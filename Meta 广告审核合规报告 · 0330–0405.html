@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<!-- saved from url=(0083)file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 广告审核合规报告 · 0330–0405</title>
+<style>
+  :root {
+    --red: #e53e3e;
+    --red-light: #fff5f5;
+    --red-border: #fc8181;
+    --orange: #dd6b20;
+    --orange-light: #fffaf0;
+    --orange-border: #f6ad55;
+    --green: #38a169;
+    --green-light: #f0fff4;
+    --green-border: #68d391;
+    --blue: #3182ce;
+    --blue-light: #ebf8ff;
+    --blue-border: #90cdf4;
+    --purple: #805ad5;
+    --purple-light: #faf5ff;
+    --gray: #718096;
+    --gray-light: #f7fafc;
+    --dark: #1a202c;
+    --text: #2d3748;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #f0f2f5;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .page-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-title { font-size: 32px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+  .header-sub { font-size: 16px; opacity: 0.75; margin-bottom: 24px; }
+  .header-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .header-meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .header-meta-label { font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.8px; }
+  .header-meta-value { font-size: 15px; font-weight: 600; }
+  .new-badge {
+    display: inline-block;
+    background: #38a169;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-left: 10px;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    z-index: 100;
+    padding: 0 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .nav-inner { display: inline-flex; gap: 0; max-width: 1200px; margin: 0 auto; }
+  .nav-item {
+    padding: 14px 16px; font-size: 13px; font-weight: 500; color: var(--gray);
+    cursor: pointer; border-bottom: 2px solid transparent; text-decoration: none;
+    transition: all 0.15s;
+  }
+  .nav-item:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* CONTAINER */
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  /* SECTION */
+  .section {
+    background: white; border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    margin-bottom: 24px; overflow: hidden;
+  }
+  .section-header {
+    padding: 20px 28px 16px; border-bottom: 1px solid #e2e8f0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-icon.red { background: var(--red-light); }
+  .section-icon.orange { background: var(--orange-light); }
+  .section-icon.blue { background: var(--blue-light); }
+  .section-icon.green { background: var(--green-light); }
+  .section-icon.purple { background: var(--purple-light); }
+  .section-title { font-size: 18px; font-weight: 700; color: var(--dark); }
+  .section-desc { font-size: 13px; color: var(--gray); margin-top: 2px; }
+  .section-body { padding: 24px 28px; }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px; margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--gray-light); border-radius: 10px;
+    padding: 16px 20px; border-left: 4px solid #e2e8f0;
+  }
+  .kpi-card.red { border-left-color: var(--red); background: var(--red-light); }
+  .kpi-card.orange { border-left-color: var(--orange); background: var(--orange-light); }
+  .kpi-card.blue { border-left-color: var(--blue); background: var(--blue-light); }
+  .kpi-card.green { border-left-color: var(--green); background: var(--green-light); }
+  .kpi-card.purple { border-left-color: var(--purple); background: var(--purple-light); }
+  .kpi-label { font-size: 12px; color: var(--gray); font-weight: 500; margin-bottom: 4px; }
+  .kpi-value { font-size: 26px; font-weight: 700; color: var(--dark); line-height: 1.1; }
+  .kpi-sub { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .kpi-diff {
+    font-size: 11px; font-weight: 700; margin-top: 4px;
+    display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px;
+    border-radius: 10px;
+  }
+  .kpi-diff.up { background: #fed7d7; color: #c53030; }
+  .kpi-diff.down { background: #c6f6d5; color: #276749; }
+  .kpi-diff.neutral { background: #e2e8f0; color: #4a5568; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: #4472C4; color: white;
+    padding: 10px 14px; font-weight: 600; text-align: left;
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #D9E2F3; }
+  tr:hover td { background: #bee3f8; transition: background 0.15s; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+  }
+  .badge-red { background: #fed7d7; color: #c53030; }
+  .badge-orange { background: #feebc8; color: #c05621; }
+  .badge-blue { background: #bee3f8; color: #2b6cb0; }
+  .badge-green { background: #c6f6d5; color: #276749; }
+  .badge-gray { background: #e2e8f0; color: #4a5568; }
+
+  /* BAR CHART */
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-label { width: 240px; font-size: 13px; color: var(--text); flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; height: 20px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+  .bar-fill.red { background: linear-gradient(90deg, #fc8181, #e53e3e); }
+  .bar-fill.orange { background: linear-gradient(90deg, #f6ad55, #dd6b20); }
+  .bar-fill.blue { background: linear-gradient(90deg, #90cdf4, #3182ce); }
+  .bar-fill.green { background: linear-gradient(90deg, #68d391, #38a169); }
+  .bar-fill.purple { background: linear-gradient(90deg, #d6bcfa, #805ad5); }
+  .bar-fill.teal { background: linear-gradient(90deg, #4fd1c5, #319795); }
+  .bar-count { width: 80px; font-size: 12px; color: var(--gray); text-align: right; flex-shrink: 0; }
+
+  /* CLAIM CARDS */
+  .claim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  .claim-card { border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+  .claim-card-header { padding: 12px 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .claim-card-header.red { background: var(--red-light); border-bottom: 1px solid #fed7d7; }
+  .claim-card-header.orange { background: var(--orange-light); border-bottom: 1px solid #feebc8; }
+  .claim-policy { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--gray); }
+  .claim-name { font-size: 14px; font-weight: 700; color: var(--dark); margin-top: 2px; }
+  .claim-count-badge { background: var(--red); color: white; border-radius: 12px; padding: 3px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+  .claim-count-badge.orange { background: var(--orange); }
+  .claim-card-body { padding: 12px 16px; }
+  .claim-desc { font-size: 13px; color: var(--gray); margin-bottom: 10px; line-height: 1.5; }
+  .claim-samples { display: flex; flex-direction: column; gap: 6px; }
+  .claim-sample { background: #f7fafc; border-left: 3px solid var(--red-border); padding: 6px 10px; font-size: 12px; color: #4a5568; border-radius: 0 4px 4px 0; line-height: 1.4; font-style: italic; }
+  .claim-sample.orange { border-left-color: var(--orange-border); }
+
+  /* DONUT */
+  .tier-visual { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .donut-wrapper { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
+  .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .donut-total { font-size: 22px; font-weight: 800; color: var(--dark); }
+  .donut-label { font-size: 11px; color: var(--gray); }
+  .tier-legend { display: flex; flex-direction: column; gap: 12px; }
+  .tier-legend-item { display: flex; align-items: center; gap: 10px; }
+  .tier-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .tier-legend-label { font-size: 13px; color: var(--text); }
+  .tier-legend-num { font-size: 13px; font-weight: 700; }
+
+  /* RISK BAR */
+  .risk-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .risk-track { flex: 1; height: 14px; background: #e2e8f0; border-radius: 3px; overflow: hidden; min-width: 80px; }
+  .risk-fill-extreme { background: linear-gradient(90deg, #fc8181, #e53e3e); height: 100%; border-radius: 3px; }
+  .risk-fill-high { background: linear-gradient(90deg, #f6ad55, #dd6b20); height: 100%; border-radius: 3px; }
+  .risk-fill-medium { background: linear-gradient(90deg, #faf089, #ecc94b); height: 100%; border-radius: 3px; }
+  .risk-fill-low { background: linear-gradient(90deg, #68d391, #38a169); height: 100%; border-radius: 3px; }
+  .risk-pct { font-size: 13px; font-weight: 700; min-width: 40px; }
+  .risk-pct.extreme { color: var(--red); }
+  .risk-pct.high { color: var(--orange); }
+  .risk-pct.medium { color: #d69e2e; }
+  .risk-pct.low { color: var(--green); }
+
+  /* COMPARE TABLE */
+  .compare-table th:first-child { width: 160px; }
+
+  /* CHECKLIST */
+  .checklist { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+  .checklist-item {
+    display: flex; gap: 10px; padding: 10px 14px;
+    background: var(--gray-light); border-radius: 8px;
+    border: 1px solid #e2e8f0; font-size: 13px; line-height: 1.5;
+  }
+  .checklist-box { width: 18px; height: 18px; border: 2px solid #a0aec0; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+
+  /* BLACKLIST */
+  .blacklist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .blacklist-card { background: var(--red-light); border: 1px solid #fed7d7; border-radius: 8px; padding: 14px 16px; }
+  .blacklist-cat { font-size: 11px; font-weight: 700; color: #9b2c2c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .blacklist-words { font-size: 13px; color: #c53030; font-weight: 600; margin-bottom: 4px; }
+  .blacklist-rule { font-size: 11px; color: var(--gray); background: #e2e8f0; display: inline-block; padding: 1px 7px; border-radius: 8px; }
+
+  /* PRINCIPLE */
+  .principle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .principle-card { border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .principle-card.allow { background: var(--green-light); border: 1px solid var(--green-border); }
+  .principle-card.deny { background: var(--red-light); border: 1px solid var(--red-border); }
+  .principle-title { font-size: 13px; font-weight: 700; }
+  .principle-title.allow { color: #276749; }
+  .principle-title.deny { color: #c53030; }
+  .principle-example { font-size: 12px; color: #4a5568; line-height: 1.5; }
+
+  /* SUBSECTION */
+  .subsection-title {
+    font-size: 15px; font-weight: 700; color: var(--dark);
+    margin: 20px 0 12px; padding-left: 10px;
+    border-left: 3px solid var(--blue);
+  }
+
+  /* TREND CHART */
+  .trend-bars { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding: 10px 0 0; }
+  .trend-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .trend-bar-inner { width: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
+  .trend-bar { border-radius: 4px 4px 0 0; width: 100%; min-height: 4px; }
+  .trend-bar-date { font-size: 10px; color: var(--gray); }
+  .trend-bar-val { font-size: 11px; font-weight: 700; color: var(--dark); }
+
+  /* SPECIAL FEATURE */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .feature-card {
+    background: var(--gray-light); border-radius: 8px; padding: 14px;
+    border: 1px solid #e2e8f0; text-align: center;
+  }
+  .feature-val { font-size: 22px; font-weight: 800; color: var(--dark); }
+  .feature-label { font-size: 11px; color: var(--gray); margin-top: 4px; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: var(--gray-light); border: 1px solid #e2e8f0;
+    border-radius: 8px; padding: 16px 20px;
+    font-size: 12px; color: var(--gray);
+    margin-top: 24px; line-height: 1.6;
+  }
+
+  /* INSIGHT BOX */
+  .insight {
+    background: linear-gradient(135deg, var(--blue-light), #e6fffa);
+    border: 1px solid var(--blue-border); border-left: 4px solid var(--blue);
+    border-radius: 8px; padding: 14px 18px;
+    font-size: 13px; color: #2c5282;
+    line-height: 1.6; margin-top: 16px;
+  }
+  .insight::before {
+    content: '💡 分析洞察';
+    font-weight: 700; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.5px; display: block; margin-bottom: 4px; opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .principle-grid { grid-template-columns: 1fr; }
+    .header-meta { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-title">
+    Meta 广告审核合规报告
+    <span class="new-badge">NEW · 0330–0405</span>
+  </div>
+  <div class="header-sub">广告素材合规性深度分析 · 2026-03-30 至 2026-04-05</div>
+  <div class="header-meta">
+    <div class="header-meta-item">
+      <div class="header-meta-label">审核周期</div>
+      <div class="header-meta-value">2026-03-30 ~ 2026-04-05</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-label">总审核量</div>
+      <div class="header-meta-value">8,316 条</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-label">Tier 3 违规率</div>
+      <div class="header-meta-value">28.2%</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-label">涉及品类</div>
+      <div class="header-meta-value">14 个</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-label">关门违规</div>
+      <div class="header-meta-value">21 条</div>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-label">对比上周期</div>
+      <div class="header-meta-value">↑ 794 条</div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#overview" style="border-bottom-color: rgb(49, 130, 206); color: rgb(49, 130, 206);">一、数据概览</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#tier3" style="border-bottom-color: transparent;">二、审核红线（Tier 3）</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#tier2" style="border-bottom-color: transparent;">三、审核灰区（Tier 2）</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#compare" style="border-bottom-color: transparent;">四、红线 vs 灰区对照</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#category" style="border-bottom-color: transparent;">五、品类风险分析</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#material" style="border-bottom-color: transparent;">六、素材类型风险</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#daily" style="border-bottom-color: transparent;">七、每日趋势</a>
+    <a class="nav-item" href="file:///Users/hebiwei/WorkBuddy/20260328141401/meta_ad_review_report_0330_0405.html#guide" style="border-bottom-color: transparent;">八、AM 合规手册</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ========== 一、数据概览 ========== -->
+  <div class="section" id="overview">
+    <div class="section-header">
+      <div class="section-icon blue">📊</div>
+      <div>
+        <div class="section-title">一、数据概览</div>
+        <div class="section-desc">2026-03-30 至 2026-04-05，共 8,316 条审核记录</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="kpi-grid">
+        <div class="kpi-card blue">
+          <div class="kpi-label">总审核量</div>
+          <div class="kpi-value">8,316</div>
+          <div class="kpi-sub">本周期总审核素材</div>
+          <div class="kpi-diff up">↑ +794 vs 上期 (7,522)</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Tier 1 — 低风险</div>
+          <div class="kpi-value">5,516</div>
+          <div class="kpi-sub">66.3% · 基本合规</div>
+          <div class="kpi-diff up">↑ 较上期 65.3%</div>
+        </div>
+        <div class="kpi-card orange">
+          <div class="kpi-label">Tier 2 — 灰区</div>
+          <div class="kpi-value">437</div>
+          <div class="kpi-sub">5.3% · 建议优化</div>
+          <div class="kpi-diff down">↓ 较上期 7.2%</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Tier 3 — 红线违规</div>
+          <div class="kpi-value">2,346</div>
+          <div class="kpi-sub">28.2% · 必须整改</div>
+          <div class="kpi-diff down">↓ 较上期 27.5%</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">关门违规（is_close_door）</div>
+          <div class="kpi-value">21</div>
+          <div class="kpi-sub">0.3% · 极严重违规</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">未分类 / 待处理</div>
+          <div class="kpi-value">17</div>
+          <div class="kpi-sub">0.2% · 审核结果待定</div>
+        </div>
+      </div>
+
+      <!-- Tier 分布可视化 -->
+      <div class="tier-visual">
+        <div class="donut-wrapper">
+          <canvas id="tierDonut" width="160" height="160"></canvas>
+          <div class="donut-center">
+            <div class="donut-total">8,316</div>
+            <div class="donut-label">总计</div>
+          </div>
+        </div>
+        <div class="tier-legend">
+          <div class="tier-legend-item">
+            <div class="tier-dot" style="background:#38a169;"></div>
+            <div class="tier-legend-label">Tier 1 — 低风险 / 合规</div>
+            <div class="tier-legend-num" style="color:#38a169;">5,516 (66.3%)</div>
+          </div>
+          <div class="tier-legend-item">
+            <div class="tier-dot" style="background:#dd6b20;"></div>
+            <div class="tier-legend-label">Tier 2 — 灰区违规</div>
+            <div class="tier-legend-num" style="color:#dd6b20;">437 (5.3%)</div>
+          </div>
+          <div class="tier-legend-item">
+            <div class="tier-dot" style="background:#e53e3e;"></div>
+            <div class="tier-legend-label">Tier 3 — 红线违规</div>
+            <div class="tier-legend-num" style="color:#e53e3e;">2,346 (28.2%)</div>
+          </div>
+          <div class="tier-legend-item">
+            <div class="tier-dot" style="background:#a0aec0;"></div>
+            <div class="tier-legend-label">未分类</div>
+            <div class="tier-legend-num" style="color:#a0aec0;">17 (0.2%)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight">
+        本周期 Tier 3 违规率为 <strong>28.2%</strong>，较上期（2026-03，27.5%）略有上升。审核总量增加 10.6%（+794 条），Tier 2 灰区占比从 7.2% 降至 5.3%，部分灰区违规可能已向 Tier 3 升级。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 二、审核红线 Tier 3 ========== -->
+  <div class="section" id="tier3">
+    <div class="section-header">
+      <div class="section-icon red">🚫</div>
+      <div>
+        <div class="section-title">二、审核红线（Tier 3）— 违规类型详析</div>
+        <div class="section-desc">共 2,346 条 Tier 3 红线违规，触犯即下架，不可复用，必须重写</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <!-- 违规类型 TOP -->
+      <div class="subsection-title">主要违规类型排名</div>
+      <div class="bar-row">
+        <div class="bar-label">Prohibited Health Claims</div>
+        <div class="bar-track"><div class="bar-fill red" style="width:94.1%;"></div></div>
+        <div class="bar-count"><strong>1,177</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Unsubstantiated Health Claims</div>
+        <div class="bar-track"><div class="bar-fill red" style="width:16.4%;"></div></div>
+        <div class="bar-count"><strong>205</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Body Image Violations</div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:7.6%;"></div></div>
+        <div class="bar-count"><strong>95</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Unacceptable Business Practices</div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:7.0%;"></div></div>
+        <div class="bar-count"><strong>88</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Misleading Claims</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:4.0%;"></div></div>
+        <div class="bar-count"><strong>50</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Unsubstantiated Claims</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:4.0%;"></div></div>
+        <div class="bar-count"><strong>50</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">False Urgency / Scarcity</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:3.7%;"></div></div>
+        <div class="bar-count"><strong>46</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Disease Treatment Claims</div>
+        <div class="bar-track"><div class="bar-fill purple" style="width:3.2%;"></div></div>
+        <div class="bar-count"><strong>40</strong> 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Medical Claims</div>
+        <div class="bar-track"><div class="bar-fill purple" style="width:2.4%;"></div></div>
+        <div class="bar-count"><strong>30</strong> 条</div>
+      </div>
+      <div class="bar-row" style="margin-bottom:0;">
+        <div class="bar-label">其他违规类型（240种共）</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:linear-gradient(90deg,#cbd5e0,#a0aec0);"></div></div>
+        <div class="bar-count"><strong>~308</strong> 条</div>
+      </div>
+
+      <!-- 违规类型卡片详析 -->
+      <div class="subsection-title" style="margin-top:28px;">TOP 违规类型详析</div>
+      <div class="claim-grid">
+
+        <div class="claim-card">
+          <div class="claim-card-header red">
+            <div>
+              <div class="claim-policy">PROHIBITED / Health</div>
+              <div class="claim-name">禁止的健康功效声明</div>
+            </div>
+            <div class="claim-count-badge">1,177</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">产品素材中包含被 Meta 明确禁止的健康类声明，包括宣称治疗、预防、逆转疾病或基于医学功效的销售话术</div>
+            <div class="claim-samples">
+              <div class="claim-sample">"Pas le budget pour des injections... je t'explique quoi faire" （暗示医美替代疗法）</div>
+              <div class="claim-sample">"La mia più grande insicurezza sono i miei denti... Nuovo sorriso!" （牙齿改变 + 情绪）</div>
+              <div class="claim-sample">"Marionette lines, smoker lines, jowls. I almost got fillers. Then I discovered this."</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header red">
+            <div>
+              <div class="claim-policy">UNSUBSTANTIATED / Health</div>
+              <div class="claim-name">未经证实的健康声明</div>
+            </div>
+            <div class="claim-count-badge">205</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">健康相关声明缺乏科学证据支撑，以暗示性语言宣称产品功效，用户无法核实其真实性</div>
+            <div class="claim-samples">
+              <div class="claim-sample">"It's called a relay attack... police consider it the hardest to stop in 10 years"（夸大安全威胁）</div>
+              <div class="claim-sample">"Only 3 left!" + 健康功效声明双重触发</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header red">
+            <div>
+              <div class="claim-policy">BODY IMAGE</div>
+              <div class="claim-name">身体形象违规</div>
+            </div>
+            <div class="claim-count-badge">95</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">通过贬低、放大缺陷或制造焦虑的方式利用身体形象进行营销，违反 Meta 社区规范</div>
+            <div class="claim-samples">
+              <div class="claim-sample">视频特写放大皮肤/体型"问题部位"后推出产品</div>
+              <div class="claim-sample">"Your skin is aging faster than you think — fix it now"</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header red">
+            <div>
+              <div class="claim-policy">BUSINESS PRACTICES</div>
+              <div class="claim-name">不可接受的商业行为</div>
+            </div>
+            <div class="claim-count-badge">88</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">广告素材中含有欺骗性定价、虚假促销、诱导消费者等不诚信商业行为</div>
+            <div class="claim-samples">
+              <div class="claim-sample">虚假折扣 / 虚高原价标注后打折</div>
+              <div class="claim-sample">"FREE gift included" 实为额外收费</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header red">
+            <div>
+              <div class="claim-policy">MISLEADING</div>
+              <div class="claim-name">误导性声明</div>
+            </div>
+            <div class="claim-count-badge">50</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">广告内容有意误导消费者对产品效果、成分或使用结果的判断</div>
+            <div class="claim-samples">
+              <div class="claim-sample">Before/After 图未注明"Results may vary"</div>
+              <div class="claim-sample">夸大某成分在产品中的实际含量或效果</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header red">
+            <div>
+              <div class="claim-policy">FALSE URGENCY</div>
+              <div class="claim-name">虚假紧迫感 / 稀缺性</div>
+            </div>
+            <div class="claim-count-badge">46</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">通过虚假的库存紧张、限时折扣或即将下架等话术制造人为紧迫感</div>
+            <div class="claim-samples">
+              <div class="claim-sample">"Only 3 left in stock — order now!" （实际库存充足）</div>
+              <div class="claim-sample">"Sale ends tonight! 70% OFF — Final hours!"</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 健康声明内部分类 -->
+      <div class="subsection-title" style="margin-top:28px;">健康声明内部风险代码分布（Tier 3）</div>
+      <div class="bar-row">
+        <div class="bar-label" title="H1d: 身体转变承诺">H1d — 身体转变承诺</div>
+        <div class="bar-track"><div class="bar-fill red" style="width:85.3%;"></div></div>
+        <div class="bar-count">2,001 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" title="H4a: 医美/医疗替代宣称">H4a — 医美替代宣称</div>
+        <div class="bar-track"><div class="bar-fill red" style="width:58.6%;"></div></div>
+        <div class="bar-count">1,375 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" title="H1a: 基础健康功效声明">H1a — 基础健康功效</div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:41.8%;"></div></div>
+        <div class="bar-count">981 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" title="H2a: 疾病治疗/预防声明">H2a — 疾病治疗声明</div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:35.1%;"></div></div>
+        <div class="bar-count">824 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" title="H3: 成分功效夸大">H3 — 成分功效夸大</div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:34.2%;"></div></div>
+        <div class="bar-count">803 条</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" title="H1b: 快速见效承诺">H1b — 快速见效承诺</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:17.2%;"></div></div>
+        <div class="bar-count">404 条</div>
+      </div>
+      <div class="bar-row" style="margin-bottom:0;">
+        <div class="bar-label" title="H1c: 永久效果承诺">H1c — 永久效果承诺</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:15.7%;"></div></div>
+        <div class="bar-count">369 条</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 三、审核灰区 Tier 2 ========== -->
+  <div class="section" id="tier2">
+    <div class="section-header">
+      <div class="section-icon orange">⚡</div>
+      <div>
+        <div class="section-title">三、审核灰区（Tier 2）</div>
+        <div class="section-desc">437 条灰区违规（5.3%）— 存在风险但暂未触红线，建议优化调整</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="claim-grid">
+        <div class="claim-card">
+          <div class="claim-card-header orange">
+            <div>
+              <div class="claim-policy">GRAY-A</div>
+              <div class="claim-name">轻量健康/功效暗示</div>
+            </div>
+            <div class="claim-count-badge orange">~186</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">功效表述使用模糊语言，暗示健康效果但未直接声称，介于合规与违规边界</div>
+            <div class="claim-samples">
+              <div class="claim-sample orange">"Supports your skin's natural renewal process"（暗示性功效）</div>
+              <div class="claim-sample orange">"Many customers noticed improvements in..." （未明确声称但有功效倾向）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header orange">
+            <div>
+              <div class="claim-policy">GRAY-B</div>
+              <div class="claim-name">诱导性互动</div>
+            </div>
+            <div class="claim-count-badge orange">~108</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">文案中引导点赞、评论、分享，以互动行为换取抽奖或优惠资格</div>
+            <div class="claim-samples">
+              <div class="claim-sample orange">"Tag a friend who needs this gift!"</div>
+              <div class="claim-sample orange">"Comment 'YES' below and we'll send you the link!"</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header orange">
+            <div>
+              <div class="claim-policy">GRAY-C</div>
+              <div class="claim-name">资质/认证声明待核实</div>
+            </div>
+            <div class="claim-count-badge orange">~87</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">声称具备医学认证、医生推荐等权威背书，但未提交对应资质文件</div>
+            <div class="claim-samples">
+              <div class="claim-sample orange">"Dermatologist-tested formula"（测试报告未上传）</div>
+              <div class="claim-sample orange">"As seen on [media outlet]"（未提供报道链接）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <div class="claim-card-header orange">
+            <div>
+              <div class="claim-policy">GRAY-D</div>
+              <div class="claim-name">落地页信息不一致</div>
+            </div>
+            <div class="claim-count-badge orange">~56</div>
+          </div>
+          <div class="claim-card-body">
+            <div class="claim-desc">广告中的价格、优惠、产品描述与实际落地页内容存在出入</div>
+            <div class="claim-samples">
+              <div class="claim-sample orange">广告标注"Buy 2 Get 1 Free"但落地页不含此优惠</div>
+              <div class="claim-sample orange">广告承诺"30-day return"，落地页只有 14 天退换政策</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight" style="background:linear-gradient(135deg,#fffaf0,#fffff0);border-color:var(--orange-border);border-left-color:var(--orange);color:#744210;">
+        本期灰区占比从上期 7.2% 降至 5.3%，<strong>注意：这不一定意味着合规改善</strong>——部分灰区内容可能因 Meta 政策收紧而直接升级为 Tier 3 红线。建议重点排查 GRAY-A（轻量功效暗示），是最容易升级为 Prohibited Health Claims 的类型。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 四、红线 vs 灰区对照 ========== -->
+  <div class="section" id="compare">
+    <div class="section-header">
+      <div class="section-icon purple">⚖️</div>
+      <div>
+        <div class="section-title">四、红线 vs 灰区对照表</div>
+        <div class="section-desc">判定边界说明 — 帮助 AM 区分哪些表述触红线，哪些属于灰区可优化</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>违规类型</th>
+            <th>🚫 Tier 3 — 必须整改（典型表述）</th>
+            <th>⚡ Tier 2 — 灰区（边界表述）</th>
+            <th>✅ 合规表述</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-red">健康功效</span></td>
+            <td>"Cures acne in 3 days" / "Treats eczema"</td>
+            <td>"Helps with skin concern..." / "Supports healing"</td>
+            <td>"May help reduce the appearance of blemishes"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">医美宣称</span></td>
+            <td>"No need for Botox! This works better!" / "Alternative to fillers"</td>
+            <td>"Like a facelift at home" (暗示)</td>
+            <td>"A relaxing skincare routine for fine lines"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">身体形象</span></td>
+            <td>"Fix your embarrassing [body part]" / "Don't be ashamed anymore"</td>
+            <td>"Feel more confident about your [area]"</td>
+            <td>"Designed to help you feel comfortable and at ease"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">疾病治疗</span></td>
+            <td>"Prevents diabetes" / "Eliminates cancer cells"</td>
+            <td>"Supports blood sugar balance" (暗示功能)</td>
+            <td>"As part of a healthy lifestyle, may support overall wellness"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">虚假紧迫</span></td>
+            <td>"Only 3 left!" (实际充足) / "Sale ends in 10min!" (循环)</td>
+            <td>"Limited-time offer" (无具体截止时间)</td>
+            <td>"Special offer available while supplies last"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">成分夸大</span></td>
+            <td>"100% natural — zero side effects" / "Proven by science"</td>
+            <td>"With powerful natural ingredients" (模糊)</td>
+            <td>"Contains Vitamin C, known to support skin brightness"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">体重/减脂</span></td>
+            <td>"Lose 10kg in 7 days guaranteed!" / "Melts fat overnight"</td>
+            <td>"Supports weight management journey" (暗示)</td>
+            <td>"May help support a healthy metabolism with diet &amp; exercise"</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">商业欺骗</span></td>
+            <td>虚高原价打折 / "FREE" 实为订阅</td>
+            <td>优惠描述不够清晰、条件隐藏</td>
+            <td>清晰标注折扣条件、原价来源</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">权威背书</span></td>
+            <td>"FDA approved" (未获批) / "Doctor recommended" (无来源)</td>
+            <td>"Dermatologist-tested" (未上传证明)</td>
+            <td>"Formulated with dermatologist input" (需提供资质)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== 五、品类风险分析 ========== -->
+  <div class="section" id="category">
+    <div class="section-header">
+      <div class="section-icon orange">🏷️</div>
+      <div>
+        <div class="section-title">五、品类风险分析</div>
+        <div class="section-desc">Health + Beauty + Fitness 三大品类违规率最高，占 Tier3 总量超 60%</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <!-- 品类违规率排名 -->
+      <div class="subsection-title">品类 Tier 3 违规率排名</div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Health, Wellness &amp; Nutrition</div>
+        <div class="risk-track"><div class="risk-fill-extreme" style="width:94.1%;"></div></div>
+        <div class="risk-pct extreme">94.1%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Fitness &amp; Sports</div>
+        <div class="risk-track"><div class="risk-fill-extreme" style="width:68.9%;"></div></div>
+        <div class="risk-pct extreme">68.9%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Beauty &amp; Personal Care</div>
+        <div class="risk-track"><div class="risk-fill-high" style="width:63.3%;"></div></div>
+        <div class="risk-pct high">63.3%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Automotive &amp; Tools</div>
+        <div class="risk-track"><div class="risk-fill-medium" style="width:29.5%;"></div></div>
+        <div class="risk-pct medium">29.5%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Fashion &amp; Apparel</div>
+        <div class="risk-track"><div class="risk-fill-medium" style="width:24.2%;"></div></div>
+        <div class="risk-pct medium">24.2%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Outdoor, Garden &amp; DIY</div>
+        <div class="risk-track"><div class="risk-fill-low" style="width:10.5%;"></div></div>
+        <div class="risk-pct low">10.5%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Home, Kitchen &amp; Living</div>
+        <div class="risk-track"><div class="risk-fill-low" style="width:7.9%;"></div></div>
+        <div class="risk-pct low">7.9%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Baby, Kids &amp; Parenting</div>
+        <div class="risk-track"><div class="risk-fill-low" style="width:7.1%;"></div></div>
+        <div class="risk-pct low">7.1%</div>
+      </div>
+      <div class="risk-bar">
+        <div style="width:220px;font-size:13px;">Electronics &amp; Smart Gadgets</div>
+        <div class="risk-track"><div class="risk-fill-low" style="width:6.2%;"></div></div>
+        <div class="risk-pct low">6.2%</div>
+      </div>
+      <div class="risk-bar" style="margin-bottom:0;">
+        <div style="width:220px;font-size:13px;">Pet Supplies</div>
+        <div class="risk-track"><div class="risk-fill-low" style="width:5.8%;"></div></div>
+        <div class="risk-pct low">5.8%</div>
+      </div>
+
+      <!-- 品类数量分布 -->
+      <div class="subsection-title" style="margin-top:24px;">品类审核量分布（数量 TOP 8）</div>
+      <table>
+        <thead>
+          <tr>
+            <th>品类</th>
+            <th>总量</th>
+            <th>占比</th>
+            <th>Tier 3</th>
+            <th>违规率</th>
+            <th>风险等级</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fashion &amp; Apparel</td>
+            <td>2,405</td>
+            <td>28.9%</td>
+            <td>583</td>
+            <td>24.2%</td>
+            <td><span class="badge badge-orange">中等</span></td>
+          </tr>
+          <tr>
+            <td>Home, Kitchen &amp; Living</td>
+            <td>2,103</td>
+            <td>25.3%</td>
+            <td>166</td>
+            <td>7.9%</td>
+            <td><span class="badge badge-green">低</span></td>
+          </tr>
+          <tr>
+            <td>Beauty &amp; Personal Care</td>
+            <td>982</td>
+            <td>11.8%</td>
+            <td>622</td>
+            <td>63.3%</td>
+            <td><span class="badge badge-red">极高</span></td>
+          </tr>
+          <tr>
+            <td>Health, Wellness &amp; Nutrition</td>
+            <td>818</td>
+            <td>9.8%</td>
+            <td>770</td>
+            <td>94.1%</td>
+            <td><span class="badge badge-red">极高</span></td>
+          </tr>
+          <tr>
+            <td>Jewelry, Watches &amp; Accessories</td>
+            <td>766</td>
+            <td>9.2%</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="badge badge-gray">待评估</span></td>
+          </tr>
+          <tr>
+            <td>Baby, Kids &amp; Parenting</td>
+            <td>296</td>
+            <td>3.6%</td>
+            <td>21</td>
+            <td>7.1%</td>
+            <td><span class="badge badge-green">低</span></td>
+          </tr>
+          <tr>
+            <td>Electronics &amp; Smart Gadgets</td>
+            <td>210</td>
+            <td>2.5%</td>
+            <td>13</td>
+            <td>6.2%</td>
+            <td><span class="badge badge-green">低</span></td>
+          </tr>
+          <tr>
+            <td>Fitness &amp; Sports</td>
+            <td>45</td>
+            <td>0.5%</td>
+            <td>31</td>
+            <td>68.9%</td>
+            <td><span class="badge badge-red">极高</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="insight">
+        本期最显著变化：<strong>Health &amp; Wellness 品类违规率高达 94.1%</strong>（上期 Fashion 为最高风险品类，违规率 98.7%），本期 Fashion 违规率降至 24.2%——说明上期对 Fashion 类的整改已见效。但 Health/Beauty 品类仍是核心整改目标，两者合计 Tier3 违规量达 1,392 条，占全量 Tier3 的 59.3%。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 六、素材类型风险 ========== -->
+  <div class="section" id="material">
+    <div class="section-header">
+      <div class="section-icon blue">🎬</div>
+      <div>
+        <div class="section-title">六、素材类型风险分析</div>
+        <div class="section-desc">VIDEO 违规率 47.9%，是最高风险素材类型；DESCRIPTION 违规率亦高达 31.6%</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th>素材类型</th>
+            <th>总量</th>
+            <th>占比</th>
+            <th>Tier 3 数量</th>
+            <th>Tier 3 违规率</th>
+            <th>特征说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>VIDEO</strong></td>
+            <td>3,763</td>
+            <td>45.3%</td>
+            <td><strong style="color:#e53e3e;">1,804</strong></td>
+            <td><strong style="color:#e53e3e;">47.9%</strong></td>
+            <td>旁白/字幕含健康声明，Body Image 镜头</td>
+          </tr>
+          <tr>
+            <td>PRIMARY_TEXT</td>
+            <td>2,897</td>
+            <td>34.8%</td>
+            <td>332</td>
+            <td>11.5%</td>
+            <td>主体文案，违规多来自功效声明</td>
+          </tr>
+          <tr>
+            <td>TITLE</td>
+            <td>1,017</td>
+            <td>12.2%</td>
+            <td>82</td>
+            <td>8.1%</td>
+            <td>标题含夸大词汇/高危词</td>
+          </tr>
+          <tr>
+            <td>MESSAGE</td>
+            <td>468</td>
+            <td>5.6%</td>
+            <td>74</td>
+            <td>15.8%</td>
+            <td>DM/私信类文案，诱导性互动较多</td>
+          </tr>
+          <tr>
+            <td>DESCRIPTION</td>
+            <td>171</td>
+            <td>2.1%</td>
+            <td>54</td>
+            <td><strong style="color:#dd6b20;">31.6%</strong></td>
+            <td>描述字段违规率第二，商品功效堆砌</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="insight">
+        VIDEO 违规率从上期分析结果（40.9%）进一步上升至 <strong>47.9%</strong>，VIDEO 绝对数量也从上期 2,104 条升至 <strong>1,804 条（占 Tier3 76.9%）</strong>。DESCRIPTION 字段违规率 31.6% 需额外关注，说明商品描述中存在大量功效堆砌现象。建议在 DESCRIPTION 字段也纳入自动审查机制。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 七、每日违规趋势 ========== -->
+  <div class="section" id="daily">
+    <div class="section-header">
+      <div class="section-icon purple">📅</div>
+      <div>
+        <div class="section-title">七、每日违规趋势</div>
+        <div class="section-desc">2026-03-30 至 04-05 每日审核量与 Tier 3 违规数变化</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div style="display:flex;align-items:flex-end;gap:10px;height:200px;padding:10px 0 0;">
+        <!-- 3/30: 总875, T3=241, 27.5% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#e53e3e;">27.5%</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:69px;background:linear-gradient(180deg,#fc8181,#e53e3e);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">03-30</div>
+          <div style="font-size:11px;font-weight:700;">875</div>
+          <div style="font-size:10px;color:#e53e3e;">T3: 241</div>
+        </div>
+        <!-- 3/31: 总1206, T3=347, 28.8% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#e53e3e;">28.8%</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:95px;background:linear-gradient(180deg,#fc8181,#e53e3e);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">03-31</div>
+          <div style="font-size:11px;font-weight:700;">1,206</div>
+          <div style="font-size:10px;color:#e53e3e;">T3: 347</div>
+        </div>
+        <!-- 4/1: 总1488, T3=406, 27.3% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#e53e3e;">27.3%</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:111px;background:linear-gradient(180deg,#fc8181,#e53e3e);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">04-01</div>
+          <div style="font-size:11px;font-weight:700;">1,488</div>
+          <div style="font-size:10px;color:#e53e3e;">T3: 406</div>
+        </div>
+        <!-- 4/2: 总931, T3=287, 30.8% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#dd6b20;">30.8%</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:78px;background:linear-gradient(180deg,#f6ad55,#dd6b20);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">04-02</div>
+          <div style="font-size:11px;font-weight:700;">931</div>
+          <div style="font-size:10px;color:#dd6b20;">T3: 287</div>
+        </div>
+        <!-- 4/3: 总1984, T3=480, 24.2% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#718096;">24.2%</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:131px;background:linear-gradient(180deg,#90cdf4,#3182ce);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">04-03</div>
+          <div style="font-size:11px;font-weight:700;color:#3182ce;">1,984 ▲</div>
+          <div style="font-size:10px;color:#3182ce;">T3: 480</div>
+        </div>
+        <!-- 4/4: 总1014, T3=189, 18.6% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#38a169;">18.6%</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:52px;background:linear-gradient(180deg,#68d391,#38a169);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">04-04</div>
+          <div style="font-size:11px;font-weight:700;">1,014</div>
+          <div style="font-size:10px;color:#38a169;">T3: 189 ↓</div>
+        </div>
+        <!-- 4/5: 总818, T3=396, 48.4% -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;font-weight:800;color:#e53e3e;">48.4% ⚠️</div>
+          <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;">
+            <div style="height:108px;background:linear-gradient(180deg,#fc8181,#e53e3e);border-radius:4px 4px 0 0;"></div>
+          </div>
+          <div style="font-size:10px;color:#718096;">04-05</div>
+          <div style="font-size:11px;font-weight:700;">818</div>
+          <div style="font-size:10px;color:#e53e3e;">T3: 396 ⚠️</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 16px;background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;font-size:13px;color:#742a2a;line-height:1.6;">
+        ⚠️ <strong>4月5日（周日）违规率异常飙升至 48.4%</strong>，同日审核总量仅 818 条（为全周最低），但 Tier3 违规 396 条。建议人工复查 4/5 批次，排查是否存在批量上传的高风险素材或系统误判情况。
+      </div>
+
+      <div class="insight">
+        4月3日（周四）审核量达全周峰值 1,984 条，违规率反而下降至 24.2%——说明正常批量审核时机器模型表现稳定。4月4日违规率降至 18.6% 为全周最低，但次日 4/5 反弹至 48.4%，有待关注。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 特殊内容检测 ========== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon purple">🔍</div>
+      <div>
+        <div class="section-title">特殊内容检测统计</div>
+        <div class="section-desc">素材中检测到的敏感特征内容分布</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-val" style="color:#dd6b20;">906</div>
+          <div class="feature-label">包含医生/医疗人物<br>has_doctor (10.9%)</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-val" style="color:#e53e3e;">50</div>
+          <div class="feature-label">色情/暴露内容<br>has_pornographic (0.6%)</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-val" style="color:#e53e3e;">44</div>
+          <div class="feature-label">武器相关内容<br>has_weapon (0.5%)</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-val" style="color:#805ad5;">37</div>
+          <div class="feature-label">明星/网红形象<br>has_celebrity (0.4%)</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-val" style="color:#e53e3e;">23</div>
+          <div class="feature-label">血腥/暴力内容<br>has_gore (0.3%)</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-val" style="color:#e53e3e;">21</div>
+          <div class="feature-label">关门违规<br>is_close_door (0.3%)</div>
+        </div>
+      </div>
+      <div class="insight">
+        本期 <strong>has_doctor 达 906 条（10.9%）</strong>，是最显著的特征信号——结合 Health 品类 94.1% 的违规率，大量医疗人物形象被用于强化健康声明可信度，这是 Prohibited Health Claims 的主要触发来源之一。建议明确禁止非持牌医疗机构的广告素材中使用医生形象。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 八、AM 合规手册 ========== -->
+  <div class="section" id="guide">
+    <div class="section-header">
+      <div class="section-icon green">📋</div>
+      <div>
+        <div class="section-title">八、AM 合规操作手册</div>
+        <div class="section-desc">基于本期数据更新的改写原则、高危词黑名单与上线前自检清单</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection-title">改写原则（本期重点：Health / Beauty 品类）</div>
+      <div class="principle-grid">
+        <div class="principle-card allow">
+          <div class="principle-title allow">✅ 允许的表达方式</div>
+          <div class="principle-example">
+            "May help support skin hydration" — 弱化功效，使用 may/might/can help<br><br>
+            "Contains Vitamin C, which is known to..." — 成分逻辑推导<br><br>
+            "Many customers reported noticing improvements in..." — 个体化表述<br><br>
+            "Designed as part of a wellness routine" — 场景化描述而非功效声明<br><br>
+            "Results may vary — see individual testimonials*" — 效果图附带免责声明
+          </div>
+        </div>
+        <div class="principle-card deny">
+          <div class="principle-title deny">🚫 禁止的表达方式（本期高频违规）</div>
+          <div class="principle-example">
+            "No need for Botox / fillers" — 医美替代宣称（H4a，1,375 条）<br><br>
+            "Cures / treats / reverses [condition]" — 疾病治疗声明（H2a，824 条）<br><br>
+            "Guaranteed to [body transformation]" — 身体变化承诺（H1d，2,001 条）<br><br>
+            "Only X left — final sale!" — 虚假紧迫感（46 条）<br><br>
+            "Doctor recommended" + 未提交资质 — 未证实权威背书
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection-title" style="margin-top:24px;">高危词黑名单（本期新增）</div>
+      <div class="blacklist-grid">
+        <div class="blacklist-card">
+          <div class="blacklist-cat">医美替代类（本期 #1）</div>
+          <div class="blacklist-words">No need for Botox · Alternative to fillers · Better than surgery · Skip the injections</div>
+          <div class="blacklist-rule">H4a — 1,375 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">身体转变类（本期 #2）</div>
+          <div class="blacklist-words">Lose Xkg in X days · Melt fat · Shrink belly · Reverse aging</div>
+          <div class="blacklist-rule">H1d — 2,001 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">禁止健康声明类</div>
+          <div class="blacklist-words">Cures · Treats · Heals · Prevents disease · Eliminates symptoms</div>
+          <div class="blacklist-rule">Prohibited Health Claims — 1,177 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">疾病治疗类</div>
+          <div class="blacklist-words">Diabetes · Cancer · Eczema · Arthritis · Depression (与产品功效连用)</div>
+          <div class="blacklist-rule">Disease Treatment — 40 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">身体形象操控类</div>
+          <div class="blacklist-words">Embarrassing · Shameful · Your [body part] is wrong · Don't be insecure anymore</div>
+          <div class="blacklist-rule">Body Image — 95 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">虚假紧迫类</div>
+          <div class="blacklist-words">Only X left · Sale ends tonight · Last chance · Selling out fast（库存实际充足时）</div>
+          <div class="blacklist-rule">False Urgency — 46 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">虚假权威类</div>
+          <div class="blacklist-words">Doctor recommended · Clinically proven · FDA approved（无真实依据）</div>
+          <div class="blacklist-rule">Unsubstantiated — 50 条</div>
+        </div>
+        <div class="blacklist-card">
+          <div class="blacklist-cat">极速效果类</div>
+          <div class="blacklist-words">Overnight · Instantly · In just X days · Guaranteed results</div>
+          <div class="blacklist-rule">H1b — 404 条</div>
+        </div>
+      </div>
+
+      <div class="subsection-title" style="margin-top:24px;">上线前自检清单（10 项）</div>
+      <div class="checklist">
+        <div class="checklist-item" style="background:#fff5f5;border-color:#fed7d7;">
+          <div class="checklist-box"></div>
+          <div>🔴 <strong>无医美替代声明</strong>（No Botox / No fillers / Alternative to surgery）</div>
+        </div>
+        <div class="checklist-item" style="background:#fff5f5;border-color:#fed7d7;">
+          <div class="checklist-box"></div>
+          <div>🔴 <strong>无疾病治疗/预防声明</strong>（Cures / Treats / Prevents [disease]）</div>
+        </div>
+        <div class="checklist-item" style="background:#fff5f5;border-color:#fed7d7;">
+          <div class="checklist-box"></div>
+          <div>🔴 <strong>无极端身体转变承诺</strong>（明确时限内减重/逆龄等 H1d 类声明）</div>
+        </div>
+        <div class="checklist-item" style="background:#fff5f5;border-color:#fed7d7;">
+          <div class="checklist-box"></div>
+          <div>🔴 <strong>无身体形象羞耻/贬低内容</strong>（含 VIDEO 旁白和字幕）</div>
+        </div>
+        <div class="checklist-item" style="background:#fff5f5;border-color:#fed7d7;">
+          <div class="checklist-box"></div>
+          <div>🔴 <strong>Before/After 附带"*Results may vary"</strong></div>
+        </div>
+        <div class="checklist-item" style="background:#fff5f5;border-color:#fed7d7;">
+          <div class="checklist-box"></div>
+          <div>🔴 <strong>医生形象使用已获授权</strong>（has_doctor 类素材需提供资质证明）</div>
+        </div>
+        <div class="checklist-item" style="background:#fffaf0;border-color:#feebc8;">
+          <div class="checklist-box"></div>
+          <div>🟠 <strong>功效描述使用软化语言</strong>（may help / can support / designed to）</div>
+        </div>
+        <div class="checklist-item" style="background:#fffaf0;border-color:#feebc8;">
+          <div class="checklist-box"></div>
+          <div>🟠 <strong>VIDEO 字幕与旁白双重检查</strong>（字幕中不得出现高危词）</div>
+        </div>
+        <div class="checklist-item" style="background:#fffaf0;border-color:#feebc8;">
+          <div class="checklist-box"></div>
+          <div>🟠 <strong>DESCRIPTION 字段无功效堆砌</strong>（本期 DESCRIPTION 违规率 31.6%）</div>
+        </div>
+        <div class="checklist-item" style="background:#fffaf0;border-color:#feebc8;">
+          <div class="checklist-box"></div>
+          <div>🟠 <strong>落地页与广告内容一致</strong>（价格/优惠/产品描述）</div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>📌 数据说明：</strong>本报告基于 2026-03-30 至 2026-04-05 共 8,316 条审核记录分析生成，数据来源为系统 machine_result 与 machine_risk_result 字段。违规类型统计基于 violationDetails 内容归并（大小写统一），部分表述存在不同案例中描述略有差异的情况已做合并处理。健康声明代码（H1a~H4b）为内部风险评估编码，不对应 Meta 官方政策代码。
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// Draw donut
+function drawDonut() {
+  const canvas = document.getElementById('tierDonut');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 80, cy = 80, r = 65;
+  const data = [
+    { pct: 0.663, color: '#38a169' }, // Tier1
+    { pct: 0.053, color: '#dd6b20' }, // Tier2
+    { pct: 0.282, color: '#e53e3e' }, // Tier3
+    { pct: 0.002, color: '#a0aec0' }, // unknown
+  ];
+  ctx.clearRect(0, 0, 160, 160);
+  let startAngle = -Math.PI / 2;
+  data.forEach(d => {
+    const slice = d.pct * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, startAngle, startAngle + slice);
+    ctx.closePath();
+    ctx.fillStyle = d.color;
+    ctx.fill();
+    startAngle += slice;
+  });
+  // center hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.58, 0, 2 * Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+}
+
+document.addEventListener('DOMContentLoaded', drawDonut);
+
+// Nav highlight
+const sections = document.querySelectorAll('.section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(n => { n.style.color = ''; n.style.borderBottomColor = 'transparent'; });
+      const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+      if (active) { active.style.color = '#3182ce'; active.style.borderBottomColor = '#3182ce'; }
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => observer.observe(s));
+</script>
+
+
+
+</body></html>
