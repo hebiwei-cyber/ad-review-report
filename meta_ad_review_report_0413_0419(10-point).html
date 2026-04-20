@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 广告审核合规分析报告 · 2026-04-13~04-19 · 十分制</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1c1e21; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 20px 16px 60px; }
+  .header { background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%); color: white; padding: 32px 24px; border-radius: 0 0 16px 16px; margin-bottom: 20px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .header .subtitle { font-size: 13px; color: rgba(255,255,255,0.75); }
+  .header .meta { margin-top: 12px; display: flex; gap: 24px; font-size: 12px; color: rgba(255,255,255,0.65); flex-wrap: wrap; }
+  .card { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a237e; padding: 0 0 12px 0; margin-bottom: 16px; border-bottom: 2px solid #e8eaf6; display: flex; align-items: center; gap: 8px; }
+  .card-title { font-size: 13px; font-weight: 600; color: #37474f; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot.red    { background: #e53935; }
+  .dot.orange { background: #fb8c00; }
+  .dot.green  { background: #43a047; }
+  .dot.purple { background: #7b1fa2; }
+  .dot.blue   { background: #1877f2; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi-card { background: white; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-top: 4px solid #e0e0e0; text-align: center; transition: transform 0.15s; }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .kpi-card.green  { border-top-color: #43a047; }
+  .kpi-card.orange { border-top-color: #fb8c00; }
+  .kpi-card.red    { border-top-color: #e53935; }
+  .kpi-card.purple { border-top-color: #7b1fa2; }
+  .kpi-value { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .kpi-card.green  .kpi-value { color: #2e7d32; }
+  .kpi-card.orange .kpi-value { color: #e65100; }
+  .kpi-card.red    .kpi-value { color: #c62828; }
+  .kpi-card.purple .kpi-value { color: #6a1b9a; }
+  .kpi-label { font-size: 12px; color: #78909c; font-weight: 500; }
+  .kpi-sub { font-size: 11px; color: #b0bec5; margin-top: 4px; }
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap-sm { position: relative; height: 220px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f5f5f5; color: #546e7a; font-weight: 600; text-align: left; padding: 8px 10px; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #37474f; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .tag-red    { background: #ffebee; color: #c62828; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-yellow { background: #fffde7; color: #f57f17; }
+  .tag-green  { background: #e8f5e9; color: #2e7d32; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .tag-blue   { background: #e3f2fd; color: #1565c0; }
+  .footer { text-align: center; padding: 24px; color: #90a4ae; font-size: 12px; }
+  .highlight-block { background: linear-gradient(135deg, #e8eaf6, #c5cae9); border-radius: 8px; padding: 14px 16px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .info-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .rubric-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+  .rubric-card { border-radius: 10px; padding: 16px 10px; text-align: center; border: 2px solid transparent; }
+  .rubric-card.r1  { background: #e8f5e9; border-color: #a5d6a7; }
+  .rubric-card.r2  { background: #f1f8e9; border-color: #c5e1a5; }
+  .rubric-card.r3  { background: #fff8e1; border-color: #ffe082; }
+  .rubric-card.r4  { background: #fff3e0; border-color: #ffcc80; }
+  .rubric-card.r5  { background: #ffccbc; border-color: #ffab91; }
+  .rubric-card.r6  { background: #ffcdd2; border-color: #ef9a9a; }
+  .rubric-card.r7  { background: #ef9a9a; border-color: #e57373; }
+  .rubric-card.r8  { background: #e57373; border-color: #ef5350; color: white; }
+  .rubric-card.r9  { background: #c62828; border-color: #b71c1c; color: white; }
+  .rubric-card.r10 { background: #3d0000; border-color: #1a0000; color: white; }
+  .rubric-score { font-size: 34px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .rubric-label { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .rubric-example { font-size: 13px; opacity: 0.9; line-height: 1.5; }
+  .threshold-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 12px; }
+  .threshold-badge { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: white; flex-shrink: 0; }
+  .threshold-label { font-weight: 600; font-size: 12px; }
+  .threshold-desc { font-size: 11px; color: #555; }
+  @media (max-width: 768px) { .kpi-grid { grid-template-columns: 1fr 1fr; } .info-grid { grid-template-columns: 1fr; } .rubric-grid { overflow-x: auto; flex-wrap: nowrap; display: flex; gap: 8px; margin-bottom: 16px; -webkit-overflow-scrolling: touch; } .rubric-card { min-width: 90px; flex-shrink: 0; padding: 12px 8px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📊 Meta 广告审核合规分析报告</h1>
+  <div class="subtitle">数据驱动 · 十分制风险评分体系（10-Point Risk Scoring）</div>
+  <div class="meta">
+    <span>📅 数据周期：2026-04-13 ~ 2026-04-19</span>
+    <span>📦 审核总量：<strong>10,480</strong> 条</span>
+    <span>🏷️ 评分体系：十分制风险评分（v3）</span>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-grid">
+  <div class="kpi-card purple">
+    <div class="kpi-value">2.1</div>
+    <div class="kpi-label">平均风险评分</div>
+    <div class="kpi-sub">满分10分，越高越危险</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-value">84.1%</div>
+    <div class="kpi-label">低风险（1-3分）</div>
+    <div class="kpi-sub">8,812 条 · 正常投放</div>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-value">0.4%</div>
+    <div class="kpi-label">中风险（4-6分）</div>
+    <div class="kpi-sub">43 条 · 建议抽检</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-value">15.5%</div>
+    <div class="kpi-label">高风险（≥7分）</div>
+    <div class="kpi-sub">1,625 条 · 人工审查</div>
+  </div>
+</div>
+
+<!-- 一、评分分布 -->
+<div class="section-title">📐 一、十分制评分分布全貌</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>评分分布柱状图 + Tier3 命中率折线（交叉验证）</div>
+  <div class="chart-wrap">
+    <canvas id="scoreDistChart"></canvas>
+  </div>
+</div>
+
+<!-- 评分标尺 -->
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>十分制评分标尺（快速对照表）</div>
+  <div class="rubric-grid">
+    <div class="rubric-card r1"><div class="rubric-score">1</div><div class="rubric-label">✅ 极低风险</div><div class="rubric-example">普通文案标题<br>无任何违规</div></div>
+    <div class="rubric-card r2"><div class="rubric-score">2</div><div class="rubric-label">🟢 低风险</div><div class="rubric-example">MESSAGE类型<br>无违规详情</div></div>
+    <div class="rubric-card r3"><div class="rubric-score">3</div><div class="rubric-label">🟡 边缘低风险</div><div class="rubric-example">DESCRIPTION<br>无违规详情</div></div>
+    <div class="rubric-card r4"><div class="rubric-score">4</div><div class="rubric-label">🟠 低中风险</div><div class="rubric-example">Low severity<br>无详情违规</div></div>
+    <div class="rubric-card r5"><div class="rubric-score">5</div><div class="rubric-label">🟠 中低风险</div><div class="rubric-example">High severity<br>Financial/Misinfo</div></div>
+    <div class="rubric-card r6"><div class="rubric-score">6</div><div class="rubric-label">🔴 中高风险</div><div class="rubric-example">Medium severity<br>Celebrity代言</div></div>
+    <div class="rubric-card r7"><div class="rubric-score">7</div><div class="rubric-label">🔴 高风险</div><div class="rubric-example">High+Health违规<br>VIDEO音频盲区</div></div>
+    <div class="rubric-card r8"><div class="rubric-score">8</div><div class="rubric-label">⛔ 极高风险</div><div class="rubric-example">色情擦边<br>暴力/血腥</div></div>
+    <div class="rubric-card r9"><div class="rubric-score">9</div><div class="rubric-label">☣️ 绝对红线</div><div class="rubric-example">医生/白大褂<br>形象</div></div>
+    <div class="rubric-card r10"><div class="rubric-score">10</div><div class="rubric-label">💀 零容忍</div><div class="rubric-example">极端暴力<br>血腥内容</div></div>
+  </div>
+  <!-- 容忍度进度条 -->
+  <div style="display:flex;border-radius:8px;overflow:hidden;height:12px;margin-bottom:16px;">
+    <div style="flex:155;background:#c62828;" title="高风险 7-10分 15.5%"></div>
+    <div style="flex:4;background:#ff7043;" title="中风险 4-6分 0.4%"></div>
+    <div style="flex:841;background:#43a047;" title="低风险 1-3分 84.1%"></div>
+  </div>
+  <div style="display:flex;gap:16px;margin-bottom:16px;font-size:12px;">
+    <span style="color:#c62828;font-weight:700;">● 高风险 7-10分 15.5%</span>
+    <span style="color:#ff7043;font-weight:700;">● 中风险 4-6分 0.4%</span>
+    <span style="color:#43a047;font-weight:700;">● 低风险 1-3分 84.1%</span>
+  </div>
+  <div class="info-grid">
+    <div>
+      <div class="threshold-item" style="background:#e8f5e9;">
+        <div class="threshold-badge" style="background:#43a047;font-size:10px;">1-3</div>
+        <div><div class="threshold-label" style="color:#2e7d32;">✅ 低风险 → 正常投放</div><div class="threshold-desc">无需任何复核，直接投放</div></div>
+      </div>
+      <div class="threshold-item" style="background:#fff8e1;">
+        <div class="threshold-badge" style="background:#ff9800;font-size:10px;">4-5</div>
+        <div><div class="threshold-label" style="color:#e65100;">⚠️ 中低风险 → 抽检 10%</div><div class="threshold-desc">AM 每日抽检 10% 素材</div></div>
+      </div>
+      <div class="threshold-item" style="background:#ffccbc;">
+        <div class="threshold-badge" style="background:#ff7043;font-size:10px;">6</div>
+        <div><div class="threshold-label" style="color:#bf360c;">🔶 中高风险 → 完整复核</div><div class="threshold-desc">所有 6 分素材必须人工审核</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="threshold-item" style="background:#ffcdd2;">
+        <div class="threshold-badge" style="background:#ef5350;font-size:10px;">7-8</div>
+        <div><div class="threshold-label" style="color:#c62828;">🔴 高风险 → 人工+主管</div><div class="threshold-desc">人工审查，主管二次确认</div></div>
+      </div>
+      <div class="threshold-item" style="background:#fce4ec;">
+        <div class="threshold-badge" style="background:#c62828;font-size:10px;">9</div>
+        <div><div class="threshold-label" style="color:#b71c1c;">⛔ 极高风险 → 立即拒绝</div><div class="threshold-desc">直接拒绝，标记黑名单</div></div>
+      </div>
+      <div class="threshold-item" style="background:#3d0000;color:white;">
+        <div class="threshold-badge" style="background:#1a0000;font-size:10px;">10</div>
+        <div><div class="threshold-label" style="color:#ff5252;">☣️ 零容忍 → 拒绝+举报</div><div class="threshold-desc" style="color:#ffcdd2;">拒绝+向平台举报+黑名单</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:#78909c;background:#f5f5f5;border-radius:6px;padding:8px 12px;">
+    <strong>⚠️ 注意：</strong>本期高风险（≥7分）占比 <strong>15.5%</strong>，较上期（3.6%）大幅上升 +11.9pp。9分（has_doctor）678条，10分（has_gore）64条，均较上期明显增加。
+  </div>
+</div>
+
+<!-- 二、每日评分趋势 -->
+<div class="section-title">📈 二、每日评分趋势</div>
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot blue"></span>每日平均评分</div>
+    <div class="chart-wrap">
+      <canvas id="dailyScoreChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>每日高风险（≥7分）占比</div>
+    <div class="chart-wrap">
+      <canvas id="dailyHighRiskChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 三、品类评分 -->
+<div class="section-title">🏷️ 三、品类风险评分分析</div>
+<div class="card">
+  <div class="card-title"><span class="dot orange"></span>品类均分排名（按均分从高到低，至少5条）</div>
+  <div class="chart-wrap">
+    <canvas id="catScoreChart"></canvas>
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>🔴 红色警戒品类（均分≥5）</div>
+    <table>
+      <thead><tr><th>品类</th><th>均分</th><th>总量</th><th>高风险数</th><th>高风险%</th><th>建议</th></tr></thead>
+      <tbody>
+        <tr style="background:#ffebee;"><td>Health, Wellness & Nutrition</td><td><strong style="color:#c62828;">6.3</strong></td><td>602</td><td>430</td><td>71.4%</td><td><span class="tag tag-red">立即全量复核</span></td></tr>
+        <tr style="background:#ffcdd2;"><td>Beauty & Personal Care</td><td><strong style="color:#c62828;">4.3</strong></td><td>1,304</td><td>610</td><td>46.8%</td><td><span class="tag tag-red">全量复核</span></td></tr>
+        <tr style="background:#fff3e0;"><td>Fashion / Activewear</td><td><strong style="color:#e65100;">5.8</strong></td><td>38</td><td>26</td><td>68.4%</td><td><span class="tag tag-red">全量复核</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot green"></span>✅ 低风险品类（均分≤2）</div>
+    <table>
+      <thead><tr><th>品类</th><th>均分</th><th>总量</th><th>高风险数</th><th>高风险%</th><th>建议</th></tr></thead>
+      <tbody>
+        <tr style="background:#e8f5e9;"><td>Home, Kitchen & Living</td><td><strong style="color:#2e7d32;">1.2</strong></td><td>3,186</td><td>81</td><td>2.5%</td><td><span class="tag tag-green">正常投放</span></td></tr>
+        <tr style="background:#e8f5e9;"><td>Jewelry, Watches & Acc.</td><td><strong style="color:#2e7d32;">1.0</strong></td><td>1,257</td><td>4</td><td>0.3%</td><td><span class="tag tag-green">正常投放</span></td></tr>
+        <tr style="background:#e8f5e9;"><td>Baby, Kids & Parenting</td><td><strong style="color:#2e7d32;">1.1</strong></td><td>309</td><td>2</td><td>0.6%</td><td><span class="tag tag-green">正常投放</span></td></tr>
+        <tr style="background:#e8f5e9;"><td>Outdoor, Garden & DIY</td><td><strong style="color:#2e7d32;">1.0</strong></td><td>192</td><td>0</td><td>0%</td><td><span class="tag tag-green">正常投放</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 四、Fashion 子品类 -->
+<div class="section-title">👗 四、Fashion 子品类评分（体量最大，27% 素材）</div>
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>Fashion 子品类均分 &amp; 高风险占比</div>
+  <div class="chart-wrap">
+    <canvas id="fashionChart"></canvas>
+  </div>
+</div>
+<div class="card" style="border-left:4px solid #ff9800;">
+  <table>
+    <thead><tr><th>子品类</th><th>均分</th><th>总量</th><th>高风险数</th><th>高风险%</th><th>主要风险</th><th>建议</th></tr></thead>
+    <tbody>
+      <tr style="background:#ffebee;"><td>Activewear</td><td><strong style="color:#c62828;">5.8</strong></td><td>38</td><td>26</td><td>68.4%</td><td>Body Claims</td><td><span class="tag tag-red">全量复核</span></td></tr>
+      <tr style="background:#ffcdd2;"><td>Shoes</td><td><strong style="color:#c62828;">3.1</strong></td><td>286</td><td>82</td><td>28.7%</td><td>Body Transformation</td><td><span class="tag tag-red">全量复核</span></td></tr>
+      <tr style="background:#fff3e0;"><td>Undergarments & Shapewear</td><td><strong style="color:#e65100;">2.4</strong></td><td>838</td><td>174</td><td>20.8%</td><td>Body Transformation</td><td><span class="tag tag-orange">抽检30%</span></td></tr>
+      <tr style="background:#fff8e1;"><td>Accessories</td><td><strong style="color:#f57f17;">2.1</strong></td><td>160</td><td>23</td><td>14.4%</td><td>Fraud</td><td><span class="tag tag-yellow">抽检10%</span></td></tr>
+      <tr style="background:#fff8e1;"><td>Women's Fashion</td><td><strong style="color:#f57f17;">1.7</strong></td><td>1,098</td><td>120</td><td>10.9%</td><td>Adult Content</td><td><span class="tag tag-yellow">抽检10%</span></td></tr>
+      <tr style="background:#e8f5e9;"><td>Men's Fashion</td><td><strong style="color:#2e7d32;">1.0</strong></td><td>284</td><td>1</td><td>0.4%</td><td>无明显风险</td><td><span class="tag tag-green">正常</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 五、违规类型 -->
+<div class="section-title">🚨 五、违规类型评分分布</div>
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>违规类型出现频次</div>
+  <div class="chart-wrap">
+    <canvas id="vtypeChart"></canvas>
+  </div>
+</div>
+
+<!-- 六、Boolean 因子 -->
+<div class="section-title">🔬 六、高风险 Boolean 因子统计</div>
+<div class="info-grid-3">
+  <div class="card" style="border-top:4px solid #3d0000;">
+    <div class="card-title" style="color:#b71c1c;"><span class="dot" style="background:#3d0000;"></span>💀 has_gore（暴力/血腥）</div>
+    <div style="text-align:center;margin:12px 0;">
+      <div style="font-size:40px;font-weight:800;color:#3d0000;">64</div>
+      <div style="font-size:12px;color:#78909c;">条（占总量 0.6%）</div>
+    </div>
+    <table>
+      <tbody>
+        <tr><td><strong style="color:#3d0000;">10分</strong></td><td>零容忍，自动拒绝</td></tr>
+        <tr><td>Tier3率</td><td><strong style="color:#c62828;">100%</strong></td></tr>
+        <tr><td>上期对比</td><td><strong style="color:#e53935;">↑ 0.4pp（上期 0.2%）</strong></td></tr>
+        <tr><td>建议动作</td><td><span class="tag tag-red">立即拒绝+举报</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card" style="border-top:4px solid #c62828;">
+    <div class="card-title" style="color:#c62828;"><span class="dot" style="background:#c62828;"></span>☣️ has_doctor（医生形象）</div>
+    <div style="text-align:center;margin:12px 0;">
+      <div style="font-size:40px;font-weight:800;color:#c62828;">678</div>
+      <div style="font-size:12px;color:#78909c;">条（占总量 6.5%）</div>
+    </div>
+    <table>
+      <tbody>
+        <tr><td><strong style="color:#c62828;">9分</strong></td><td>绝对红线，自动拒绝</td></tr>
+        <tr><td>Tier3率</td><td><strong style="color:#c62828;">60.2%</strong></td></tr>
+        <tr><td>上期对比</td><td><strong style="color:#e53935;">↑ +3.4pp（上期 3.1%）</strong></td></tr>
+        <tr><td>建议动作</td><td><span class="tag tag-red">立即拒绝</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card" style="border-top:4px solid #e53935;">
+    <div class="card-title" style="color:#c62828;"><span class="dot" style="background:#e53935;"></span>⛔ has_pornographic（色情）</div>
+    <div style="text-align:center;margin:12px 0;">
+      <div style="font-size:40px;font-weight:800;color:#e53935;">103</div>
+      <div style="font-size:12px;color:#78909c;">条（占总量 1.0%）</div>
+    </div>
+    <table>
+      <tbody>
+        <tr><td><strong style="color:#e53935;">8分</strong></td><td>极高风险，人工+主管</td></tr>
+        <tr><td>Tier3率</td><td><strong style="color:#c62828;">100%</strong></td></tr>
+        <tr><td>上期对比</td><td><strong style="color:#e53935;">↑ +0.6pp（上期 0.4%）</strong></td></tr>
+        <tr><td>建议动作</td><td><span class="tag tag-orange">人工+主管确认</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- AM 操作手册 -->
+<div class="section-title">✅ 七、AM 十分制评分操作手册</div>
+<div class="card">
+  <div class="card-title"><span class="dot green"></span>按评分快速操作指引</div>
+  <table>
+    <thead><tr><th>评分</th><th>风险等级</th><th>占比</th><th>审核动作</th><th>是否需要主管</th><th>是否通知广告主</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5e9;">
+        <td><strong style="color:#2e7d32;">1-3分</strong></td><td><span class="tag tag-green">✅ 低风险</span></td><td>84.1%</td><td>无需审核，直接投放</td><td>否</td><td>否</td>
+      </tr>
+      <tr style="background:#fff8e1;">
+        <td><strong style="color:#f57f17;">4-5分</strong></td><td><span class="tag tag-yellow">⚠️ 中低风险</span></td><td>0.4%</td><td>抽检 10%（随机）</td><td>否</td><td>否</td>
+      </tr>
+      <tr style="background:#ffccbc;">
+        <td><strong style="color:#bf360c;">6分</strong></td><td><span class="tag tag-orange">🔶 中高风险</span></td><td>0.0%</td><td>完整人工复核</td><td>否</td><td>是（标注问题）</td>
+      </tr>
+      <tr style="background:#ffcdd2;">
+        <td><strong style="color:#c62828;">7-8分</strong></td><td><span class="tag tag-red">🔴 高风险</span></td><td>8.6%</td><td>人工审查</td><td>是（二次确认）</td><td>是（需整改）</td>
+      </tr>
+      <tr style="background:#fce4ec;">
+        <td><strong style="color:#b71c1c;">9分</strong></td><td><span class="tag tag-red">⛔ 极高风险</span></td><td>6.3%</td><td>立即拒绝</td><td>否</td><td>是（说明违规）</td>
+      </tr>
+      <tr style="background:#3d0000;color:white;">
+        <td><strong style="color:#ff5252;">10分</strong></td><td style="color:#ff5252;"><strong>☣️ 零容忍</strong></td><td>0.6%</td><td>拒绝+举报</td><td>否</td><td>是（严重违规）</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 八、核心洞察 -->
+<div class="section-title">💡 八、本期核心洞察 &amp; 行动建议</div>
+<div class="card">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="highlight-block">
+      <div style="font-size:14px;font-weight:700;color:#c62828;margin-bottom:8px;">🔥 洞察 1：高风险占比从 3.6% 飙升至 15.5%</div>
+      <p>上期整体高风险率仅 3.6%（549条），本期达 15.5%（1,625条），增幅惊人。主要来源：9分（has_doctor）678条、10分（has_gore）64条、7分（Health&Wellness高严重度）804条。</p>
+    </div>
+    <div class="highlight-block" style="background:linear-gradient(135deg,#fff3e0,#fce4ec);">
+      <div style="font-size:14px;font-weight:700;color:#e65100;margin-bottom:8px;">⚠️ 洞察 2：Beauty 品类均分飙升至 4.3</div>
+      <p>Beauty & Personal Care 1,304 条，均分 4.3，46.8% 为高风险（610条）。该品类已成为仅次于 Health 的第二大风险来源，且绝对体量远超 Health，建议独立建立审核 SOP。</p>
+    </div>
+    <div class="highlight-block" style="background:linear-gradient(135deg,#f3e5f5,#e8f5e9);">
+      <div style="font-size:14px;font-weight:700;color:#6a1b9a;margin-bottom:8px;">📉 洞察 3：04-15 均分峰值（2.58分，高风险21.9%）</div>
+      <p>04-15 高风险率 21.9%，均分 2.58，为本周最高单日。04-19 降至 6.1%，均分 1.40，显著改善。04-15 批次来源广告主需重点排查。</p>
+    </div>
+    <div class="highlight-block" style="background:linear-gradient(135deg,#e8f5e9,#e3f2fd);">
+      <div style="font-size:14px;font-weight:700;color:#1b5e20;margin-bottom:8px;">⚡ 洞察 4：has_doctor 整改效果消退需重抓</div>
+      <p>上期 has_doctor 从 10.9% 降至 3.1%，整改明显。但本期回弹至 6.5%，超过两周前水平。说明 Health/Beauty 品类广告主又开始使用医生形象素材，需重新发出整改通知。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 行动清单 -->
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>📋 下周行动清单（按评分优先级排序）</div>
+  <table>
+    <thead><tr><th>#</th><th>行动项</th><th>涉及评分</th><th>品类/对象</th><th>优先级</th><th>负责方</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>向 Health & Beauty 广告主重新发出医生形象整改通知（has_doctor 6.5%，从3.1%回弹）</td><td><span class="tag tag-red">9分</span></td><td>Health/Beauty</td><td><span class="tag tag-red">P0</span></td><td>运营团队</td></tr>
+      <tr><td>2</td><td>Beauty & Personal Care 全量走人工审核通道（610条 Tier3，均分4.3）</td><td><span class="tag tag-red">7-9分</span></td><td>Beauty</td><td><span class="tag tag-red">P0</span></td><td>AM 团队</td></tr>
+      <tr><td>3</td><td>Health, Wellness & Nutrition 暂停新素材，存量全量复核（均分 6.3，71.4% Tier3）</td><td><span class="tag tag-red">7-9分</span></td><td>Health</td><td><span class="tag tag-red">P0</span></td><td>AM 团队</td></tr>
+      <tr><td>4</td><td>04-13~04-15 高评分批次溯源（高风险率 15.3%-17.3%）</td><td><span class="tag tag-orange">7-10分</span></td><td>全量</td><td><span class="tag tag-orange">P1</span></td><td>运营团队</td></tr>
+      <tr><td>5</td><td>Activewear 子品类建立专项 SOP（均分5.8，Tier3率68.4%）</td><td><span class="tag tag-orange">5-8分</span></td><td>Fashion</td><td><span class="tag tag-orange">P1</span></td><td>AM 团队</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 九、周期对比 -->
+<div class="section-title">📊 九、周期对比（04-06~04-12 vs 04-13~04-19）</div>
+<div class="card">
+  <table>
+    <thead><tr><th>指标</th><th>上期 04-06~04-12</th><th>本期 04-13~04-19</th><th>变化</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>审核总量</td><td>15,111 条</td><td><strong>10,480 条</strong></td><td style="color:#e53935;">↓ -30.6%</td><td>素材量减少</td></tr>
+      <tr><td>平均评分</td><td>2.1 分</td><td><strong>2.1 分</strong></td><td style="color:#78909c;">— 持平</td><td>均值被低分素材拉低</td></tr>
+      <tr><td>低风险（1-3分）占比</td><td>78.8%</td><td><strong>84.1%</strong></td><td style="color:#43a047;">↑ +5.3pp</td><td>低分素材占比提升</td></tr>
+      <tr><td>中风险（4-6分）占比</td><td>17.5%</td><td><strong>0.4%</strong></td><td style="color:#43a047;">↓ -17.1pp</td><td>中等违规大幅减少</td></tr>
+      <tr><td>高风险（≥7分）占比</td><td>3.6%</td><td><strong>15.5%</strong></td><td style="color:#c62828;">↑ +11.9pp ⚠️</td><td>高严重度违规激增</td></tr>
+      <tr><td>has_doctor 出现率</td><td>3.1%（475条）</td><td><strong>6.5%（678条）</strong></td><td style="color:#c62828;">↑ +3.4pp ⚠️</td><td>医生形象整改效果消退</td></tr>
+      <tr><td>Health 品类均分</td><td>6.8</td><td><strong>6.3</strong></td><td style="color:#43a047;">↓ 略降</td><td>但绝对体量大</td></tr>
+      <tr><td>Beauty 品类均分</td><td>5.0</td><td><strong>4.3</strong></td><td style="color:#43a047;">↓ 略降</td><td>但高风险率仍达46.8%</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  Meta 广告审核合规分析报告 · 数据周期：2026-04-13 ~ 2026-04-19 · 总量 10,480 条 · 十分制评分体系 v3 · 内部使用，请勿对外传播
+</div>
+
+<script src="chart.umd.min.js"></script>
+<script>
+(function() {
+  'use strict';
+  var DAYS = ['04-13','04-14','04-15','04-16','04-17','04-18','04-19'];
+
+  // 1. 评分分布 + Tier3率
+  try {
+    new Chart(document.getElementById('scoreDistChart'), {
+      type: 'bar',
+      data: {
+        labels: ['1分','2分','3分','4分','5分','6分','7分','8分','9分','10分'],
+        datasets: [
+          {
+            label: '记录数',
+            data: [8812, 0, 0, 3, 0, 40, 804, 100, 657, 64],
+            backgroundColor: ['#4caf50','#66bb6a','#81c784','#ff9800','#ffa726','#ff7043','#ef5350','#e53935','#c62828','#b71c1c'],
+            borderWidth: 0, borderRadius: 4
+          },
+          {
+            label: 'Tier3命中率(%)',
+            type: 'line',
+            data: [0, 0, 0, 100, 0, 100, 100, 100, 58.9, 100],
+            borderColor: '#7b1fa2', backgroundColor: 'transparent',
+            borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#7b1fa2',
+            tension: 0.3, yAxisID: 'yRate'
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { font: { size: 11 } } },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                if (ctx.dataset.label.indexOf('记录') > -1) {
+                  var pct = (ctx.raw / 10480 * 100).toFixed(1);
+                  return ' ' + ctx.raw.toLocaleString() + ' 条 (' + pct + '%)';
+                }
+                return ' Tier3命中率: ' + ctx.raw + '%';
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, title: { display: true, text: '记录数', font: { size: 10 } } },
+          yRate: { type: 'linear', position: 'right', beginAtZero: true, max: 120, grid: { display: false }, ticks: { callback: function(v) { return v + '%'; }, color: '#7b1fa2' }, title: { display: true, text: 'Tier3率%', color: '#7b1fa2', font: { size: 10 } } }
+        }
+      }
+    });
+  } catch(e) { console.error('scoreDistChart:', e); }
+
+  // 2. 每日均分
+  try {
+    new Chart(document.getElementById('dailyScoreChart'), {
+      type: 'line',
+      data: {
+        labels: DAYS,
+        datasets: [{
+          label: '每日均分',
+          data: [2.23, 2.48, 2.58, 1.72, 2.07, 1.94, 1.40],
+          borderColor: '#1877f2', backgroundColor: 'rgba(24,119,242,0.1)',
+          borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#1877f2',
+          tension: 0.3, fill: true
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' 均分: ' + c.raw; } } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          y: { beginAtZero: true, max: 5, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  } catch(e) { console.error(e); }
+
+  // 3. 每日高风险率
+  try {
+    new Chart(document.getElementById('dailyHighRiskChart'), {
+      type: 'bar',
+      data: {
+        labels: DAYS,
+        datasets: [{
+          label: '高风险率(%)',
+          data: [17.7, 20.5, 21.9, 9.9, 15.2, 13.6, 6.1],
+          backgroundColor: ['#ef5350','#e53935','#c62828','#ff9800','#ef5350','#ff7043','#43a047'],
+          borderWidth: 0, borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' 高风险率: ' + c.raw + '%'; } } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          y: { beginAtZero: true, max: 30, ticks: { callback: function(v) { return v + '%'; }, font: { size: 11 } } }
+        }
+      }
+    });
+  } catch(e) { console.error(e); }
+
+  // 4. 品类均分
+  try {
+    new Chart(document.getElementById('catScoreChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Health,W&N','Beauty&PC','Fashion','Fitness','Electronics','Pet Supplies','Other','Home,K&L','Baby&Kids','Jewelry','Outdoor'],
+        datasets: [{
+          label: '均分',
+          data: [6.34, 4.31, 2.04, 1.75, 1.49, 1.29, 1.38, 1.18, 1.05, 1.02, 1.00],
+          backgroundColor: ['#c62828','#e53935','#ff7043','#ffa726','#ff9800','#ffc107','#66bb6a','#43a047','#2e7d32','#1b5e20','#1b5e20'],
+          borderWidth: 0, borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' 均分: ' + c.raw; } } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          y: { beginAtZero: true, max: 8, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  } catch(e) { console.error(e); }
+
+  // 5. Fashion 子品类
+  try {
+    new Chart(document.getElementById('fashionChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Activewear','Shoes','Undergarments','Accessories','Women\'s','Loungewear','Men\'s'],
+        datasets: [
+          { label: '均分', data: [5.79, 3.11, 2.35, 2.12, 1.72, 1.00, 1.03], backgroundColor: '#1877f2', borderWidth: 0, borderRadius: 4, yAxisID: 'y' },
+          { label: '高风险率(%)', data: [68.4, 28.7, 20.8, 14.4, 10.9, 0, 0.4], backgroundColor: 'rgba(229,57,53,0.7)', borderWidth: 0, borderRadius: 4, yAxisID: 'yRate' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          y: { beginAtZero: true, max: 10, title: { display: true, text: '均分', font: { size: 10 } } },
+          yRate: { type: 'linear', position: 'right', beginAtZero: true, max: 80, grid: { display: false }, ticks: { callback: function(v) { return v + '%'; }, color: '#e53935' }, title: { display: true, text: '高风险率%', color: '#e53935', font: { size: 10 } } }
+        }
+      }
+    });
+  } catch(e) { console.error(e); }
+
+  // 6. 违规类型
+  try {
+    new Chart(document.getElementById('vtypeChart'), {
+      type: 'bar',
+      data: {
+        labels: [
+          'Health & Wellness',
+          'Fraud & Deceptive',
+          'Adult Content',
+          'Misinformation',
+          'Objectionable Content',
+          'IP Infringement',
+          'Privacy Violations',
+          'Restricted Goods',
+          'Unacceptable Business'
+        ],
+        datasets: [{
+          label: '出现次数',
+          data: [1150, 96, 74, 24, 14, 12, 11, 10, 5],
+          backgroundColor: '#7b1fa2', borderWidth: 0, borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { font: { size: 11 } } },
+          y: { ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  } catch(e) { console.error(e); }
+
+})();
+</script>
+</body>
+</html>
