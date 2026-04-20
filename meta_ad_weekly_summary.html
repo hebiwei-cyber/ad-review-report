@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 广告审核合规 · 多周趋势汇总报告</title>
+<script src="chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1c1e21; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #0d1b5e 0%, #1a237e 45%, #283593 100%); color: white; padding: 36px 32px 28px; border-radius: 0 0 20px 20px; margin-bottom: 24px; }
+  .header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; color: rgba(255,255,255,0.72); margin-bottom: 20px; }
+  .header-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .hstat { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; text-align: center; border: 1px solid rgba(255,255,255,0.15); }
+  .hstat-val { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .hstat-lbl { font-size: 11px; color: rgba(255,255,255,0.65); }
+  .hstat.warn .hstat-val { color: #ffcc02; }
+  .hstat.danger .hstat-val { color: #ff6b6b; }
+  .hstat.good .hstat-val { color: #69f0ae; }
+
+  /* Sections */
+  .section-title { font-size: 15px; font-weight: 700; color: #1a237e; padding: 0 0 12px 0; margin-bottom: 16px; border-bottom: 2px solid #e8eaf6; display: flex; align-items: center; gap: 8px; }
+  .card { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .card-title { font-size: 13px; font-weight: 600; color: #37474f; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot.red    { background: #e53935; }
+  .dot.orange { background: #fb8c00; }
+  .dot.green  { background: #43a047; }
+  .dot.purple { background: #7b1fa2; }
+  .dot.blue   { background: #1565c0; }
+  .dot.teal   { background: #00897b; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap-md { position: relative; height: 240px; }
+  .chart-wrap-sm { position: relative; height: 200px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f5f5f5; color: #546e7a; font-weight: 600; text-align: left; padding: 8px 10px; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #37474f; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .tag-red    { background: #ffebee; color: #c62828; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-green  { background: #e8f5e9; color: #2e7d32; }
+  .tag-blue   { background: #e3f2fd; color: #1565c0; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+
+  /* Week highlight strip */
+  .week-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .week-card { border-radius: 12px; padding: 16px 14px; text-align: center; position: relative; overflow: hidden; }
+  .week-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .wk1 { background: #e8f5e9; } .wk1::before { background: #43a047; }
+  .wk2 { background: #fff3e0; } .wk2::before { background: #fb8c00; }
+  .wk3 { background: #e8f5e9; } .wk3::before { background: #43a047; }
+  .wk4 { background: #ffebee; } .wk4::before { background: #e53935; }
+  .week-label { font-size: 11px; font-weight: 600; color: #78909c; margin-bottom: 6px; }
+  .week-range { font-size: 12px; font-weight: 700; color: #37474f; margin-bottom: 8px; }
+  .week-t3 { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .wk1 .week-t3, .wk3 .week-t3 { color: #2e7d32; }
+  .wk2 .week-t3 { color: #e65100; }
+  .wk4 .week-t3 { color: #c62828; }
+  .week-vol { font-size: 12px; color: #78909c; }
+  .week-trend { font-size: 12px; font-weight: 600; margin-top: 4px; }
+
+  /* Highlight block */
+  .highlight-block { background: linear-gradient(135deg, #fff8f0, #fff0f0); border-radius: 10px; padding: 16px 18px; border-left: 4px solid #e53935; }
+  .highlight-block.green  { background: linear-gradient(135deg, #f1f8f2, #e8f5e9); border-left-color: #43a047; }
+  .highlight-block.orange { background: linear-gradient(135deg, #fffaf0, #fff3e0); border-left-color: #fb8c00; }
+  .highlight-block.purple { background: linear-gradient(135deg, #f9f0ff, #f3e5f5); border-left-color: #7b1fa2; }
+  .highlight-block h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .highlight-block p { font-size: 12px; line-height: 1.7; color: #546e7a; }
+
+  /* Insight grid */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+
+  /* Alert bar */
+  .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; }
+  .alert.danger { background: #ffebee; border: 1px solid #ef9a9a; color: #b71c1c; }
+  .alert.warn   { background: #fff8e1; border: 1px solid #ffe082; color: #e65100; }
+  .alert.good   { background: #e8f5e9; border: 1px solid #a5d6a7; color: #1b5e20; }
+  .alert-icon   { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Category comparison */
+  .cat-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .cat-bar-label { width: 160px; font-size: 12px; color: #546e7a; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat-bar-track { flex: 1; background: #f5f5f5; border-radius: 4px; height: 16px; overflow: hidden; display: flex; }
+  .cat-bar-seg { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: white; transition: width 0.3s; }
+  .cat-bar-pct { width: 44px; text-align: right; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+
+  /* Phase timeline */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+  .tl-item { display: flex; gap: 16px; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+  .tl-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; border: 2px solid white; box-shadow: 0 0 0 2px currentColor; }
+  .tl-line { width: 2px; flex: 1; min-height: 20px; }
+  .tl-content { padding-bottom: 20px; flex: 1; }
+  .tl-week { font-size: 11px; font-weight: 700; color: #78909c; margin-bottom: 4px; }
+  .tl-event { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .tl-desc { font-size: 12px; color: #546e7a; line-height: 1.6; }
+
+  /* Action table */
+  .action-priority { display: inline-block; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; }
+  .p0 { background: #c62828; }
+  .p1 { background: #fb8c00; }
+  .p2 { background: #43a047; }
+
+  .footer { text-align: center; padding: 28px; color: #90a4ae; font-size: 12px; }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-left: 4px; }
+  .badge-red { background: #ffebee; color: #c62828; }
+  .badge-green { background: #e8f5e9; color: #2e7d32; }
+  .badge-orange { background: #fff3e0; color: #e65100; }
+
+  /* Viocat rank */
+  .viocat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .viocat-label { width: 200px; font-size: 12px; color: #37474f; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .viocat-track { flex: 1; background: #f5f5f5; border-radius: 4px; height: 18px; overflow: hidden; }
+  .viocat-fill { height: 100%; border-radius: 4px; }
+  .viocat-num { width: 52px; text-align: right; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+
+  /* Gray-area table */
+  .gray-note { background: #fff8e1; border-left: 4px solid #ffb300; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #6d4c00; margin-bottom: 12px; }
+  .gray-note strong { color: #e65100; }
+
+  /* Stacked bar */
+  .sbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .sbar-label { width: 90px; font-size: 12px; color: #546e7a; flex-shrink: 0; text-align: right; }
+  .sbar-track { flex: 1; display: flex; border-radius: 4px; overflow: hidden; height: 20px; }
+  .sbar-seg { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; white-space: nowrap; }
+  .sbar-legend { display: flex; gap: 14px; font-size: 11px; margin-bottom: 12px; flex-wrap: wrap; }
+  .sbar-legend-item { display: flex; align-items: center; gap: 5px; }
+  .sbar-legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 768px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .week-strip { grid-template-columns: 1fr 1fr; }
+    .header-stats { grid-template-columns: 1fr 1fr; }
+    .insight-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <h1>📊 Meta 广告审核合规 · 多周趋势汇总报告</h1>
+  <div class="subtitle">数据周期：2026-03-23 ~ 2026-04-19 · 共四周 · 自动生成</div>
+  <div class="header-stats">
+    <div class="hstat">
+      <div class="hstat-val">41,429</div>
+      <div class="hstat-lbl">四周累计审核量</div>
+    </div>
+    <div class="hstat danger">
+      <div class="hstat-val">↑ 13.3%</div>
+      <div class="hstat-lbl">最新周 Tier3 违规率</div>
+    </div>
+    <div class="hstat warn">
+      <div class="hstat-val">6.5%</div>
+      <div class="hstat-lbl">最新周 has_doctor</div>
+    </div>
+    <div class="hstat good">
+      <div class="hstat-val">3.6%</div>
+      <div class="hstat-lbl">最低周违规率（04-06）</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== 周概览条 ===== -->
+<div class="section-title">📅 四周概览</div>
+<div class="week-strip">
+  <div class="week-card wk1">
+    <div class="week-label">第1周</div>
+    <div class="week-range">03-23 ~ 03-29</div>
+    <div class="week-t3">27.5%</div>
+    <div class="week-vol">7,522 条</div>
+    <div class="week-trend" style="color:#e65100;">⚠️ 高风险基线</div>
+  </div>
+  <div class="week-card wk2">
+    <div class="week-label">第2周</div>
+    <div class="week-range">03-30 ~ 04-05</div>
+    <div class="week-t3">28.2%</div>
+    <div class="week-vol">8,316 条</div>
+    <div class="week-trend" style="color:#c62828;">↑ 继续走高</div>
+  </div>
+  <div class="week-card wk3">
+    <div class="week-label">第3周</div>
+    <div class="week-range">04-06 ~ 04-12</div>
+    <div class="week-t3">3.6%</div>
+    <div class="week-vol">15,111 条</div>
+    <div class="week-trend" style="color:#2e7d32;">↓ 大幅改善</div>
+  </div>
+  <div class="week-card wk4">
+    <div class="week-label">第4周</div>
+    <div class="week-range">04-13 ~ 04-19</div>
+    <div class="week-t3">13.3%</div>
+    <div class="week-vol">10,480 条</div>
+    <div class="week-trend" style="color:#c62828;">↑ 反弹警报</div>
+  </div>
+</div>
+
+<!-- ===== 一、关键指标趋势 ===== -->
+<div class="section-title">📈 一、关键指标四周趋势</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>Tier3 违规率趋势（%）</div>
+    <div class="chart-wrap">
+      <canvas id="t3TrendChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot purple"></span>审核总量趋势（条）</div>
+    <div class="chart-wrap">
+      <canvas id="volTrendChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>has_doctor 出现率趋势（%）</div>
+    <div class="chart-wrap-md">
+      <canvas id="doctorTrendChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot teal"></span>has_gore / has_porn 出现率趋势（%）</div>
+    <div class="chart-wrap-md">
+      <canvas id="boolTrendChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 二、完整数据表 ===== -->
+<div class="section-title">📋 二、四周完整数据对照</div>
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>指标</th>
+        <th>W1 03-23~03-29</th>
+        <th>W2 03-30~04-05</th>
+        <th>W3 04-06~04-12</th>
+        <th>W4 04-13~04-19</th>
+        <th>趋势</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>审核总量</strong></td>
+        <td>7,522</td>
+        <td>8,316 <span class="badge badge-green">↑+10.6%</span></td>
+        <td>15,111 <span class="badge badge-green">↑+81.7%</span></td>
+        <td>10,480 <span class="badge badge-red">↓-30.6%</span></td>
+        <td>波动较大</td>
+      </tr>
+      <tr style="background:#fff5f5;">
+        <td><strong>Tier3 违规率</strong></td>
+        <td><strong style="color:#c62828;">27.5%</strong></td>
+        <td><strong style="color:#c62828;">28.2%</strong></td>
+        <td><strong style="color:#2e7d32;">3.6%</strong></td>
+        <td><strong style="color:#c62828;">13.3%</strong></td>
+        <td><span class="tag tag-red">↑反弹，需关注</span></td>
+      </tr>
+      <tr>
+        <td>Tier3 绝对数量</td>
+        <td>2,069</td>
+        <td>2,345</td>
+        <td>549</td>
+        <td>1,398</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><strong>has_doctor 出现率</strong></td>
+        <td><strong style="color:#e65100;">10.9%</strong></td>
+        <td><strong style="color:#e65100;">10.9%</strong> (906条)</td>
+        <td><strong style="color:#2e7d32;">3.1%</strong> (475条) <span class="badge badge-green">↓改善</span></td>
+        <td><strong style="color:#c62828;">6.5%</strong> (678条) <span class="badge badge-red">↑反弹</span></td>
+        <td><span class="tag tag-orange">整改效果衰退</span></td>
+      </tr>
+      <tr>
+        <td>has_gore 出现率</td>
+        <td>—</td>
+        <td>—</td>
+        <td>0.2% (24条)</td>
+        <td>0.6% (64条) <span class="badge badge-red">↑+0.4pp</span></td>
+        <td>上升</td>
+      </tr>
+      <tr>
+        <td>has_porn 出现率</td>
+        <td>—</td>
+        <td>—</td>
+        <td>0.4% (67条)</td>
+        <td>1.0% (103条) <span class="badge badge-red">↑+0.6pp</span></td>
+        <td>上升</td>
+      </tr>
+      <tr style="background:#f3e5f5;">
+        <td><strong>Health 品类 Tier3率</strong></td>
+        <td>86.3%</td>
+        <td>94.1%</td>
+        <td>66%</td>
+        <td><strong style="color:#c62828;">71.4%</strong></td>
+        <td><span class="tag tag-red">长期高危</span></td>
+      </tr>
+      <tr style="background:#fff3e0;">
+        <td><strong>Beauty 品类 Tier3率</strong></td>
+        <td>64.0%</td>
+        <td>63.3%</td>
+        <td>36%</td>
+        <td><strong style="color:#c62828;">46.8%</strong></td>
+        <td><span class="tag tag-orange">W3改善，W4反弹</span></td>
+      </tr>
+      <tr>
+        <td><strong>VIDEO Tier3率/风险</strong></td>
+        <td>40.9%</td>
+        <td>47.9%</td>
+        <td>高风险34%（均分6.0）</td>
+        <td>高风险率偏高</td>
+        <td><span class="tag tag-orange">持续高风险</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 三、品类四周对比 ===== -->
+<div class="section-title">🏷️ 三、高风险品类四周走势</div>
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>Health / Beauty / Fashion 品类 Tier3 率四周对比（%）</div>
+  <div class="chart-wrap">
+    <canvas id="catTrendChart"></canvas>
+  </div>
+</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>🔴 最高风险品类（Health）</div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W1 03-23~03-29</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#e53935;width:86.3%;"></div></div>
+      <div class="cat-bar-pct" style="color:#c62828;">86.3%</div>
+    </div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W2 03-30~04-05</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#e53935;width:94.1%;"></div></div>
+      <div class="cat-bar-pct" style="color:#c62828;">94.1%</div>
+    </div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W3 04-06~04-12</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#fb8c00;width:66%;"></div></div>
+      <div class="cat-bar-pct" style="color:#e65100;">66.0%</div>
+    </div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W4 04-13~04-19</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#e53935;width:71.4%;"></div></div>
+      <div class="cat-bar-pct" style="color:#c62828;">71.4%</div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#c62828;background:#ffebee;border-radius:6px;padding:8px 12px;">
+      📌 四周均 &gt;66%，为系统性高危品类，整改效果难以持续。建议建立专属 SOP。
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>🟠 持续高危品类（Beauty）</div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W1 03-23~03-29</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#e53935;width:64%;"></div></div>
+      <div class="cat-bar-pct" style="color:#c62828;">64.0%</div>
+    </div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W2 03-30~04-05</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#e53935;width:63.3%;"></div></div>
+      <div class="cat-bar-pct" style="color:#c62828;">63.3%</div>
+    </div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W3 04-06~04-12</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#66bb6a;width:36%;"></div></div>
+      <div class="cat-bar-pct" style="color:#2e7d32;">36.0%</div>
+    </div>
+    <div class="cat-bar-row">
+      <div class="cat-bar-label">W4 04-13~04-19</div>
+      <div class="cat-bar-track"><div class="cat-bar-seg" style="background:#fb8c00;width:46.8%;"></div></div>
+      <div class="cat-bar-pct" style="color:#e65100;">46.8%</div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#e65100;background:#fff3e0;border-radius:6px;padding:8px 12px;">
+      📌 W3 整改见效（36%），W4 反弹至 46.8%。整改需持续加压，不能停。
+    </div>
+  </div>
+</div>
+
+<!-- ===== 四、演变阶段解读 ===== -->
+<div class="section-title">🧭 四、四周演变阶段分析</div>
+<div class="card">
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot" style="color:#e53935;"></div>
+        <div class="tl-line" style="background:#e53935;opacity:0.3;"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-week">W1&W2 · 03-23~04-05</div>
+        <div class="tl-event" style="color:#c62828;">🔴 高违规持续阶段（Tier3率 27-28%）</div>
+        <div class="tl-desc">
+          四周中违规率最高的两周，Health 品类 Tier3 率达 86~94%，has_doctor 出现率高达 10.9%（906条），
+          违规主要由 <strong>Prohibited Health Claims（禁止健康声明）</strong> 驱动，
+          单日最高（4月5日）飙升至 <strong>48.4%</strong>。VIDEO 素材违规率持续攀升（40.9%→47.9%）。
+          Fashion 品类从 98.7% 高位整改至 24.2%，是同期唯一改善信号。
+          <strong>审核量相对较小</strong>（7,522/8,316条），但违规密度极高。
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot" style="color:#43a047;"></div>
+        <div class="tl-line" style="background:#43a047;opacity:0.3;"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-week">W3 · 04-06~04-12</div>
+        <div class="tl-event" style="color:#2e7d32;">✅ 集中整改见效阶段（Tier3率 3.6%）</div>
+        <div class="tl-desc">
+          Tier3 率骤降至 <strong>3.6%（历史最低）</strong>，审核量大幅扩容至 15,111 条（较上周 +81.7%）。
+          has_doctor 从 10.9% 降至 <strong>3.1%</strong>（改善 7.8pp），说明针对医生形象的整改措施已落地见效。
+          Health 品类 Tier3 率也从 94.1% 降至 66%，Beauty 从 63.3% 降至 36%。
+          <strong>本周是整个观察期内合规表现最佳的一周</strong>，但盲区警告已出现：
+          约 21.8% Tier3 违规落在低分区（VIDEO 无标注类）。
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot" style="color:#fb8c00;"></div>
+        <div class="tl-line" style="background:transparent;"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-week">W4 · 04-13~04-19</div>
+        <div class="tl-event" style="color:#c62828;">⚠️ 整改效果衰退、违规反弹阶段（Tier3率 13.3%）</div>
+        <div class="tl-desc">
+          Tier3 率反弹至 13.3%（+9.7pp），绝对数量从 549 条激增至 <strong>1,398 条（+154.6%）</strong>。
+          has_doctor 从 3.1% 反弹至 6.5%，has_gore（0.2%→0.6%）和 has_porn（0.4%→1.0%）同步恶化。
+          Beauty + Health + Fashion（Activewear/Shoes）三大品类集中爆发，
+          审核量同时大幅缩减（-30.6%），说明高风险素材占比急剧上升。
+          <strong>整改成果未巩固，反弹风险正在加速</strong>。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 五、核心洞察 ===== -->
+<div class="section-title">💡 五、核心洞察</div>
+<div class="insight-grid">
+  <div class="highlight-block">
+    <h4 style="color:#c62828;">🔴 洞察1：整改效果难以持续，W4 违规快速反弹</h4>
+    <p>W3 通过集中整改将 Tier3率从 28.2% 降至 3.6%，但 W4 即反弹至 13.3%，<strong>仅一周回弹 9.7pp</strong>。整改措施的有效期极短，说明当前整改停留在"一次性清理"层面，缺乏持续监控机制和广告主行为管理手段。</p>
+  </div>
+  <div class="highlight-block green">
+    <h4 style="color:#1b5e20;">✅ 洞察2：医生形象整改验证了 has_doctor 作为预测信号的有效性</h4>
+    <p>has_doctor 与 Tier3 高度相关（Tier3 率约 60~94%）。W3 专项整改后，has_doctor 从 10.9% 降至 3.1%，同步驱动 Tier3 整体大降。W4 反弹时 has_doctor 也同步回升至 6.5%。<strong>has_doctor 可作为早期预警的核心监控指标。</strong></p>
+  </div>
+  <div class="highlight-block orange">
+    <h4 style="color:#e65100;">⚠️ 洞察3：Health + Beauty 品类四周持续高危，是系统性问题</h4>
+    <p>Health 品类四周 Tier3 率分别为 86.3% / 94.1% / 66% / 71.4%，<strong>从未低于 66%</strong>。Beauty 类似，W3 最低也有 36%。两大品类合计 Tier3 量持续占全量 60% 以上，说明是系统性高风险来源，需建立品类级专项 SOP 而非依赖整体整改。</p>
+  </div>
+  <div class="highlight-block purple">
+    <h4 style="color:#6a1b9a;">📊 洞察4：审核量与违规率呈现负相关</h4>
+    <p>W3 审核量最高（15,111条），违规率最低（3.6%）；W4 审核量缩减至 10,480 条（-30.6%），违规率反弹至 13.3%。<strong>审核量下降可能意味着新增素材结构变差</strong>（高风险类目素材占比升高），也可能反映平台流量结构变化，建议关联素材来源渠道分析。</p>
+  </div>
+</div>
+
+<!-- ===== 六、红线词变化 ===== -->
+<div class="section-title">🚫 六、主要违规类型（红线词）四周变化</div>
+
+<div class="gray-note">
+  <strong>说明：</strong>W1/W2 采用 Tier1/2/3 分级体系，违规类型以 <code>violationDetails.primaryViolationCategory</code> 为口径；W3/W4 采用10分制评分体系，违规类型定义与 W1/W2 基本一致但命名略有差异（如 W3/W4 的 "Health & Wellness" 对应 W1/W2 的 "Prohibited Health Claims"），已尽量对齐。数量为绝对出现次数（同一条素材可能含多类型），<strong>非去重数</strong>。
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>核心违规类型四周趋势（出现次数）</div>
+  <div class="chart-wrap">
+    <canvas id="viotypeChart"></canvas>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>🔴 健康类违规（最大来源）</div>
+    <div class="viocat-row">
+      <div class="viocat-label">W1 · 禁止健康声明(≈)</div>
+      <div class="viocat-track"><div class="viocat-fill" style="width:100%;background:#c62828;"></div></div>
+      <div class="viocat-num" style="color:#c62828;">~1,500</div>
+    </div>
+    <div class="viocat-row">
+      <div class="viocat-label">W2 · Prohibited Health Claims</div>
+      <div class="viocat-track"><div class="viocat-fill" style="width:78.5%;background:#e53935;"></div></div>
+      <div class="viocat-num" style="color:#e53935;">1,177</div>
+    </div>
+    <div class="viocat-row">
+      <div class="viocat-label">W3 · Prohibited Health Claims</div>
+      <div class="viocat-track"><div class="viocat-fill" style="width:43.5%;background:#fb8c00;"></div></div>
+      <div class="viocat-num" style="color:#e65100;">653</div>
+    </div>
+    <div class="viocat-row">
+      <div class="viocat-label">W4 · Health & Wellness</div>
+      <div class="viocat-track"><div class="viocat-fill" style="width:76.7%;background:#e53935;"></div></div>
+      <div class="viocat-num" style="color:#c62828;">1,150</div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:#c62828;background:#ffebee;border-radius:6px;padding:8px 12px;">
+      健康类违规始终占全部违规的 <strong>60~80%</strong>，W3 整改压至653条（最低），W4 骤反弹至1,150条，几乎回到W2水平。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>📋 各周违规类型 TOP5 对照</div>
+    <table>
+      <thead>
+        <tr>
+          <th>违规类型</th>
+          <th>W2</th>
+          <th>W3</th>
+          <th>W4</th>
+          <th>趋势</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#ffebee;">
+          <td><strong>健康类声明</strong><br><span style="font-size:10px;color:#90a4ae;">Prohibited/Health&Wellness</span></td>
+          <td><strong style="color:#c62828;">1,177</strong></td>
+          <td><strong style="color:#2e7d32;">653</strong></td>
+          <td><strong style="color:#c62828;">1,150</strong></td>
+          <td><span class="tag tag-red">↑反弹</span></td>
+        </tr>
+        <tr>
+          <td><strong>欺诈/误导</strong><br><span style="font-size:10px;color:#90a4ae;">Fraud & Deceptive / Misleading</span></td>
+          <td>50</td>
+          <td>50+67=<strong>117</strong></td>
+          <td><strong>96</strong></td>
+          <td><span class="tag tag-orange">持续存在</span></td>
+        </tr>
+        <tr>
+          <td><strong>成人/色情内容</strong><br><span style="font-size:10px;color:#90a4ae;">Explicit Content / Adult</span></td>
+          <td>34+33=<strong>67</strong></td>
+          <td>34+33=<strong>67</strong></td>
+          <td><strong>74</strong></td>
+          <td><span class="tag tag-orange">稳定偏高</span></td>
+        </tr>
+        <tr>
+          <td><strong>未证实健康声明</strong><br><span style="font-size:10px;color:#90a4ae;">Unsubstantiated Health Claims</span></td>
+          <td><strong>205</strong></td>
+          <td><strong>116</strong></td>
+          <td>—</td>
+          <td><span class="tag tag-green">W3改善</span></td>
+        </tr>
+        <tr>
+          <td><strong>身体形象/形变</strong><br><span style="font-size:10px;color:#90a4ae;">Body Image / Transformation</span></td>
+          <td>95</td>
+          <td>50+22=<strong>72</strong></td>
+          <td>—</td>
+          <td><span class="tag tag-orange">持续</span></td>
+        </tr>
+        <tr>
+          <td><strong>虚假紧迫感</strong><br><span style="font-size:10px;color:#90a4ae;">False Urgency / Scarcity</span></td>
+          <td>46</td>
+          <td>57+23=<strong>80</strong></td>
+          <td>—</td>
+          <td><span class="tag tag-orange">↑升高</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>W3 健康声明违规类型细分（整改参考）</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:12px;">
+    <div style="background:#fff3e0;border-radius:8px;padding:12px;border-left:3px solid #fb8c00;">
+      <div style="font-weight:700;color:#e65100;margin-bottom:4px;">Prohibited Health Claims</div>
+      <div style="font-size:22px;font-weight:800;color:#c62828;">653条</div>
+      <div style="color:#78909c;margin-top:4px;">W2 1,177条 · ↓-44.5%</div>
+    </div>
+    <div style="background:#fff3e0;border-radius:8px;padding:12px;border-left:3px solid #ffa726;">
+      <div style="font-weight:700;color:#e65100;margin-bottom:4px;">Unsubstantiated Health Claims</div>
+      <div style="font-size:22px;font-weight:800;color:#e65100;">116条</div>
+      <div style="color:#78909c;margin-top:4px;">W2 205条 · ↓-43.4%</div>
+    </div>
+    <div style="background:#e8f5e9;border-radius:8px;padding:12px;border-left:3px solid #66bb6a;">
+      <div style="font-weight:700;color:#2e7d32;margin-bottom:4px;">整改效果最显著</div>
+      <div style="font-size:22px;font-weight:800;color:#2e7d32;">↓44%</div>
+      <div style="color:#78909c;margin-top:4px;">两类健康声明共降 613条</div>
+    </div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:#546e7a;background:#f5f5f5;border-radius:6px;padding:10px 14px;">
+    <strong>W4 反弹原因推断：</strong>Health & Wellness 违规从 653 条骤升至 1,150 条（+76.1%），说明整改措施（主要针对医生形象 has_doctor）仅治标未治本。
+    核心问题是<strong>广告主创意文案本身的合规意识不足</strong>——has_doctor 减少了，但 Health 品类的功效声明依然大量存在。建议推进创意文案自动检测能力。
+  </div>
+</div>
+
+<!-- ===== 七、灰区变化 ===== -->
+<div class="section-title">⚡ 七、灰区（Tier2 / 中风险）四周变化</div>
+
+<div class="gray-note">
+  <strong>口径说明：</strong>W1/W2 灰区为 Tier2（系统直接判定），W3/W4 切换至10分制后无独立 Tier2，以「中风险 4-6分」区间替代（性质相同：存在违规风险但未达红线）。两种口径可类比参考，但<strong>不宜直接比较绝对数量</strong>（W3/W4 的4-6分区间覆盖更宽）。
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>灰区 / 中风险区间四周走势</div>
+    <div class="chart-wrap-md">
+      <canvas id="grayTrendChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot purple"></span>三色分布四周堆叠对比</div>
+    <div class="sbar-legend">
+      <div class="sbar-legend-item"><div class="sbar-legend-dot" style="background:#43a047;"></div><span>合规/低风险（Tier1 / 1-3分）</span></div>
+      <div class="sbar-legend-item"><div class="sbar-legend-dot" style="background:#fb8c00;"></div><span>灰区/中风险（Tier2 / 4-6分）</span></div>
+      <div class="sbar-legend-item"><div class="sbar-legend-dot" style="background:#e53935;"></div><span>红线/高风险（Tier3 / 7-10分）</span></div>
+    </div>
+    <div class="sbar-row">
+      <div class="sbar-label">W1<br><small style="color:#90a4ae;">03-23</small></div>
+      <div class="sbar-track">
+        <div class="sbar-seg" style="width:65.3%;background:#43a047;" title="Tier1 65.3%">65.3%</div>
+        <div class="sbar-seg" style="width:7.2%;background:#fb8c00;" title="Tier2 7.2%">7.2%</div>
+        <div class="sbar-seg" style="width:27.5%;background:#e53935;" title="Tier3 27.5%">27.5%</div>
+      </div>
+    </div>
+    <div class="sbar-row">
+      <div class="sbar-label">W2<br><small style="color:#90a4ae;">03-30</small></div>
+      <div class="sbar-track">
+        <div class="sbar-seg" style="width:66.5%;background:#43a047;" title="Tier1 66.5%">66.5%</div>
+        <div class="sbar-seg" style="width:5.3%;background:#fb8c00;" title="Tier2 5.3%">5.3%</div>
+        <div class="sbar-seg" style="width:28.2%;background:#e53935;" title="Tier3 28.2%">28.2%</div>
+      </div>
+    </div>
+    <div class="sbar-row">
+      <div class="sbar-label">W3<br><small style="color:#90a4ae;">04-06</small></div>
+      <div class="sbar-track">
+        <div class="sbar-seg" style="width:78.8%;background:#43a047;" title="低风险 78.8%">78.8%</div>
+        <div class="sbar-seg" style="width:17.5%;background:#fb8c00;" title="中风险 17.5%">17.5%</div>
+        <div class="sbar-seg" style="width:3.7%;background:#e53935;" title="高风险 3.7%">3.7%</div>
+      </div>
+    </div>
+    <div class="sbar-row">
+      <div class="sbar-label">W4<br><small style="color:#90a4ae;">04-13</small></div>
+      <div class="sbar-track">
+        <div class="sbar-seg" style="width:69.2%;background:#43a047;" title="低风险 69.2%">69.2%</div>
+        <div class="sbar-seg" style="width:15.3%;background:#fb8c00;" title="中风险 15.3%">15.3%</div>
+        <div class="sbar-seg" style="width:15.5%;background:#e53935;" title="高风险 15.5%">15.5%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#546e7a;background:#f5f5f5;border-radius:6px;padding:8px 12px;">
+      W3 灰区占比 17.5% 最高，但红线区仅 3.7%——说明整改把红线违规"降级"到了灰区，而非真正消除风险。W4 灰区降至 15.3%，但红线区反升至 15.5%，说明灰区又在向红线升级。
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot orange"></span>灰区详细数据对照</div>
+  <table>
+    <thead>
+      <tr>
+        <th>指标</th>
+        <th>W1 (03-23~03-29)</th>
+        <th>W2 (03-30~04-05)</th>
+        <th>W3 (04-06~04-12)</th>
+        <th>W4 (04-13~04-19)</th>
+        <th>口径</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>灰区/中风险数量</strong></td>
+        <td>540 条</td>
+        <td>437 条 <span class="badge badge-green">↓-18.9%</span></td>
+        <td><strong>2,648 条</strong> <span class="badge badge-orange">↑（口径扩大）</span></td>
+        <td>~1,604 条</td>
+        <td>W1/W2: Tier2；W3/W4: 4-6分</td>
+      </tr>
+      <tr>
+        <td><strong>灰区/中风险占比</strong></td>
+        <td>7.2%</td>
+        <td>5.3% <span class="badge badge-green">↓-1.9pp</span></td>
+        <td><strong style="color:#e65100;">17.5%</strong></td>
+        <td><strong style="color:#e65100;">15.3%</strong></td>
+        <td>—</td>
+      </tr>
+      <tr style="background:#fff3e0;">
+        <td><strong>灰区主要类型</strong></td>
+        <td>轻量健康暗示(GRAY-A)~540<br>诱导互动(GRAY-B)~108</td>
+        <td>轻量功效暗示 ~186<br>诱导性互动 ~108</td>
+        <td>VIDEO/DESCRIPTION 无标注<br>Low-Medium severity</td>
+        <td>VIDEO/DESCRIPTION 无标注<br>Body Transform Claims</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><strong>灰区→红线升级风险</strong></td>
+        <td><span class="tag tag-orange">中（GRAY-A占比高）</span></td>
+        <td><span class="tag tag-red">高（Tier3同期升高）</span></td>
+        <td><span class="tag tag-orange">中（17.5%但Tier3低）</span></td>
+        <td><span class="tag tag-red">高（灰区缩减伴随红线反弹）</span></td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="insight-grid" style="margin-top:14px;">
+    <div class="highlight-block orange">
+      <h4 style="color:#e65100;">⚠️ 灰区「虚性改善」现象</h4>
+      <p>W2 灰区从 540 降至 437（↓-18.9%），但 Tier3 同期从 27.5% 升至 28.2%。说明部分灰区内容<strong>直接升级为红线违规</strong>，并非真正改善，而是风险等级上移。</p>
+    </div>
+    <div class="highlight-block green">
+      <h4 style="color:#1b5e20;">✅ W3 灰区膨胀是"降级成功"的体现</h4>
+      <p>W3 中风险区间达 17.5%（W2 仅 5.3%），但红线区骤降至 3.6%。这说明整改将原本红线违规压降至灰区/中风险，<strong>是真实的合规改善</strong>，而非数据虚高。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 八、预警信号汇总 ===== -->
+
+<div class="section-title">🚨 八、当前预警信号</div>
+<div class="card">
+  <div class="alert danger">
+    <div class="alert-icon">🔴</div>
+    <div>
+      <strong>P0 预警：Tier3 违规率已从 3.6% 反弹至 13.3%</strong><br>
+      <span style="font-size:12px;">连续两周改善后骤然反弹，需立即复查 W4（04-13~04-19）高违规批次广告主来源，启动针对 Beauty & Personal Care、Health 品类的全量人工复核。</span>
+    </div>
+  </div>
+  <div class="alert danger">
+    <div class="alert-icon">🔴</div>
+    <div>
+      <strong>P0 预警：has_doctor 反弹至 6.5%（678条），超过 W3 整改基线两倍</strong><br>
+      <span style="font-size:12px;">W3 整改将其压至 3.1%，W4 一周内即回升至 6.5%。需重新对医生形象广告主执行约束，Beauty 类新兴医学权威形象需重点排查。</span>
+    </div>
+  </div>
+  <div class="alert warn">
+    <div class="alert-icon">🟠</div>
+    <div>
+      <strong>P1 预警：has_gore（0.6%）和 has_porn（1.0%）双双走高</strong><br>
+      <span style="font-size:12px;">两项指标为四周最高值。has_gore 绝对数增至 64 条（W3 为 24 条），has_porn 增至 103 条（W3 为 67 条），建议优先人工复核这两类素材。</span>
+    </div>
+  </div>
+  <div class="alert warn">
+    <div class="alert-icon">🟠</div>
+    <div>
+      <strong>P1 预警：W4 审核量骤降 -30.6%，但违规总量反升</strong><br>
+      <span style="font-size:12px;">量少质差是更危险的信号——说明新增素材池中高风险内容占比正在急速升高。建议排查 W4 素材来源渠道结构变化。</span>
+    </div>
+  </div>
+  <div class="alert good">
+    <div class="alert-icon">✅</div>
+    <div>
+      <strong>正向信号：Fashion 主类整改成效已基本稳固</strong><br>
+      <span style="font-size:12px;">W1 Fashion 违规率高达 98.7%，W2 降至 24.2%，W3/W4 整体可控（除 Activewear/Shoes 子品类外）。说明 Fashion 整改 SOP 有效，可作为模板推广至 Health/Beauty 品类。</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 七、行动优先级 ===== -->
+<div class="section-title">📋 九、综合行动优先级清单</div>
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>优先级</th>
+        <th>行动项</th>
+        <th>依据</th>
+        <th>负责方</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#ffebee;">
+        <td>1</td>
+        <td><span class="action-priority p0">P0</span></td>
+        <td>对 Beauty & Personal Care 品类实施全量人工复核，停止该品类快速通过</td>
+        <td>四周 Tier3 率均超 36%，W4 反弹至 46.8%</td>
+        <td>AM 团队</td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td>2</td>
+        <td><span class="action-priority p0">P0</span></td>
+        <td>建立 has_doctor 实时监控预警（阈值5%），触发则立即启动约束流程</td>
+        <td>四周数据验证其为核心预测信号，当前已反弹至 6.5%</td>
+        <td>技术+运营</td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td>3</td>
+        <td><span class="action-priority p0">P0</span></td>
+        <td>Health 品类建立独立 SOP（禁止 Prohibited Health Claims 的系统检测），不依赖人工整改</td>
+        <td>四周 Tier3 率从未低于 66%，系统性问题无法靠临时整改根治</td>
+        <td>产品+AM</td>
+      </tr>
+      <tr style="background:#fff8e1;">
+        <td>4</td>
+        <td><span class="action-priority p1">P1</span></td>
+        <td>复查 04-13~04-19 高违规批次，核查广告主账号来源与增量规律</td>
+        <td>W4 Tier3 从 549 条爆增至 1,398 条（+154.6%）</td>
+        <td>运营团队</td>
+      </tr>
+      <tr style="background:#fff8e1;">
+        <td>5</td>
+        <td><span class="action-priority p1">P1</span></td>
+        <td>将 Fashion 整改 SOP（W1→W2 已验证有效）文档化，推广至 Health/Beauty</td>
+        <td>Fashion 从 98.7% 降至可控水平，整改方法论可复用</td>
+        <td>AM 团队</td>
+      </tr>
+      <tr style="background:#fff8e1;">
+        <td>6</td>
+        <td><span class="action-priority p1">P1</span></td>
+        <td>对 has_gore / has_porn 素材实施自动拒绝（W4 分别 64/103 条，均为最高）</td>
+        <td>此类素材 Tier3 率接近 100%，无需人工判断</td>
+        <td>技术</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><span class="action-priority p2">P2</span></td>
+        <td>分析 W3→W4 审核量骤降 -30.6% 原因，评估素材来源渠道结构变化</td>
+        <td>量降质差是高风险信号，需明确驱动因素</td>
+        <td>数据团队</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><span class="action-priority p2">P2</span></td>
+        <td>建立周度合规健康度仪表盘（含 Tier3率、has_doctor、has_gore、has_porn 实时追踪）</td>
+        <td>四周数据已验证核心监控指标，需系统化</td>
+        <td>技术+运营</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 八、数据说明 ===== -->
+<div class="section-title">📝 十、数据与方法说明</div>
+<div class="card" style="font-size:12px;color:#546e7a;line-height:1.8;">
+  <p><strong>数据范围：</strong>2026-03-23 至 2026-04-19，共四周，累计 41,429 条审核记录，来源为系统 machine_result 与 machine_risk_result 字段解析。</p>
+  <p style="margin-top:8px;"><strong>Tier3 定义：</strong>W1/W2 基于 Tier1/2/3 分级体系（adStandardsCompliant=False 或 communityStandardsCompliant=False）；W3/W4 采用相同判定逻辑，统一口径可比。</p>
+  <p style="margin-top:8px;"><strong>10分制评分（W3/W4）：</strong>v3 逻辑，L1（Boolean因子）→ L2（severityLevel）→ L3（contentType兜底）。W1/W2 采用旧口径，10分制数据仅覆盖 W3/W4。</p>
+  <p style="margin-top:8px;"><strong>品类 Tier3 率：</strong>W1/W2 数据精度略低（手工录入），W3/W4 基于实际计算，建议以 W3/W4 数据作为基准。</p>
+  <p style="margin-top:8px;"><strong>注意：</strong>本报告由 AI 自动生成，如有数据解读差异，以原始各周报告为准。</p>
+</div>
+
+</div><!-- .container end -->
+
+<div class="footer">
+  Meta 广告审核合规 · 多周趋势汇总报告 · 数据截至 2026-04-19 · AI 自动生成
+</div>
+
+<script>
+const WEEKS = ['W1\n03-23~03-29', 'W2\n03-30~04-05', 'W3\n04-06~04-12', 'W4\n04-13~04-19'];
+const WEEKS_SHORT = ['W1 (03-23)', 'W2 (03-30)', 'W3 (04-06)', 'W4 (04-13)'];
+
+// ===== 1. Tier3 违规率趋势 =====
+try {
+  new Chart(document.getElementById('t3TrendChart'), {
+    type: 'line',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [{
+        label: 'Tier3 违规率(%)',
+        data: [27.5, 28.2, 3.6, 13.3],
+        borderColor: '#e53935',
+        backgroundColor: 'rgba(229,57,53,0.1)',
+        borderWidth: 2.5,
+        tension: 0.4,
+        fill: true,
+        pointRadius: 6,
+        pointBackgroundColor: ['#e53935','#e53935','#43a047','#e53935'],
+        pointBorderColor: 'white',
+        pointBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` Tier3率: ${ctx.raw}%`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true, max: 35,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { callback: v => v + '%', font: { size: 11 } }
+        }
+      }
+    }
+  });
+} catch(e) { console.error(e); }
+
+// ===== 2. 审核量趋势 =====
+try {
+  new Chart(document.getElementById('volTrendChart'), {
+    type: 'bar',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [{
+        label: '审核量（条）',
+        data: [7522, 8316, 15111, 10480],
+        backgroundColor: ['#90caf9','#90caf9','#42a5f5','#ef9a9a'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` 审核量: ${ctx.raw.toLocaleString()} 条` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { callback: v => (v/1000).toFixed(0) + 'k', font: { size: 11 } }
+        }
+      }
+    }
+  });
+} catch(e) { console.error(e); }
+
+// ===== 3. has_doctor 趋势 =====
+try {
+  new Chart(document.getElementById('doctorTrendChart'), {
+    type: 'line',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [{
+        label: 'has_doctor 出现率(%)',
+        data: [10.9, 10.9, 3.1, 6.5],
+        borderColor: '#fb8c00',
+        backgroundColor: 'rgba(251,140,0,0.1)',
+        borderWidth: 2.5,
+        tension: 0.4,
+        fill: true,
+        pointRadius: 6,
+        pointBackgroundColor: ['#e53935','#e53935','#43a047','#fb8c00'],
+        pointBorderColor: 'white',
+        pointBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` has_doctor: ${ctx.raw}%` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true, max: 14,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { callback: v => v + '%', font: { size: 11 } }
+        }
+      }
+    }
+  });
+} catch(e) { console.error(e); }
+
+// ===== 4. has_gore / has_porn 趋势 =====
+try {
+  new Chart(document.getElementById('boolTrendChart'), {
+    type: 'line',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [
+        {
+          label: 'has_gore(%)',
+          data: [null, null, 0.2, 0.6],
+          borderColor: '#c62828',
+          backgroundColor: 'rgba(198,40,40,0.08)',
+          borderWidth: 2, tension: 0.4, fill: false,
+          pointRadius: 5, pointBackgroundColor: '#c62828', pointBorderColor: 'white', pointBorderWidth: 2,
+        },
+        {
+          label: 'has_porn(%)',
+          data: [null, null, 0.4, 1.0],
+          borderColor: '#7b1fa2',
+          backgroundColor: 'rgba(123,31,162,0.08)',
+          borderWidth: 2, tension: 0.4, fill: false,
+          pointRadius: 5, pointBackgroundColor: '#7b1fa2', pointBorderColor: 'white', pointBorderWidth: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 10 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}%` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true, max: 1.5,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { callback: v => v + '%', font: { size: 11 } }
+        }
+      }
+    }
+  });
+} catch(e) { console.error(e); }
+
+// ===== 5. 品类 Tier3率 四周对比 =====
+try {
+  new Chart(document.getElementById('catTrendChart'), {
+    type: 'bar',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [
+        {
+          label: 'Health & Wellness',
+          data: [86.3, 94.1, 66.0, 71.4],
+          backgroundColor: 'rgba(229,57,53,0.75)',
+          borderColor: '#e53935', borderWidth: 1, borderRadius: 4,
+        },
+        {
+          label: 'Beauty & Personal Care',
+          data: [64.0, 63.3, 36.0, 46.8],
+          backgroundColor: 'rgba(251,140,0,0.75)',
+          borderColor: '#fb8c00', borderWidth: 1, borderRadius: 4,
+        },
+        {
+          label: 'Fashion & Apparel',
+          data: [17.0, 24.2, null, 15.2],
+          backgroundColor: 'rgba(123,31,162,0.55)',
+          borderColor: '#7b1fa2', borderWidth: 1, borderRadius: 4,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}%` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true, max: 100,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { callback: v => v + '%', font: { size: 11 } }
+        }
+      }
+    }
+  });
+} catch(e) { console.error(e); }
+
+// ===== 6. 违规类型趋势 =====
+try {
+  new Chart(document.getElementById('viotypeChart'), {
+    type: 'bar',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [
+        {
+          label: '健康类违规（Prohibited/H&W）',
+          data: [1500, 1177, 653, 1150],
+          backgroundColor: 'rgba(198,40,40,0.82)',
+          borderColor: '#c62828', borderWidth: 1, borderRadius: 3,
+        },
+        {
+          label: '欺诈/误导（Fraud & Misleading）',
+          data: [null, 50, 117, 96],
+          backgroundColor: 'rgba(251,140,0,0.78)',
+          borderColor: '#fb8c00', borderWidth: 1, borderRadius: 3,
+        },
+        {
+          label: '成人/色情（Explicit/Adult）',
+          data: [null, 67, 67, 74],
+          backgroundColor: 'rgba(123,31,162,0.72)',
+          borderColor: '#7b1fa2', borderWidth: 1, borderRadius: 3,
+        },
+        {
+          label: '未证实健康声明（Unsubstantiated）',
+          data: [null, 205, 116, null],
+          backgroundColor: 'rgba(229,57,53,0.48)',
+          borderColor: '#e53935', borderWidth: 1, borderRadius: 3,
+        },
+        {
+          label: '虚假紧迫感（False Urgency）',
+          data: [null, 46, 80, null],
+          backgroundColor: 'rgba(255,112,67,0.65)',
+          borderColor: '#ff7043', borderWidth: 1, borderRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12, padding: 8 } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + (ctx.raw != null ? ctx.raw + ' 次' : '无数据') } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+} catch(e) { console.error('viotypeChart:', e); }
+
+// ===== 7. 灰区趋势折线 =====
+try {
+  new Chart(document.getElementById('grayTrendChart'), {
+    type: 'line',
+    data: {
+      labels: WEEKS_SHORT,
+      datasets: [
+        {
+          label: '灰区/中风险 占比(%)',
+          data: [7.2, 5.3, 17.5, 15.3],
+          borderColor: '#fb8c00',
+          backgroundColor: 'rgba(251,140,0,0.12)',
+          borderWidth: 2.5, tension: 0.4, fill: true,
+          pointRadius: 6,
+          pointBackgroundColor: ['#fb8c00','#fb8c00','#fb8c00','#fb8c00'],
+          pointBorderColor: 'white', pointBorderWidth: 2,
+        },
+        {
+          label: '红线/高风险 占比(%)',
+          data: [27.5, 28.2, 3.6, 15.5],
+          borderColor: '#e53935',
+          backgroundColor: 'rgba(229,57,53,0.06)',
+          borderWidth: 2.5, tension: 0.4, fill: false,
+          pointRadius: 6,
+          pointBackgroundColor: ['#e53935','#e53935','#43a047','#e53935'],
+          pointBorderColor: 'white', pointBorderWidth: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 10 } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw + '%' } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true, max: 35,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { callback: function(v) { return v + '%'; }, font: { size: 11 } }
+        }
+      }
+    }
+  });
+} catch(e) { console.error('grayTrendChart:', e); }
+
+</script>
+</body>
+</html>
