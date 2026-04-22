@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>广告审核分析报告 · AD 120243212537560638</title>
+<script src="chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif; background: #f0f2f5; color: #263238; font-size: 14px; }
+
+  .page-header {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 40%, #3949ab 100%);
+    color: white; padding: 36px 40px 28px;
+  }
+  .page-header .badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 3px 12px; font-size: 11px; margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  .page-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .page-header .sub { font-size: 13px; opacity: 0.75; margin-bottom: 18px; }
+  .header-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .header-meta-item .lbl { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .header-meta-item .val { font-size: 14px; font-weight: 600; }
+
+  .dedup-banner {
+    background: #e8f5e9; border-bottom: 2px solid #a5d6a7;
+    padding: 10px 40px; font-size: 12px; color: #1b5e20;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dedup-banner strong { color: #2e7d32; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+  .section-title {
+    font-size: 15px; font-weight: 700; color: #1a237e;
+    padding: 10px 16px; margin: 28px 0 14px;
+    border-left: 4px solid #3949ab; background: #e8eaf6;
+    border-radius: 0 6px 6px 0;
+  }
+  .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .card-title { font-size: 13px; font-weight: 700; color: #37474f; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-card { background: white; border-radius: 10px; padding: 16px 14px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-top: 3px solid #ddd; }
+  .kpi-card.red { border-top-color: #e53935; }
+  .kpi-card.orange { border-top-color: #fb8c00; }
+  .kpi-card.blue { border-top-color: #1e88e5; }
+  .kpi-card.green { border-top-color: #43a047; }
+  .kpi-card.purple { border-top-color: #7b1fa2; }
+  .kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .kpi-num.red { color: #c62828; }
+  .kpi-num.orange { color: #e65100; }
+  .kpi-num.blue { color: #1565c0; }
+  .kpi-num.green { color: #2e7d32; }
+  .kpi-num.purple { color: #6a1b9a; }
+  .kpi-label { font-size: 11px; color: #78909c; margin-bottom: 3px; }
+  .kpi-sub { font-size: 10px; color: #b0bec5; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f5f5f5; color: #546e7a; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e0e0e0; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #37474f; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+  .tag-red { background: #ffebee; color: #c62828; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-green { background: #e8f5e9; color: #2e7d32; }
+  .tag-blue { background: #e3f2fd; color: #1565c0; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .tag-gray { background: #f5f5f5; color: #546e7a; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .dot.red { background: #e53935; }
+  .dot.orange { background: #fb8c00; }
+  .dot.green { background: #43a047; }
+  .dot.blue { background: #1e88e5; }
+  .dot.purple { background: #7b1fa2; }
+
+  .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; }
+  .alert.danger { background: #ffebee; border-left: 4px solid #e53935; color: #b71c1c; }
+  .alert.warning { background: #fff3e0; border-left: 4px solid #fb8c00; color: #bf360c; }
+  .alert.info { background: #e3f2fd; border-left: 4px solid #1e88e5; color: #0d47a1; }
+  .alert.success { background: #e8f5e9; border-left: 4px solid #43a047; color: #1b5e20; }
+
+  .element-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .element-id-badge { background: #1a237e; color: white; font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 6px; font-family: monospace; }
+  .status-badge { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .status-rejected { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+  .status-pass { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+
+  .evidence-box {
+    background: #fafafa; border: 1px solid #e0e0e0; border-left: 4px solid #e53935;
+    border-radius: 6px; padding: 12px 14px; font-size: 12px; color: #37474f;
+    line-height: 1.7; margin: 10px 0; max-height: 200px; overflow-y: auto;
+  }
+  .evidence-box.orange-border { border-left-color: #fb8c00; }
+  .evidence-label { font-size: 10px; font-weight: 700; color: #90a4ae; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .evidence-text { font-style: italic; }
+  .evidence-text em { font-style: normal; font-weight: 700; color: #c62828; background: #ffebee; padding: 0 2px; border-radius: 2px; }
+  .evidence-text em.orange { color: #e65100; background: #fff3e0; }
+
+  .policy-pill { display: inline-flex; align-items: center; gap: 5px; background: #e8eaf6; border: 1px solid #c5cae9; border-radius: 4px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #283593; }
+
+  .chart-wrap { position: relative; height: 260px; }
+  .chart-wrap-sm { position: relative; height: 200px; }
+  .chart-wrap-md { position: relative; height: 230px; }
+
+  .highlight-block { border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+  .highlight-block.red { background: #ffebee; border-left: 3px solid #e53935; }
+  .highlight-block.orange { background: #fff3e0; border-left: 3px solid #fb8c00; }
+  .highlight-block.green { background: #e8f5e9; border-left: 3px solid #43a047; }
+  .highlight-block.blue { background: #e3f2fd; border-left: 3px solid #1e88e5; }
+  .highlight-block.purple { background: #f3e5f5; border-left: 3px solid #7b1fa2; }
+  .highlight-block h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .highlight-block p { font-size: 12px; line-height: 1.7; }
+  .highlight-block ul { font-size: 12px; padding-left: 16px; line-height: 2; }
+
+  .rec-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
+  .rec-item:last-child { border-bottom: none; }
+  .rec-priority { flex-shrink: 0; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+  .rec-priority.p0 { background: #ffebee; color: #c62828; }
+  .rec-priority.p1 { background: #fff3e0; color: #e65100; }
+  .rec-priority.p2 { background: #e8f5e9; color: #2e7d32; }
+  .rec-body h4 { font-size: 13px; font-weight: 700; color: #263238; margin-bottom: 4px; }
+  .rec-body p { font-size: 12px; color: #546e7a; line-height: 1.6; }
+  .rec-body ul { font-size: 12px; color: #546e7a; padding-left: 16px; line-height: 2; margin-top: 6px; }
+  .rec-body .rec-detail { font-size: 11px; color: #90a4ae; margin-top: 5px; }
+
+  /* 数据对比条 */
+  .compare-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .compare-label { width: 130px; font-size: 12px; color: #546e7a; flex-shrink: 0; }
+  .compare-track { flex: 1; display: flex; gap: 4px; align-items: center; }
+  .compare-bar { height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; min-width: 30px; transition: width 0.3s; }
+  .compare-note { font-size: 11px; color: #90a4ae; flex-shrink: 0; }
+
+  footer { text-align: center; padding: 28px; color: #b0bec5; font-size: 11px; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .page-header { padding: 24px 16px 20px; }
+    .container { padding: 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="badge">Meta Ads · 违规专项分析</div>
+  <h1>广告 ID 120243212537560638 · 审核记录分析报告</h1>
+  <div class="sub">数据区间：2025-11-14 ~ 2026-04-21 &nbsp;·&nbsp; 平台：Facebook &nbsp;·&nbsp; 品类：Health, Wellness & Nutrition / Pain Relief</div>
+  <div class="header-meta">
+    <div class="header-meta-item"><span class="lbl">去重后审核快照</span><span class="val">117 条</span></div>
+    <div class="header-meta-item"><span class="lbl">涉及素材数</span><span class="val">4 个 Element</span></div>
+    <div class="header-meta-item"><span class="lbl">机器判定违规</span><span class="val">83 条 (70.9%)</span></div>
+    <div class="header-meta-item"><span class="lbl">人工确认违规</span><span class="val">3 条</span></div>
+    <div class="header-meta-item"><span class="lbl">报告生成</span><span class="val">2026-04-22</span></div>
+  </div>
+</div>
+
+<!-- 去重说明横幅 -->
+<div class="dedup-banner">
+  ✅ <strong>已完成数据去重</strong>：原始数据 351 条，每条记录均存在 3 份完全相同的重复，按 [ad_id × element_id × 快照日期] 去重后剩余 <strong>117 条</strong>（精确缩减为原来的 1/3）。以下所有分析均基于去重后数据。
+</div>
+
+<div class="container">
+
+<!-- KPI -->
+<div class="kpi-grid">
+  <div class="kpi-card red">
+    <div class="kpi-label">机器违规率</div>
+    <div class="kpi-num red">70.9%</div>
+    <div class="kpi-sub">83 / 117 条快照</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">持续违规素材</div>
+    <div class="kpi-num red">2个</div>
+    <div class="kpi-sub">445314 · 789093</div>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-label">最长持续违规</div>
+    <div class="kpi-num orange">155天</div>
+    <div class="kpi-sub">445314：80个快照日均违规</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-label">合规素材</div>
+    <div class="kpi-num green">2个</div>
+    <div class="kpi-sub">670837 (18天) · 670838 (16天)</div>
+  </div>
+  <div class="kpi-card purple">
+    <div class="kpi-label">has_doctor 触发</div>
+    <div class="kpi-num purple">3条</div>
+    <div class="kpi-sub">仅素材 789093 全量触发</div>
+  </div>
+</div>
+
+<!-- 一、整体概览 -->
+<div class="section-title">📊 一、广告整体概览</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>各素材审核结果汇总（去重后）</div>
+    <table>
+      <thead>
+        <tr><th>素材 ID</th><th>PASS</th><th>REJECTED</th><th>违规率</th><th>快照时间跨度</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+        <tr style="background:#ffebee;">
+          <td><strong>445314</strong></td>
+          <td>0</td>
+          <td><strong style="color:#c62828;">80</strong></td>
+          <td><strong style="color:#c62828;">100%</strong></td>
+          <td>2025-11-14 ~ 2026-04-21</td>
+          <td><span class="tag tag-red">持续违规</span></td>
+        </tr>
+        <tr style="background:#ffebee;">
+          <td><strong>789093</strong></td>
+          <td>0</td>
+          <td><strong style="color:#c62828;">3</strong></td>
+          <td><strong style="color:#c62828;">100%</strong></td>
+          <td>2026-04-09 ~ 2026-04-21</td>
+          <td><span class="tag tag-red">新增违规</span> <span class="tag tag-purple">has_doctor</span></td>
+        </tr>
+        <tr>
+          <td><strong>670837</strong></td>
+          <td>18</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>—</td>
+          <td><span class="tag tag-green">合规</span></td>
+        </tr>
+        <tr>
+          <td><strong>670838</strong></td>
+          <td>16</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>—</td>
+          <td><span class="tag tag-green">合规</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;font-size:12px;color:#78909c;background:#f9f9f9;border-radius:6px;padding:8px 12px;">
+      💡 数据说明：各素材每个日期快照各有 1 条有效记录，快照频率约为每周 1~3 次（按系统采集日期）。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>违规快照时间分布（去重后）</div>
+    <div class="chart-wrap-sm">
+      <canvas id="timelineChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot blue"></span>违规政策代码总览（去重后）</div>
+  <table>
+    <thead>
+      <tr><th>政策代码</th><th>违规类别</th><th>违规类型</th><th>严重程度</th><th>涉及素材</th><th>出现次数（快照数）</th></tr>
+    </thead>
+    <tbody>
+      <tr style="background:#fff3e0;">
+        <td><span class="policy-pill">FS-1.2</span></td>
+        <td>Fraud, Scams and Deceptive Practices</td>
+        <td>Guarantees can be misleading depending on the product.</td>
+        <td><span class="tag tag-orange">Low</span></td>
+        <td>445314</td>
+        <td><strong>80</strong> <span style="font-size:10px;color:#90a4ae;">（每次快照均触发）</span></td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td><span class="policy-pill">HW-1.1</span></td>
+        <td>Health and Wellness Violations</td>
+        <td>Prohibited Health Claims</td>
+        <td><span class="tag tag-red">High</span></td>
+        <td>789093</td>
+        <td><strong>3</strong></td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td><span class="policy-pill">HW-1.1</span></td>
+        <td>Health and Wellness Violations</td>
+        <td>Unsubstantiated Health Claims</td>
+        <td><span class="tag tag-red">High</span></td>
+        <td>789093</td>
+        <td><strong>3</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 二、素材445314 详细分析 -->
+<div class="section-title">🔴 二、素材 445314 · 违规详情（欺诈误导类）</div>
+
+<div class="element-header">
+  <div class="element-id-badge">Element ID: 445314</div>
+  <span class="status-badge status-rejected">全量违规 · 80/80 快照均 REJECTED</span>
+  <span class="tag tag-orange">Low Severity · FS-1.2</span>
+  <span class="tag tag-gray">Fraud &amp; Deceptive Practices</span>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>违规核心证据</div>
+    <div class="alert danger">
+      <strong>唯一违规触发词：</strong><code style="font-size:15px;font-weight:800;letter-spacing:0.5px;">"100% Money Back Guarantee"</code>
+    </div>
+    <div class="evidence-label" style="margin-top:12px;">机器审核摘取 Evidence</div>
+    <div class="evidence-box">
+      <div class="evidence-text"><em>100% Money Back Guarantee</em></div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#546e7a;line-height:1.9;">
+      <strong>政策代码：</strong>FS-1.2<br>
+      <strong>违规类别：</strong>Fraud, Scams and Deceptive Practices<br>
+      <strong>违规类型：</strong>Guarantees can be misleading depending on the product.<br>
+      <strong>严重程度：</strong><span class="tag tag-orange">Low</span><br>
+      <strong>违规层级：</strong>AS（Ad Standards）<br>
+      <strong>isCloseDoor：</strong>false（非关闭性违规）
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>违规持续时间分析</div>
+    <div class="alert warning">
+      <strong>⚠️ 持续违规 155+ 天，整改成本极低但从未处理</strong>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0;">
+      <div style="background:#ffebee;border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#e57373;margin-bottom:2px;">首次违规快照</div>
+        <div style="font-size:15px;font-weight:800;color:#c62828;">2025-11-14</div>
+      </div>
+      <div style="background:#ffebee;border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#e57373;margin-bottom:2px;">最新违规快照</div>
+        <div style="font-size:15px;font-weight:800;color:#c62828;">2026-04-21</div>
+      </div>
+      <div style="background:#fff3e0;border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#fb8c00;margin-bottom:2px;">有效违规快照数</div>
+        <div style="font-size:15px;font-weight:800;color:#e65100;">80 天</div>
+      </div>
+    </div>
+    <div style="background:#fff8e1;border-radius:8px;padding:12px;font-size:12px;color:#6d4c00;line-height:1.7;">
+      <strong>关键特征：</strong>80 个快照日期均触发同一处违规 —— <code>"100% Money Back Guarantee"</code>，内容完全固定，说明广告主<strong>从未对该素材做任何修改</strong>，属于运营监控响应滞后导致的长期合规风险。
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot orange"></span>FS-1.2 政策解读 · 为何该表述违规</div>
+  <div class="highlight-block orange">
+    <h4 style="color:#e65100;">📌 Meta 广告标准 FS-1.2 要点</h4>
+    <p>Meta 广告政策规定，在 <strong>Health & Wellness / Pain Relief</strong> 品类中，"100% Money Back Guarantee" 属于可能<strong>误导消费者产生不合理效果预期</strong>的保证性表述，原因如下：</p>
+    <ul style="margin-top:8px;">
+      <li>消费者可能将退款保证解读为「产品一定有效，不满意再退」，形成疗效担保的隐性暗示</li>
+      <li>健康类产品使用绝对保证语言，需配合明确的适用条件限制披露，否则构成欺诈性广告</li>
+      <li>此为广告标准层（AS）违规，非社区标准违规，说明该产品合法但广告表达方式不合规</li>
+    </ul>
+  </div>
+  <div class="alert info" style="margin-top:4px;">
+    <strong>Low Severity 的含义：</strong>isCloseDoor = false，不会直接导致账号封禁，但系统会持续拒审该素材，长期积累会对账号整体健康度评分产生负面影响。
+  </div>
+</div>
+
+<!-- 三、素材789093 详细分析 -->
+<div class="section-title">🔴 三、素材 789093 · 违规详情（医疗健康声明类）</div>
+
+<div class="element-header">
+  <div class="element-id-badge">Element ID: 789093</div>
+  <span class="status-badge status-rejected">全量违规 · 3/3 快照均 REJECTED</span>
+  <span class="tag tag-red">High Severity · HW-1.1</span>
+  <span class="tag tag-purple">has_doctor = 1（全量触发）</span>
+  <span class="tag tag-gray">2026-04-09 新增</span>
+</div>
+
+<div class="alert danger">
+  <strong>⚠️ 最高风险素材：</strong>严重程度 High（对比 445314 的 Low），同时触发 has_doctor 标记，两类违规均被系统确认且经人工审核（operation_result = 素材不合规），是该广告 ID 下<strong>优先级最高</strong>的整改对象。
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>ASR 语音文本（视频解说词 · 违规内容来源）</div>
+  <div class="evidence-label">ASR 自动语音识别文本节选，违规表述已标注</div>
+  <div class="evidence-box">
+    <div class="evidence-text">
+      "This is the hip pain life hack I wish I knew sooner. ... What's really happening is that your hip joint is being placed under constant mechanical stress. ...
+      <em>restoring alignment and preventing the hip from being pushed out of position. Because without that, the cycle never stops.</em>
+      ... <em>our solution that addresses the root cause of faulty foot mechanics.</em>
+      ... <em>They're built to realign the foot, control inward motion and keep the hip properly aligned with every step.</em>
+      ... <em>the hip finally has a chance to move normally again.</em>
+      ... <em>Xstance insoles are engineered to address the mechanics behind hip pain.</em>"
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>违规点 1 · Prohibited Health Claims</div>
+    <div style="margin-bottom:10px;"><span class="policy-pill">HW-1.1</span> &nbsp; <span class="tag tag-red">High Severity</span></div>
+    <div class="evidence-label">违规 Evidence（解说词截取）</div>
+    <div class="evidence-box">
+      <div class="evidence-text">
+        "<em>restoring alignment and preventing the hip from being pushed out of position</em>. Because without that, the cycle never stops. ...
+        <em>our solution that addresses the root cause of faulty foot mechanics</em>. ...
+        They're built to <em>realign the foot, control inward motion and keep the hip properly aligned</em> with every step. ...
+        <em>the hip finally has a chance to move normally again</em>. ...
+        <em>Xstance insoles are engineered to address the mechanics behind hip pain</em>."
+      </div>
+    </div>
+    <div class="highlight-block red" style="margin-top:10px;">
+      <h4 style="color:#c62828;">机器判定原因</h4>
+      <p>广告声称鞋垫能「纠正错位 / 恢复对齐 / 解决根本原因 / 防止髋关节偏移」，均属于<strong>医疗器械级声明</strong>。鞋垫为非医疗器械，不得宣称能治疗或纠正医疗状况。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>违规点 2 · Unsubstantiated Health Claims</div>
+    <div style="margin-bottom:10px;"><span class="policy-pill">HW-1.1</span> &nbsp; <span class="tag tag-red">High Severity</span></div>
+    <div class="evidence-label">违规 Evidence（用户证言）</div>
+    <div class="evidence-box orange-border">
+      <div class="evidence-text">
+        "<em class="orange">these little buggers right here have saved my life.</em>
+        I was about ready to have to go to an orthopedic and <em class="orange">get a hip replacement.</em>
+        My back and my hip were killing me.
+        By the second day <em class="orange">these little boys helped me be able to stand and not have pain.</em>
+        I can walk as far as I want. I can work as much as I want. ...
+        <em class="orange">I'd cry at night because my feet hurt so bad, even my hips would hurt. But once I put this in my tennis shoe... my feet don't hurt and my hips don't hurt</em>
+        so I strongly recommend it."
+      </div>
+    </div>
+    <div class="highlight-block orange" style="margin-top:10px;">
+      <h4 style="color:#e65100;">机器判定原因</h4>
+      <p>用户证言出现「saved my life」「avoided hip replacement」「no pain by day 2」等夸大性医疗结果描述，<strong>未经临床证实</strong>。广告主对 UGC 内容引发的违规同样承担责任。</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>has_doctor 标记的叠加影响</div>
+  <div class="grid2" style="margin-top:0;">
+    <div class="highlight-block blue">
+      <h4 style="color:#1565c0;">🩺 has_doctor = 1 的含义</h4>
+      <p>系统检测到素材 789093 中包含<strong>医生/医疗专业人士出镜形象</strong>，与健康声明类违规叠加，显著加重合规风险。Meta 对含医疗权威形象 + 健康声明的广告实施更严格的人工复审优先级。</p>
+    </div>
+    <div class="highlight-block red">
+      <h4 style="color:#c62828;">⚠️ 三重叠加违规</h4>
+      <p>789093 同时满足：<br>
+      ① <strong>禁止性健康声明</strong>（解说词医疗级描述）<br>
+      ② <strong>未证实健康声明</strong>（夸大用户证言）<br>
+      ③ <strong>has_doctor = 1</strong>（医生形象）<br>
+      是全广告 ID 中<strong>风险最高的素材</strong>，且已通过人工审核确认不合规。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 四、合规素材参考 -->
+<div class="section-title">✅ 四、合规素材参考（670837 / 670838）</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot green"></span>670838 · 合规情况</div>
+    <div class="element-header" style="margin-bottom:12px;">
+      <div class="element-id-badge" style="background:#2e7d32;">670838</div>
+      <span class="status-badge status-pass">16/16 快照全部 PASS</span>
+    </div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.9;">
+      <strong>机器判定：</strong>adStandardsCompliant = true，compliant = true<br>
+      <strong>置信度：</strong>confidenceScore = 0.95<br>
+      <strong>has_doctor：</strong>0（无医生形象）<br>
+      <strong>violationDetails：</strong>[] 无任何违规
+    </div>
+    <div class="alert success" style="margin-top:12px;">
+      同属 Pain Relief 品类，健康领域定位与违规素材一致，但<strong>完全未使用医疗功效声明</strong>，是同品类合规投放的可参考基准。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot green"></span>670837 · 合规情况</div>
+    <div class="element-header" style="margin-bottom:12px;">
+      <div class="element-id-badge" style="background:#2e7d32;">670837</div>
+      <span class="status-badge status-pass">18/18 快照全部 PASS</span>
+    </div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.9;">
+      <strong>has_doctor：</strong>0<br>
+      <strong>violationDetails：</strong>[] 无任何违规
+    </div>
+    <div class="alert success" style="margin-top:12px;">
+      与违规素材 445314 同属一个广告 ID，却 100% 合规——说明<strong>投放方向可行，问题在特定素材的文案选择</strong>，不是品类/账号整体问题。
+    </div>
+  </div>
+</div>
+
+<!-- 五、违规类型对比图 -->
+<div class="section-title">📈 五、数据可视化</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>各素材 PASS / REJECTED 分布</div>
+    <div class="chart-wrap-sm">
+      <canvas id="statusChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>违规类型构成（按去重快照数）</div>
+    <div class="chart-wrap-sm">
+      <canvas id="vioTypeChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 六、违规根因 -->
+<div class="section-title">🔍 六、违规根因分析</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>Health &amp; Wellness 品类广告常见违规边界对照</div>
+  <table>
+    <thead>
+      <tr><th>表述类型</th><th>❌ 违规示例（本次出现）</th><th>✅ 合规替代表述</th><th>政策</th></tr>
+    </thead>
+    <tbody>
+      <tr style="background:#ffebee;">
+        <td><strong>保证性承诺</strong></td>
+        <td>"<em>100% Money Back Guarantee</em>"</td>
+        <td>"30-day return policy — see details"<br>"Satisfaction guaranteed, terms apply"</td>
+        <td>FS-1.2</td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td><strong>治疗/修复声明</strong></td>
+        <td>"<em>addresses the root cause</em>"<br>"<em>restoring alignment</em>"<br>"<em>realign the foot</em>"</td>
+        <td>"designed for comfort and support"<br>"helps reduce discomfort during activity"<br>"supports natural movement"</td>
+        <td>HW-1.1</td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td><strong>医疗结果声明</strong></td>
+        <td>"<em>address the mechanics behind hip pain</em>"<br>"<em>engineered to address hip pain</em>"</td>
+        <td>"designed for arch support and cushioning"<br>"built to improve daily walking comfort"</td>
+        <td>HW-1.1</td>
+      </tr>
+      <tr style="background:#fff3e0;">
+        <td><strong>夸大用户证言</strong></td>
+        <td>"<em>saved my life</em>"<br>"<em>about to get hip replacement</em>"<br>"<em>pain gone by day 2</em>"</td>
+        <td>"felt more comfortable walking"<br>"noticed improvement in daily activities"<br>"easier to stand for long periods"</td>
+        <td>HW-1.1</td>
+      </tr>
+      <tr>
+        <td><strong>医疗权威背书</strong></td>
+        <td>医生形象 + 治疗性声明组合</td>
+        <td>仅展示产品特性，或使用非医疗专业人士背书</td>
+        <td>HW-1.1</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 七、整改建议 -->
+<div class="section-title">📋 七、整改建议（优先级排序）</div>
+
+<div class="card">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+    <span class="tag tag-red" style="font-size:12px;padding:4px 14px;">P0 · 立即处理</span>
+    <span style="font-size:12px;color:#546e7a;">影响账号健康，建议本周内完成</span>
+  </div>
+  <div style="height:1px;background:#f0f0f0;margin:12px 0;"></div>
+
+  <div class="rec-item">
+    <div class="rec-priority p0">P0</div>
+    <div class="rec-body">
+      <h4>🛑 素材 445314 · 修改保证性承诺文案（0.5 天可完成）</h4>
+      <p>整改方式极简：删除或替换 <code>"100% Money Back Guarantee"</code> 即可解决全部 80 个快照的持续违规。</p>
+      <ul>
+        <li>方案 A：直接删除该句子</li>
+        <li>方案 B：替换为 <code>"30-day return policy — see website for details"</code></li>
+        <li>方案 C：保留退款承诺，但须加入明确条款限制披露（如「仅限未开封商品 / 需提供购买证明」）</li>
+        <li>修改后重新提交审核，监控 7 天确认稳定 PASS</li>
+      </ul>
+      <div class="rec-detail">⏱ 预计整改周期：0.5 个工作日 | 🎯 预期效果：立即解除 80 个快照的拒审状态</div>
+    </div>
+  </div>
+
+  <div class="rec-item">
+    <div class="rec-priority p0">P0</div>
+    <div class="rec-body">
+      <h4>🛑 素材 789093 · 全面重制广告创意（3~5 天）</h4>
+      <p>三重复合违规，单纯修改文案无法解决，需重新制作：</p>
+      <ul>
+        <li><strong>解说词脚本：</strong>删除所有「纠正 / 对齐 / 修复 / 解决根本原因 / engineered to address pain」等医疗级表述，替换为「足弓支撑 / 运动舒适 / 步态辅助」等功能性描述</li>
+        <li><strong>用户证言片段：</strong>剪除「saved my life / avoided surgery / pain gone by day 2」等夸大陈述，保留描述「更舒适、走路更轻松」的真实体验反馈</li>
+        <li><strong>医生形象：</strong>若无医疗器械认证，建议移除医生出镜场景；如需保留权威感，可使用运动专业人士（运动员/教练）替代</li>
+        <li><strong>整体卖点方向：</strong>从「治疗髋痛」转向「日常运动舒适支撑 / 足弓护理 / 步态改善」</li>
+      </ul>
+      <div class="rec-detail">⏱ 预计整改周期：3~5 个工作日（含脚本改写 + 重新剪辑/配音）| 🎯 预期效果：消除 High Severity 违规风险</div>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin: 20px 0 4px;">
+    <span class="tag tag-orange" style="font-size:12px;padding:4px 14px;">P1 · 本周内</span>
+    <span style="font-size:12px;color:#546e7a;">流程优化，防止复发</span>
+  </div>
+  <div style="height:1px;background:#f0f0f0;margin:12px 0;"></div>
+
+  <div class="rec-item">
+    <div class="rec-priority p1">P1</div>
+    <div class="rec-body">
+      <h4>⚡ 建立健康品类广告文案上线前关键词审查清单</h4>
+      <p>投放前对照以下高风险词组进行逐条排查，阻断违规素材进入投放：</p>
+      <ul>
+        <li><strong>保证类：</strong>money back guarantee、zero risk、100% refund、无效退款</li>
+        <li><strong>治疗/修复类：</strong>root cause、cure、treat、eliminate pain、addresses the cause、restore / correct / realign</li>
+        <li><strong>医疗结果类：</strong>avoid surgery、saved my life、no more pain、replace medication、hip replacement</li>
+        <li><strong>夸大功效类：</strong>engineered to heal、scientifically proven to cure、clinically addresses</li>
+      </ul>
+      <div class="rec-detail">建议实现为 Excel 关键词对照表，后期可升级为文本扫描脚本</div>
+    </div>
+  </div>
+
+  <div class="rec-item">
+    <div class="rec-priority p1">P1</div>
+    <div class="rec-body">
+      <h4>⚡ 对 has_doctor = 1 的素材设置强制人工复审节点</h4>
+      <p>任何包含医生/医疗专业人士形象的健康品类素材，在投放前须经人工合规审查确认，并核实是否具备相应的医疗器械/专业认证材料。</p>
+      <div class="rec-detail">可在审核流程中增加 has_doctor 触发标记的自动提示</div>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin: 20px 0 4px;">
+    <span class="tag tag-green" style="font-size:12px;padding:4px 14px;">P2 · 中长期</span>
+    <span style="font-size:12px;color:#546e7a;">系统性提升</span>
+  </div>
+  <div style="height:1px;background:#f0f0f0;margin:12px 0;"></div>
+
+  <div class="rec-item">
+    <div class="rec-priority p2">P2</div>
+    <div class="rec-body">
+      <h4>✅ 参考合规素材 670837 / 670838 输出创意规范模板</h4>
+      <p>两个合规素材在相同品类和定位下实现 100% 通过，建议提取其创意策略（产品特性 + 舒适体验导向）作为 Pain Relief 品类新素材的创意基准，产出「Health 品类广告创意合规规范」内部文档。</p>
+    </div>
+  </div>
+
+  <div class="rec-item">
+    <div class="rec-priority p2">P2</div>
+    <div class="rec-body">
+      <h4>✅ 对高频违规素材建立持续监控告警机制</h4>
+      <p>设置规则：若某素材 REJECTED 率 = 100% 且持续超过 2 个审核周期，自动触发告警通知责任人。445314 持续违规 155 天未被处理，属于典型的监控盲区，应通过系统告警机制规避。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 八、总结 -->
+<div class="section-title">📝 八、结论摘要</div>
+
+<div class="card">
+  <div class="grid2">
+    <div>
+      <div class="highlight-block red">
+        <h4 style="color:#c62828;">🔴 核心问题（去重后数据）</h4>
+        <ul>
+          <li>117 条有效快照中 83 条违规，整体违规率 <strong>70.9%</strong></li>
+          <li>素材 445314：80 个快照日全部违规，单一触发词 155+ 天未整改，整改成本极低</li>
+          <li>素材 789093：3 个快照均为 High Severity 三重复合违规 + has_doctor，已经人工确认不合规，需重制创意</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="highlight-block green">
+        <h4 style="color:#2e7d32;">✅ 可借鉴的信号</h4>
+        <ul>
+          <li>同广告 ID 下的 670837 / 670838 共 34 个快照全部 PASS，证明同品类完全可以合规投放</li>
+          <li>问题集中在两个素材的特定创意选择，不影响整体投放策略</li>
+          <li>445314 的整改极为简单（0.5天），可立即释放大量被拒审资源</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="alert warning" style="margin-top:4px;">
+    <strong>最优先行动：</strong>① 今日修改素材 445314 的保证性文案（0.5天，80条拒审立即解除）；② 本周启动素材 789093 的重制（优先处理解说词脚本 + 证言片段剪辑）；③ 制定 Health 品类文案上线前审查规则，建立 has_doctor 素材的强制复审流程。
+  </div>
+</div>
+
+</div>
+
+<footer>广告 ID 120243212537560638 · 审核记录分析报告（去重版）&nbsp;·&nbsp; 生成时间：2026-04-22 &nbsp;·&nbsp; 原始记录 351 条 → 去重后 117 条（精确 3x 重复）</footer>
+
+<script>
+// 1. 各素材 PASS/REJECTED 柱状图
+try {
+  new Chart(document.getElementById('statusChart'), {
+    type: 'bar',
+    data: {
+      labels: ['445314', '670837', '670838', '789093'],
+      datasets: [
+        {
+          label: 'PASS',
+          data: [0, 18, 16, 0],
+          backgroundColor: 'rgba(67,160,71,0.82)',
+          borderColor: '#2e7d32', borderWidth: 1, borderRadius: 4,
+        },
+        {
+          label: 'REJECTED',
+          data: [80, 0, 0, 3],
+          backgroundColor: 'rgba(229,57,53,0.82)',
+          borderColor: '#c62828', borderWidth: 1, borderRadius: 4,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw + ' 条' } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, stepSize: 10 } }
+      }
+    }
+  });
+} catch(e) { console.error('statusChart:', e); }
+
+// 2. 违规类型饼图
+try {
+  new Chart(document.getElementById('vioTypeChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Fraud & Deceptive (FS-1.2 · Low)',
+        'Prohibited Health Claims (HW-1.1 · High)',
+        'Unsubstantiated Health Claims (HW-1.1 · High)'
+      ],
+      datasets: [{
+        data: [80, 3, 3],
+        backgroundColor: ['#fb8c00', '#c62828', '#ef5350'],
+        borderColor: 'white', borderWidth: 3, hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 8 } },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var pct = ((ctx.raw / 86) * 100).toFixed(1);
+              return ' ' + ctx.raw + ' 条 (' + pct + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+} catch(e) { console.error('vioTypeChart:', e); }
+
+// 3. 时间线折线图（445314 违规快照密度 · 按月份聚合）
+try {
+  new Chart(document.getElementById('timelineChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04'],
+      datasets: [
+        {
+          label: '445314 违规快照数',
+          data: [2, 4, 5, 10, 22, 37],
+          backgroundColor: 'rgba(229,57,53,0.75)',
+          borderColor: '#c62828', borderWidth: 1, borderRadius: 3,
+        },
+        {
+          label: '789093 违规快照数',
+          data: [0, 0, 0, 0, 0, 3],
+          backgroundColor: 'rgba(123,31,162,0.75)',
+          borderColor: '#7b1fa2', borderWidth: 1, borderRadius: 3,
+        },
+        {
+          label: '合规素材（670837+670838）快照数',
+          data: [0, 0, 0, 8, 16, 10],
+          backgroundColor: 'rgba(67,160,71,0.65)',
+          borderColor: '#2e7d32', borderWidth: 1, borderRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 10 }, boxWidth: 10, padding: 6 } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw + ' 条' } }
+      },
+      scales: {
+        x: { grid: { display: false }, stacked: false, ticks: { font: { size: 10 } } },
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, stepSize: 5 } }
+      }
+    }
+  });
+} catch(e) { console.error('timelineChart:', e); }
+</script>
+</body>
+</html>
