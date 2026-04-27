@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 广告审核合规分析报告 · 2026-04-20~04-26 · 十分制</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1c1e21; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 20px 16px 60px; }
+  .header { background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%); color: white; padding: 32px 24px; border-radius: 0 0 16px 16px; margin-bottom: 20px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .header .subtitle { font-size: 13px; color: rgba(255,255,255,0.75); }
+  .header .meta { margin-top: 12px; display: flex; gap: 24px; font-size: 12px; color: rgba(255,255,255,0.65); flex-wrap: wrap; }
+  .card { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a237e; padding: 0 0 12px 0; margin-bottom: 16px; border-bottom: 2px solid #e8eaf6; display: flex; align-items: center; gap: 8px; }
+  .card-title { font-size: 13px; font-weight: 600; color: #37474f; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot.red    { background: #e53935; }
+  .dot.orange { background: #fb8c00; }
+  .dot.green  { background: #43a047; }
+  .dot.purple { background: #7b1fa2; }
+  .dot.blue   { background: #1877f2; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi-card { background: white; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-top: 4px solid #e0e0e0; text-align: center; transition: transform 0.15s; }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .kpi-card.green  { border-top-color: #43a047; }
+  .kpi-card.orange { border-top-color: #fb8c00; }
+  .kpi-card.red    { border-top-color: #e53935; }
+  .kpi-card.purple { border-top-color: #7b1fa2; }
+  .kpi-value { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .kpi-card.green  .kpi-value { color: #2e7d32; }
+  .kpi-card.orange .kpi-value { color: #e65100; }
+  .kpi-card.red    .kpi-value { color: #c62828; }
+  .kpi-card.purple .kpi-value { color: #6a1b9a; }
+  .kpi-label { font-size: 12px; color: #78909c; font-weight: 500; }
+  .kpi-sub { font-size: 11px; color: #b0bec5; margin-top: 4px; }
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap-sm { position: relative; height: 220px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f5f5f5; color: #546e7a; font-weight: 600; text-align: left; padding: 8px 10px; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #37474f; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .tag-red    { background: #ffebee; color: #c62828; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-yellow { background: #fffde7; color: #f57f17; }
+  .tag-green  { background: #e8f5e9; color: #2e7d32; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .tag-blue   { background: #e3f2fd; color: #1565c0; }
+  .footer { text-align: center; padding: 24px; color: #90a4ae; font-size: 12px; }
+  .highlight-block { background: linear-gradient(135deg, #e8eaf6, #c5cae9); border-radius: 8px; padding: 14px 16px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .info-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .rubric-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+  .rubric-card { border-radius: 10px; padding: 16px 10px; text-align: center; border: 2px solid transparent; }
+  .rubric-card.r1  { background: #e8f5e9; border-color: #a5d6a7; }
+  .rubric-card.r2  { background: #f1f8e9; border-color: #c5e1a5; }
+  .rubric-card.r3  { background: #fff8e1; border-color: #ffe082; }
+  .rubric-card.r4  { background: #fff3e0; border-color: #ffcc80; }
+  .rubric-card.r5  { background: #ffccbc; border-color: #ffab91; }
+  .rubric-card.r6  { background: #ffcdd2; border-color: #ef9a9a; }
+  .rubric-card.r7  { background: #ef9a9a; border-color: #e57373; }
+  .rubric-card.r8  { background: #e57373; border-color: #ef5350; color: white; }
+  .rubric-card.r9  { background: #c62828; border-color: #b71c1c; color: white; }
+  .rubric-card.r10 { background: #3d0000; border-color: #1a0000; color: white; }
+  .rubric-score { font-size: 34px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .rubric-label { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .rubric-example { font-size: 11px; opacity: 0.9; line-height: 1.5; }
+  .threshold-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 12px; }
+  .threshold-badge { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: white; flex-shrink: 0; }
+  .threshold-label { font-weight: 600; font-size: 12px; }
+  .threshold-desc { font-size: 11px; color: #555; }
+  .notice-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #5d4037; margin-bottom: 14px; }
+  @media (max-width: 768px) { .kpi-grid { grid-template-columns: 1fr 1fr; } .info-grid { grid-template-columns: 1fr; } .rubric-grid { overflow-x: auto; flex-wrap: nowrap; display: flex; } .rubric-card { min-width: 90px; flex-shrink: 0; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📊 Meta 广告审核合规分析报告</h1>
+  <div class="subtitle">数据驱动 · 十分制风险评分体系（10-Point Risk Scoring）· 广告维度（ad_id 去重）</div>
+  <div class="meta">
+    <span>📅 数据周期：2026-04-20 ~ 2026-04-26</span>
+    <span>📦 审核广告数：<strong>10,185</strong> 条</span>
+    <span>📋 原始记录：26,685 条</span>
+    <span>🏷️ 评分体系：十分制风险评分（v3）</span>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-grid">
+  <div class="kpi-card purple">
+    <div class="kpi-value">2.2</div>
+    <div class="kpi-label">平均风险评分</div>
+    <div class="kpi-sub">满分10分，越高越危险</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-value">82.9%</div>
+    <div class="kpi-label">低风险（1-3分）</div>
+    <div class="kpi-sub">8,439 条 · 正常投放</div>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-value">1.1%</div>
+    <div class="kpi-label">中风险（4-6分）</div>
+    <div class="kpi-sub">117 条 · 建议抽检</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-value">16.0%</div>
+    <div class="kpi-label">高风险（≥7分）</div>
+    <div class="kpi-sub">1,629 条 · 人工审查</div>
+  </div>
+</div>
+
+<!-- 一、评分体系说明 -->
+<div class="section-title">📐 一、十分制评分体系说明</div>
+
+<div class="rubric-grid">
+  <div class="rubric-card r1">
+    <div class="rubric-score">1</div>
+    <div class="rubric-label">完全合规</div>
+    <div class="rubric-example">高置信度通过<br>置信分≥0.85</div>
+  </div>
+  <div class="rubric-card r2">
+    <div class="rubric-score">2-3</div>
+    <div class="rubric-label">合规·低置信</div>
+    <div class="rubric-example">通过但置信度<br>偏低，建议复核</div>
+  </div>
+  <div class="rubric-card r5">
+    <div class="rubric-score">5-6</div>
+    <div class="rubric-label">灰度违规</div>
+    <div class="rubric-example">FS-1.2 紧迫感<br>OC-1.1 冒犯内容</div>
+  </div>
+  <div class="rubric-card r7">
+    <div class="rubric-score">7-8</div>
+    <div class="rubric-label">明确违规</div>
+    <div class="rubric-example">HW-1.1/HW-1.2<br>MI-1.1/PV-1.2</div>
+  </div>
+  <div class="rubric-card r9">
+    <div class="rubric-score">9-10</div>
+    <div class="rubric-label">严重违规</div>
+    <div class="rubric-example">AC-1.1/HS-1.1<br>IP侵权/RG违规</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>评分阈值与处理建议</div>
+  <div class="threshold-item" style="background:#e8f5e9;">
+    <div class="threshold-badge" style="background:#43a047;">1</div>
+    <div><div class="threshold-label">低风险 (1-3分) · 8,439 条 · 82.9%</div><div class="threshold-desc">正常投放。置信度高，内容符合 Meta 政策规范，可直接上线。</div></div>
+  </div>
+  <div class="threshold-item" style="background:#fff3e0;">
+    <div class="threshold-badge" style="background:#fb8c00;">5</div>
+    <div><div class="threshold-label">中风险 (4-6分) · 117 条 · 1.1%</div><div class="threshold-desc">建议抽检。触发灰度规则（虚假紧迫感、冒犯性内容），需人工确认后投放。</div></div>
+  </div>
+  <div class="threshold-item" style="background:#ffebee;">
+    <div class="threshold-badge" style="background:#c62828;">8</div>
+    <div><div class="threshold-label">高风险 (7-8分) · 1,488 条 · 14.6%</div><div class="threshold-desc">需人工审查。触发 HW-1.1 等明确违规规则，存在健康/医疗声明违规，需修改后才可投放。</div></div>
+  </div>
+  <div class="threshold-item" style="background:#ffcdd2;">
+    <div class="threshold-badge" style="background:#880000;">9</div>
+    <div><div class="threshold-label">极高风险 (9-10分) · 141 条 · 1.4%</div><div class="threshold-desc">立即下架。触发 AC-1.1（色情）、HS-1.1（仇恨言论）、IP-1.1（侵权）等 S 级红线，须立即处理。</div></div>
+  </div>
+</div>
+
+<!-- 二、评分分布 -->
+<div class="section-title">📊 二、评分分布全貌</div>
+
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot purple"></span>评分分布柱状图</div>
+    <div class="chart-wrap">
+      <canvas id="scoreDistChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>风险层级占比</div>
+    <div class="chart-wrap">
+      <canvas id="riskTierChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>各评分段广告数明细</div>
+  <table>
+    <thead><tr><th>风险评分</th><th>广告数</th><th>占比</th><th>对应违规类型</th><th>处理建议</th></tr></thead>
+    <tbody>
+      <tr style="background:#e8f5e9;"><td><strong>1分</strong></td><td>8,431</td><td>82.8%</td><td>合规通过（高置信度）</td><td><span class="tag tag-green">直接投放</span></td></tr>
+      <tr style="background:#f1f8e9;"><td><strong>2分</strong></td><td>6</td><td>0.1%</td><td>合规通过（置信度0.7-0.85）</td><td><span class="tag tag-green">可投放</span></td></tr>
+      <tr style="background:#fff8e1;"><td><strong>3分</strong></td><td>2</td><td>&lt;0.1%</td><td>合规通过（置信度&lt;0.7）</td><td><span class="tag tag-yellow">建议复核</span></td></tr>
+      <tr style="background:#fff3e0;"><td><strong>5分</strong></td><td>4</td><td>&lt;0.1%</td><td>轻度灰度违规</td><td><span class="tag tag-orange">人工确认</span></td></tr>
+      <tr style="background:#ffcdd2;"><td><strong>6分</strong></td><td>113</td><td>1.1%</td><td>FS-1.2 虚假紧迫感</td><td><span class="tag tag-orange">抽检处理</span></td></tr>
+      <tr style="background:#ef9a9a;"><td><strong>7分</strong></td><td>71</td><td>0.7%</td><td>MI-1.1/PV-1.2 误导/人身属性</td><td><span class="tag tag-red">人工审查</span></td></tr>
+      <tr style="background:#e57373;"><td><strong>8分</strong></td><td>1,417</td><td>13.9%</td><td>HW-1.1 禁止性健康声明（核心问题）</td><td><span class="tag tag-red">审查修改</span></td></tr>
+      <tr style="background:#c62828;"><td><strong>9分</strong></td><td>141</td><td>1.4%</td><td>AC-1.1 色情/IP侵权/仇恨言论</td><td><span class="tag tag-red" style="background:#880000;color:white;">立即下架</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 三、每日评分趋势 -->
+<div class="section-title">📈 三、每日评分趋势</div>
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot purple"></span>每日平均风险评分</div>
+    <div class="chart-wrap">
+      <canvas id="dailyScoreChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>每日高风险（≥7分）占比</div>
+    <div class="chart-wrap">
+      <canvas id="dailyHighRiskChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot blue"></span>每日风险分布明细</div>
+  <table>
+    <thead><tr><th>日期</th><th>总广告数</th><th>低风险(1-3)</th><th>中风险(4-6)</th><th>高风险(≥7)</th><th>平均分</th></tr></thead>
+    <tbody>
+      <tr style="background:#ffebee;"><td>04-20</td><td>1,821</td><td>1,177(64.6%)</td><td>46(2.5%)</td><td><strong style="color:#c62828;">598(32.8%)</strong></td><td><strong style="color:#c62828;">3.1</strong></td></tr>
+      <tr style="background:#e8f5e9;"><td>04-21</td><td>1,213</td><td>1,038(85.6%)</td><td>12(1.0%)</td><td><strong style="color:#43a047;">163(13.4%)</strong></td><td>1.6</td></tr>
+      <tr style="background:#fff3e0;"><td>04-22</td><td>1,670</td><td>1,255(75.1%)</td><td>28(1.7%)</td><td><strong style="color:#e65100;">387(23.2%)</strong></td><td>2.4</td></tr>
+      <tr style="background:#fff3e0;"><td>04-23</td><td>1,734</td><td>1,368(78.9%)</td><td>17(1.0%)</td><td><strong style="color:#e65100;">349(20.1%)</strong></td><td>2.2</td></tr>
+      <tr style="background:#fff3e0;"><td>04-24</td><td>1,903</td><td>1,519(79.8%)</td><td>10(0.5%)</td><td><strong style="color:#e65100;">374(19.7%)</strong></td><td>2.1</td></tr>
+      <tr style="background:#fff8e1;"><td>04-25</td><td>1,089</td><td>887(81.5%)</td><td>4(0.4%)</td><td><strong style="color:#f57f17;">198(18.2%)</strong></td><td>2.0</td></tr>
+      <tr style="background:#e8f5e9;"><td>04-26</td><td>755</td><td>626(82.9%)</td><td>0(0%)</td><td><strong style="color:#f57f17;">129(17.1%)</strong></td><td>2.0</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 四、品类评分分析 -->
+<div class="section-title">🏷️ 四、品类风险评分分析</div>
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>各品类平均风险评分</div>
+    <div class="chart-wrap">
+      <canvas id="catScoreChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>品类高风险(≥7分)占比</div>
+    <div class="chart-wrap">
+      <canvas id="catHighRiskChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot orange"></span>品类风险评分详情</div>
+  <table>
+    <thead><tr><th>品类</th><th>总广告数</th><th>高风险(≥7)数</th><th>高风险率</th><th>主要违规</th><th>风险等级</th></tr></thead>
+    <tbody>
+      <tr><td>Health, Wellness &amp; Nutrition</td><td>944</td><td>570</td><td><strong style="color:#c62828;">60.4%</strong></td><td>HW-1.1 健康声明</td><td><span class="tag tag-red">极高</span></td></tr>
+      <tr><td>Beauty &amp; Personal Care</td><td>1,772</td><td>614</td><td><strong style="color:#e65100;">34.7%</strong></td><td>HW-1.1 + AC-1.1</td><td><span class="tag tag-red">高</span></td></tr>
+      <tr><td>Fitness &amp; Sports</td><td>190</td><td>36</td><td><strong style="color:#fb8c00;">18.9%</strong></td><td>HW-1.1 健康声明</td><td><span class="tag tag-orange">中</span></td></tr>
+      <tr><td>Fashion &amp; Apparel</td><td>3,307</td><td>237</td><td><strong style="color:#f57f17;">7.2%</strong></td><td>AC-1.1 + FS-1.2</td><td><span class="tag tag-yellow">低中</span></td></tr>
+      <tr><td>Home, Kitchen &amp; Living</td><td>1,514</td><td>56</td><td><strong style="color:#43a047;">3.7%</strong></td><td>FS-1.2 虚假紧迫</td><td><span class="tag tag-green">低</span></td></tr>
+      <tr><td>Jewelry &amp; Accessories</td><td>750</td><td>7</td><td><strong style="color:#43a047;">0.9%</strong></td><td>FS-1.2</td><td><span class="tag tag-green">极低</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 五、广告主评分排行 -->
+<div class="section-title">👤 五、广告主风险评分排行</div>
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>广告主平均风险评分 TOP15（总广告数≥30）</div>
+  <div class="notice-box">💡 平均评分 ≥ 7 表示该广告主投放内容整体风险极高，建议暂停投放资格</div>
+  <table>
+    <thead><tr><th>排名</th><th>广告主</th><th>总广告数</th><th>平均评分</th><th>高风险率(≥7)</th><th>主要违规</th><th>风险状态</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Shinka</strong></td><td>245</td><td><strong style="color:#c62828;">7.9</strong></td><td>98.8%</td><td>HW-1.1 健康声明</td><td><span class="tag tag-red">🚨 立即处理</span></td></tr>
+      <tr><td>2</td><td><strong>Rayan-VX</strong></td><td>107</td><td><strong style="color:#c62828;">7.0</strong></td><td>92.5%</td><td>HW-1.1 + AC-1.1</td><td><span class="tag tag-red">🚨 立即处理</span></td></tr>
+      <tr><td>3</td><td><strong>Saamir Mithwani</strong></td><td>156</td><td><strong style="color:#e65100;">6.7</strong></td><td>76.3%</td><td>HW-1.1 健康声明</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>4</td><td><strong>Lenny</strong></td><td>153</td><td><strong style="color:#e65100;">5.2</strong></td><td>65.4%</td><td>HW-1.1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>5</td><td><strong>Brandon Bardwell</strong></td><td>103</td><td><strong style="color:#e65100;">5.1</strong></td><td>69.9%</td><td>HW-1.1 + FS-1.2</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>6</td><td><strong>Lucas De Souza 1</strong></td><td>104</td><td><strong style="color:#e65100;">5.1</strong></td><td>59.6%</td><td>HW-1.1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>7</td><td><strong>Lisa</strong></td><td>148</td><td><strong style="color:#e65100;">4.9</strong></td><td>75.0%</td><td>HW-1.1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>8</td><td>Tony Groen</td><td>80</td><td><strong style="color:#fb8c00;">4.8</strong></td><td>67.5%</td><td>HW-1.2</td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>9</td><td>Volmer</td><td>139</td><td><strong style="color:#fb8c00;">4.5</strong></td><td>57.6%</td><td>HW-1.1</td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>10</td><td>Facundo</td><td>450</td><td><strong style="color:#fb8c00;">4.1</strong></td><td>88.2%</td><td>FS-1.2 虚假紧迫</td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>11</td><td>Alex el filali</td><td>165</td><td><strong style="color:#fb8c00;">4.1</strong></td><td>61.2%</td><td>HW-1.1</td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>12</td><td>Miguel</td><td>125</td><td><strong style="color:#f57f17;">3.5</strong></td><td>48.0%</td><td>MI-1.1</td><td><span class="tag tag-yellow">需关注</span></td></tr>
+      <tr><td>13</td><td>Michael</td><td>163</td><td><strong style="color:#f57f17;">3.4</strong></td><td>35.0%</td><td>HW-1.2</td><td><span class="tag tag-yellow">需关注</span></td></tr>
+      <tr><td>14</td><td>Wouter Akika</td><td>211</td><td><strong style="color:#f57f17;">3.7</strong></td><td>39.8%</td><td>HW-1.1 + FS-1.2</td><td><span class="tag tag-yellow">需关注</span></td></tr>
+      <tr><td>15</td><td>PSM</td><td>1,439</td><td><strong style="color:#43a047;">1.2</strong></td><td>6.8%</td><td>HW-1.1（少量）</td><td><span class="tag tag-green">良好</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>广告主平均评分分布</div>
+  <div class="chart-wrap">
+    <canvas id="companyScoreChart"></canvas>
+  </div>
+</div>
+
+<!-- 六、横向对比 -->
+<div class="section-title">📊 六、周期对比与趋势</div>
+<div class="card">
+  <div class="highlight-block">
+    <div style="font-size:14px;font-weight:700;color:#1a237e;margin-bottom:12px;">📌 本周关键结论（十分制视角）</div>
+    <div style="font-size:12px;color:#37474f;line-height:2;">
+      <div>🔴 <strong>整体评分上升：</strong>平均风险评分 2.2（上期 2.1），高风险率 16.0%（上期 15.5%），持续恶化</div>
+      <div>🔴 <strong>8分重灾区：</strong>1,417 条广告评分 8 分，均为 HW-1.1 禁止性健康声明，是最核心问题</div>
+      <div>🔴 <strong>9分极危：</strong>141 条 9 分广告（AC-1.1色情 + IP-1.1侵权），须立即处理</div>
+      <div>🟡 <strong>中风险扩大：</strong>6 分段 113 条（上期接近 0 条），主要为 FS-1.2 虚假紧迫感</div>
+      <div>✅ <strong>周末好转：</strong>04-26 高风险率回落至 17.1%，但距健康基线（&lt;10%）仍有差距</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot blue"></span>周期对比：平均评分 &amp; 高风险率趋势</div>
+  <div class="chart-wrap">
+    <canvas id="trendChart"></canvas>
+  </div>
+</div>
+
+<div class="footer">
+  Meta 广告审核合规分析报告 · 十分制评分体系 · 2026-04-20~2026-04-26 · 广告维度（ad_id 去重）
+</div>
+</div>
+
+<script>
+const C = { green:'#43a047',red:'#e53935',orange:'#fb8c00',purple:'#7b1fa2',blue:'#1877f2',amber:'#ffb300',teal:'#00897b' };
+
+// 评分分布
+new Chart(document.getElementById('scoreDistChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1分','2分','3分','5分','6分','7分','8分','9分'],
+    datasets: [{
+      label: '广告数',
+      data: [8431, 6, 2, 4, 113, 71, 1417, 141],
+      backgroundColor: ['#43a047','#66bb6a','#a5d6a7','#ffb300','#fb8c00','#ef9a9a','#e53935','#880000']
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{ y:{ beginAtZero:true, type:'logarithmic' } } }
+});
+
+// 风险层级占比
+new Chart(document.getElementById('riskTierChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['低风险(1-3分)','中风险(4-6分)','高风险(7-8分)','极高风险(9-10分)'],
+    datasets: [{
+      data: [8439, 117, 1488, 141],
+      backgroundColor: [C.green, C.orange, C.red, '#880000']
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}} }
+});
+
+// 每日平均评分
+new Chart(document.getElementById('dailyScoreChart'), {
+  type: 'line',
+  data: {
+    labels: ['04-20','04-21','04-22','04-23','04-24','04-25','04-26'],
+    datasets: [{
+      label: '平均风险评分',
+      data: [3.1, 1.6, 2.4, 2.2, 2.1, 2.0, 2.0],
+      borderColor: C.purple, backgroundColor: 'rgba(123,31,162,0.1)',
+      fill: true, tension: 0.4, pointRadius: 5
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{ min:0, max:5, ticks:{stepSize:1} } } }
+});
+
+// 每日高风险占比
+new Chart(document.getElementById('dailyHighRiskChart'), {
+  type: 'line',
+  data: {
+    labels: ['04-20','04-21','04-22','04-23','04-24','04-25','04-26'],
+    datasets: [{
+      label: '高风险率(≥7分)',
+      data: [32.8, 13.4, 23.2, 20.1, 19.7, 18.2, 17.1],
+      borderColor: C.red, backgroundColor: 'rgba(229,57,53,0.1)',
+      fill: true, tension: 0.4, pointRadius: 5
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{ min:0, max:45, ticks:{callback:v=>v+'%'} } } }
+});
+
+// 品类平均评分
+new Chart(document.getElementById('catScoreChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Health & Nutrition','Beauty & Personal','Fitness & Sports','Fashion & Apparel','Home & Living','Jewelry'],
+    datasets: [{
+      label: '平均风险评分',
+      data: [5.8, 3.5, 2.8, 1.8, 1.4, 1.2],
+      backgroundColor: [C.red, C.red, C.orange, C.amber, C.green, C.green]
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{min:0, max:8} } }
+});
+
+// 品类高风险率
+new Chart(document.getElementById('catHighRiskChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Health & Nutrition','Beauty & Personal','Fitness & Sports','Fashion & Apparel','Home & Living','Jewelry'],
+    datasets: [{
+      label: '高风险率(≥7分)',
+      data: [60.4, 34.7, 18.9, 7.2, 3.7, 0.9],
+      backgroundColor: C.orange
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{min:0, max:70, ticks:{callback:v=>v+'%'}} } }
+});
+
+// 广告主评分
+new Chart(document.getElementById('companyScoreChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Shinka','Rayan-VX','Saamir M.','Lenny','Brandon B.','Lucas DS1','Lisa','Tony G.','Volmer','Facundo','Alex el f.','Miguel','Wouter A.','Michael','PSM'],
+    datasets: [{
+      label: '平均风险评分',
+      data: [7.9, 7.0, 6.7, 5.2, 5.1, 5.1, 4.9, 4.8, 4.5, 4.1, 4.1, 3.5, 3.7, 3.4, 1.2],
+      backgroundColor: [
+        '#880000','#880000','#c62828','#e53935','#e53935','#e53935','#e53935',
+        '#fb8c00','#fb8c00','#fb8c00','#fb8c00','#f57f17','#f57f17','#f57f17','#43a047'
+      ]
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{min:0, max:10} } }
+});
+
+// 趋势对比
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: ['04-06~04-12','04-13~04-19','04-20~04-26'],
+    datasets: [
+      { label: '平均风险评分', data: [1.2, 2.1, 2.2], borderColor: C.purple, backgroundColor: 'rgba(123,31,162,0.1)', fill:true, tension:0.4, yAxisID:'y1', pointRadius:6 },
+      { label: '高风险率(≥7分)%', data: [3.8, 15.5, 16.0], borderColor: C.red, backgroundColor: 'rgba(229,57,53,0.1)', fill:true, tension:0.4, yAxisID:'y2', pointRadius:6 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'bottom'} },
+    scales:{
+      y1:{ type:'linear', position:'left', min:0, max:10, title:{display:true,text:'平均评分'} },
+      y2:{ type:'linear', position:'right', min:0, max:25, ticks:{callback:v=>v+'%'}, grid:{drawOnChartArea:false}, title:{display:true,text:'高风险率'} }
+    }
+  }
+});
+</script>
+</body>
+</html>

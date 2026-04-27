@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 广告审核合规分析报告 · 2026-04-20~04-26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1c1e21; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 20px 16px 60px; }
+  .header { background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%); color: white; padding: 32px 24px; border-radius: 0 0 16px 16px; margin-bottom: 20px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .header .subtitle { font-size: 13px; color: rgba(255,255,255,0.75); }
+  .header .meta { margin-top: 12px; display: flex; gap: 24px; font-size: 12px; color: rgba(255,255,255,0.65); flex-wrap: wrap; }
+  .card { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a237e; padding: 0 0 12px 0; margin-bottom: 16px; border-bottom: 2px solid #e8eaf6; display: flex; align-items: center; gap: 8px; }
+  .card-title { font-size: 13px; font-weight: 600; color: #37474f; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot.red    { background: #e53935; }
+  .dot.orange { background: #fb8c00; }
+  .dot.green  { background: #43a047; }
+  .dot.purple { background: #7b1fa2; }
+  .dot.blue   { background: #1877f2; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi-card { background: white; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-top: 4px solid #e0e0e0; text-align: center; }
+  .kpi-card.green  { border-top-color: #43a047; }
+  .kpi-card.orange { border-top-color: #fb8c00; }
+  .kpi-card.red    { border-top-color: #e53935; }
+  .kpi-card.purple { border-top-color: #7b1fa2; }
+  .kpi-value { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .kpi-card.green  .kpi-value { color: #2e7d32; }
+  .kpi-card.orange .kpi-value { color: #e65100; }
+  .kpi-card.red    .kpi-value { color: #c62828; }
+  .kpi-card.purple .kpi-value { color: #6a1b9a; }
+  .kpi-label { font-size: 12px; color: #78909c; font-weight: 500; }
+  .kpi-sub { font-size: 11px; color: #b0bec5; margin-top: 4px; }
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap-sm { position: relative; height: 220px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f5f5f5; color: #546e7a; font-weight: 600; text-align: left; padding: 8px 10px; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #37474f; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .tag-red    { background: #ffebee; color: #c62828; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-yellow { background: #fffde7; color: #f57f17; }
+  .tag-green  { background: #e8f5e9; color: #2e7d32; }
+  .tag-blue   { background: #e3f2fd; color: #1565c0; }
+  .footer { text-align: center; padding: 24px; color: #90a4ae; font-size: 12px; }
+  .highlight-block { background: linear-gradient(135deg, #e8eaf6, #c5cae9); border-radius: 8px; padding: 14px 16px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .info-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .tier-bar { display: flex; border-radius: 8px; overflow: hidden; height: 12px; margin-bottom: 8px; }
+  .notice-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #5d4037; margin-bottom: 14px; }
+  @media (max-width: 768px) { .kpi-grid { grid-template-columns: 1fr 1fr; } .info-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📊 Meta 广告审核合规分析报告</h1>
+  <div class="subtitle">三级违规分级体系（Tier 1 合规 / Tier 2 警告 / Tier 3 违规）· 广告维度（ad_id 去重）</div>
+  <div class="meta">
+    <span>📅 数据周期：2026-04-20 ~ 2026-04-26</span>
+    <span>📦 审核广告数：<strong>10,185</strong> 条</span>
+    <span>📋 原始记录：26,685 条（广告维度去重后）</span>
+    <span>🏷️ 分级体系：Tier 1/2/3</span>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-grid">
+  <div class="kpi-card purple">
+    <div class="kpi-value">10,185</div>
+    <div class="kpi-label">审核广告数</div>
+    <div class="kpi-sub">ad_id 去重后</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-value">77.3%</div>
+    <div class="kpi-label">Tier 1 合规</div>
+    <div class="kpi-sub">7,870 条 · 正常投放</div>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-value">0%</div>
+    <div class="kpi-label">Tier 2 警告</div>
+    <div class="kpi-sub">0 条 · 待复核</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-value">22.7%</div>
+    <div class="kpi-label">Tier 3 违规</div>
+    <div class="kpi-sub">2,315 条 · 需处理</div>
+  </div>
+</div>
+
+<!-- 整体分布条 -->
+<div class="card">
+  <div class="card-title"><span class="dot green"></span>合规率总览</div>
+  <div class="notice-box">⚠️ 本报告基于<strong>广告维度（ad_id）去重</strong>，原始记录 26,685 条 → 去重后 10,185 条独立广告。同一广告的多条审核记录取最新一条。</div>
+  <div class="tier-bar">
+    <div style="flex:773;background:#43a047;" title="Tier1 77.3%"></div>
+    <div style="flex:227;background:#e53935;" title="Tier3 22.7%"></div>
+  </div>
+  <div style="display:flex;gap:16px;font-size:12px;margin-bottom:16px;">
+    <span style="color:#43a047;font-weight:700;">● Tier 1 合规 77.3%（7,870条）</span>
+    <span style="color:#e53935;font-weight:700;">● Tier 3 违规 22.7%（2,315条）</span>
+  </div>
+  <div style="font-size:12px;color:#546e7a;background:#f5f5f5;border-radius:6px;padding:10px 14px;">
+    <strong>对比上期（04-13~04-19）：</strong>审核量 10,480 条（素材维度）→ <strong>10,185 条（广告维度，本期）</strong>；
+    Tier3率 <strong>13.3%（1,398条）→ 22.7%（2,315条）</strong>，大幅上升 +9.4pp，需重点关注。
+  </div>
+</div>
+
+<!-- 一、每日趋势 -->
+<div class="section-title">📈 一、每日审核量 &amp; Tier3 违规趋势</div>
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot blue"></span>每日审核量（广告数）</div>
+    <div class="chart-wrap">
+      <canvas id="dailyVolChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>每日 Tier3 违规率</div>
+    <div class="chart-wrap">
+      <canvas id="dailyT3Chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 日期明细表 -->
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>每日明细数据</div>
+  <table>
+    <thead><tr><th>日期</th><th>审核广告数</th><th>Tier3违规</th><th>Tier3率</th><th>趋势</th></tr></thead>
+    <tbody>
+      <tr style="background:#ffebee;"><td>04-20</td><td>1,821</td><td>644</td><td><strong style="color:#c62828;">35.4%</strong></td><td>⚠️ 本周最高，异常峰值</td></tr>
+      <tr style="background:#e8f5e9;"><td>04-21</td><td>1,213</td><td>175</td><td><strong style="color:#43a047;">14.4%</strong></td><td>✅ 显著回落</td></tr>
+      <tr style="background:#fff3e0;"><td>04-22</td><td>1,670</td><td>415</td><td><strong style="color:#fb8c00;">24.9%</strong></td><td>↑ 再次上升</td></tr>
+      <tr style="background:#fff3e0;"><td>04-23</td><td>1,734</td><td>366</td><td><strong style="color:#e65100;">21.1%</strong></td><td>→ 小幅回落</td></tr>
+      <tr style="background:#fff3e0;"><td>04-24</td><td>1,903</td><td>384</td><td><strong style="color:#e65100;">20.2%</strong></td><td>→ 维持高位</td></tr>
+      <tr style="background:#fff8e1;"><td>04-25</td><td>1,089</td><td>202</td><td><strong style="color:#f57f17;">18.5%</strong></td><td>↓ 略有改善</td></tr>
+      <tr style="background:#e8f5e9;"><td>04-26</td><td>755</td><td>129</td><td><strong style="color:#43a047;">17.1%</strong></td><td>↓ 继续改善</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 二、品类分析 -->
+<div class="section-title">🏷️ 二、品类违规分析</div>
+<div class="card">
+  <div class="card-title"><span class="dot orange"></span>各品类 Tier3 违规率排行</div>
+  <table>
+    <thead><tr><th>品类</th><th>总广告数</th><th>Tier3违规</th><th>违规率</th><th>风险等级</th></tr></thead>
+    <tbody>
+      <tr><td>Health, Wellness &amp; Nutrition</td><td>944</td><td>571</td><td><strong style="color:#c62828;">60.5%</strong></td><td><span class="tag tag-red">极高风险</span></td></tr>
+      <tr><td>Beauty &amp; Personal Care</td><td>1,772</td><td>632</td><td><strong style="color:#e65100;">35.7%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>Fitness &amp; Sports</td><td>190</td><td>36</td><td><strong style="color:#fb8c00;">18.9%</strong></td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>Fashion &amp; Apparel</td><td>3,307</td><td>336</td><td><strong style="color:#f57f17;">10.2%</strong></td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>Home, Kitchen &amp; Living</td><td>1,514</td><td>95</td><td><strong style="color:#43a047;">6.3%</strong></td><td><span class="tag tag-yellow">低风险</span></td></tr>
+      <tr><td>Electronics &amp; Smart Gadgets</td><td>184</td><td>6</td><td><strong style="color:#43a047;">3.3%</strong></td><td><span class="tag tag-green">良好</span></td></tr>
+      <tr><td>Jewelry, Watches &amp; Accessories</td><td>750</td><td>18</td><td><strong style="color:#43a047;">2.4%</strong></td><td><span class="tag tag-green">良好</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>品类违规率分布</div>
+    <div class="chart-wrap">
+      <canvas id="catChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>品类违规量（绝对值）</div>
+    <div class="chart-wrap">
+      <canvas id="catVolChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 三、违规类型分析 -->
+<div class="section-title">⚠️ 三、违规类型深度分析</div>
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>Policy Code 违规分布</div>
+    <div class="chart-wrap">
+      <canvas id="pcChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>Violation Type TOP10</div>
+    <div class="chart-wrap">
+      <canvas id="vtChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>Policy Code 详细说明</div>
+  <table>
+    <thead><tr><th>Policy Code</th><th>含义</th><th>违规广告数</th><th>占违规总量</th><th>风险级别</th></tr></thead>
+    <tbody>
+      <tr><td><strong>HW-1.1</strong></td><td>禁止性健康声明（无依据医疗效果宣称）</td><td>1,368</td><td>59.1%</td><td><span class="tag tag-red">S级红线</span></td></tr>
+      <tr><td><strong>AC-1.1</strong></td><td>成人/色情内容（性暗示、露骨语言）</td><td>95</td><td>4.1%</td><td><span class="tag tag-red">S级红线</span></td></tr>
+      <tr><td><strong>FS-1.2</strong></td><td>虚假紧迫感/稀缺性（倒计时、限量虚构）</td><td>93</td><td>4.0%</td><td><span class="tag tag-orange">A级灰度</span></td></tr>
+      <tr><td><strong>HW-1.2</strong></td><td>健康/保健功效声明（未经证实的保健宣传）</td><td>53</td><td>2.3%</td><td><span class="tag tag-orange">A级灰度</span></td></tr>
+      <tr><td><strong>FS-1.1</strong></td><td>不可接受的商业行为（欺骗性销售手段）</td><td>39</td><td>1.7%</td><td><span class="tag tag-red">S级红线</span></td></tr>
+      <tr><td><strong>MI-1.1</strong></td><td>误导性声明（夸大功效、虚假宣传）</td><td>32</td><td>1.4%</td><td><span class="tag tag-orange">A级灰度</span></td></tr>
+      <tr><td><strong>SP-1.1</strong></td><td>绕过审核系统（规避检测机制）</td><td>15</td><td>0.6%</td><td><span class="tag tag-red">S级红线</span></td></tr>
+      <tr><td><strong>IP-1.1</strong></td><td>知识产权侵权（版权/名人/商标）</td><td>12</td><td>0.5%</td><td><span class="tag tag-red">S级红线</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 四、广告主分析 -->
+<div class="section-title">👤 四、广告主违规分析</div>
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>违规量 TOP15 广告主</div>
+  <div class="notice-box">💡 违规率 ≥ 80% 标记为极高风险，建议优先处理</div>
+  <table>
+    <thead><tr><th>排名</th><th>广告主</th><th>总广告数</th><th>违规数</th><th>违规率</th><th>风险状态</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Facundo</strong></td><td>450</td><td>397</td><td><strong style="color:#c62828;">88.2%</strong></td><td><span class="tag tag-red">🚨 极高风险</span></td></tr>
+      <tr><td>2</td><td><strong>Shinka</strong></td><td>245</td><td>242</td><td><strong style="color:#c62828;">98.8%</strong></td><td><span class="tag tag-red">🚨 极高风险</span></td></tr>
+      <tr><td>3</td><td><strong>Saamir Mithwani</strong></td><td>156</td><td>119</td><td><strong style="color:#c62828;">76.3%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>4</td><td><strong>Lisa</strong></td><td>148</td><td>111</td><td><strong style="color:#c62828;">75.0%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>5</td><td>Alex JM</td><td>611</td><td>105</td><td><strong style="color:#f57f17;">17.2%</strong></td><td><span class="tag tag-yellow">需关注</span></td></tr>
+      <tr><td>6</td><td><strong>Alex el filali</strong></td><td>165</td><td>101</td><td><strong style="color:#e65100;">61.2%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>7</td><td><strong>Lenny</strong></td><td>153</td><td>100</td><td><strong style="color:#e65100;">65.4%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>8</td><td><strong>Rayan-VX</strong></td><td>107</td><td>99</td><td><strong style="color:#c62828;">92.5%</strong></td><td><span class="tag tag-red">🚨 极高风险</span></td></tr>
+      <tr><td>9</td><td>PSM</td><td>1,439</td><td>98</td><td><strong style="color:#43a047;">6.8%</strong></td><td><span class="tag tag-green">良好</span></td></tr>
+      <tr><td>10</td><td>Wouter Akika</td><td>211</td><td>84</td><td><strong style="color:#fb8c00;">39.8%</strong></td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>11</td><td><strong>Volmer</strong></td><td>139</td><td>80</td><td><strong style="color:#e65100;">57.6%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>12</td><td><strong>Brandon Bardwell</strong></td><td>103</td><td>72</td><td><strong style="color:#e65100;">69.9%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>13</td><td><strong>Lucas De Souza 1</strong></td><td>104</td><td>62</td><td><strong style="color:#e65100;">59.6%</strong></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td>14</td><td>Miguel</td><td>125</td><td>60</td><td><strong style="color:#fb8c00;">48.0%</strong></td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td>15</td><td>Michael</td><td>163</td><td>57</td><td><strong style="color:#f57f17;">35.0%</strong></td><td><span class="tag tag-orange">中风险</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="info-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>广告主违规数 TOP10</div>
+    <div class="chart-wrap">
+      <canvas id="companyVolChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>广告主违规率 TOP10（≥30条总量）</div>
+    <div class="chart-wrap">
+      <canvas id="companyRateChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 五、违规重点案例 -->
+<div class="section-title">🔍 五、高频违规内容摘要</div>
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>Prohibited Health Claims — 违规数 1,131 条（最高频）</div>
+  <div style="font-size:12px;color:#546e7a;line-height:1.8;padding:10px;background:#fff8f8;border-radius:8px;">
+    <div>• 宣称产品能"治愈"、"预防"或"逆转"特定疾病（癌症、糖尿病、高血压等）</div>
+    <div>• 使用"Medical-grade"、"Clinically proven"等未经验证的医疗级声明</div>
+    <div>• 净水器/美容仪宣称能"消除99%氯和有害物质"等功效性健康声明</div>
+    <div>• 典型触发词：<em>Chlorine/Fluoride removal</em>、<em>dermatologist recommended</em>、<em>clinically tested</em></div>
+  </div>
+</div>
+
+<div class="info-grid-3">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>AC-1.1 · 色情/性暗示 (95条)</div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.8;">
+      <div>• 露骨的性语言（"makes me horny"）</div>
+      <div>• 服装广告过度性化身体展示</div>
+      <div>• 视频中的性暗示姿势或场景</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>FS-1.2 · 虚假紧迫感 (93条)</div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.8;">
+      <div>• 虚假倒计时（"仅剩最后3件"）</div>
+      <div>• 长期重复的"限时特价"促销</div>
+      <div>• 虚构已售件数制造稀缺感</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>SP-1.1 · 绕过系统 (15条)</div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.8;">
+      <div>• 利用行李技巧绕过航空规定</div>
+      <div>• 规避平台检测的视觉处理手段</div>
+      <div>• "技术上合法但绕过规则"的宣传</div>
+    </div>
+  </div>
+</div>
+
+<!-- 六、趋势对比 -->
+<div class="section-title">📊 六、趋势对比与预警</div>
+<div class="card">
+  <div class="highlight-block">
+    <div style="font-size:14px;font-weight:700;color:#1a237e;margin-bottom:12px;">📌 本周关键结论</div>
+    <div style="font-size:12px;color:#37474f;line-height:2;">
+      <div>🔴 <strong>违规率大幅上升：</strong>本周 Tier3率 22.7%，较上期 13.3% 上升 <strong>+9.4pp</strong>，达近期高点</div>
+      <div>🔴 <strong>4月20日异常峰值：</strong>当日违规率高达 <strong>35.4%</strong>，为本周最高，需排查当日集中投放的广告批次</div>
+      <div>🟡 <strong>HW类广告是重灾区：</strong>健康类（HW-1.1）占违规总量 <strong>59.1%</strong>，Health & Nutrition 品类违规率高达 60.5%</div>
+      <div>🟡 <strong>极高风险广告主：</strong>Shinka（98.8%）、Rayan-VX（92.5%）、Facundo（88.2%）需立即人工干预</div>
+      <div>✅ <strong>周末趋势改善：</strong>04-25~04-26 违规率持续回落至 17-18%，但仍高于健康基线</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot purple"></span>周期对比趋势</div>
+  <div class="chart-wrap">
+    <canvas id="weeklyTrendChart"></canvas>
+  </div>
+</div>
+
+<div class="footer">
+  Meta 广告审核合规分析报告 · 2026-04-20~2026-04-26 · 广告维度（ad_id 去重）· 数据来源：机审系统
+</div>
+</div>
+
+<script>
+const COLORS = {
+  green: '#43a047', red: '#e53935', orange: '#fb8c00',
+  purple: '#7b1fa2', blue: '#1877f2', indigo: '#3949ab',
+  teal: '#00897b', amber: '#ffb300'
+};
+
+// 每日审核量
+new Chart(document.getElementById('dailyVolChart'), {
+  type: 'bar',
+  data: {
+    labels: ['04-20','04-21','04-22','04-23','04-24','04-25','04-26'],
+    datasets: [
+      { label: 'Tier1合规', data: [1177,1038,1255,1368,1519,887,626], backgroundColor: COLORS.green },
+      { label: 'Tier3违规', data: [644,175,415,366,384,202,129], backgroundColor: COLORS.red }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}},
+    scales:{ x:{stacked:true}, y:{stacked:true, beginAtZero:true} } }
+});
+
+// 每日违规率
+new Chart(document.getElementById('dailyT3Chart'), {
+  type: 'line',
+  data: {
+    labels: ['04-20','04-21','04-22','04-23','04-24','04-25','04-26'],
+    datasets: [{
+      label: 'Tier3违规率',
+      data: [35.4,14.4,24.9,21.1,20.2,18.5,17.1],
+      borderColor: COLORS.red, backgroundColor: 'rgba(229,57,53,0.1)',
+      fill: true, tension: 0.4, pointRadius: 5, pointBackgroundColor: COLORS.red
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'bottom'} },
+    scales:{ y:{ beginAtZero:true, max:45, ticks:{ callback: v=>v+'%' } } } }
+});
+
+// 品类违规率
+new Chart(document.getElementById('catChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Health & Nutrition','Beauty & Personal','Fitness & Sports','Fashion & Apparel','Home & Living','Electronics','Jewelry'],
+    datasets: [{
+      label: '违规率%',
+      data: [60.5,35.7,18.9,10.2,6.3,3.3,2.4],
+      backgroundColor: [COLORS.red,COLORS.red,COLORS.orange,COLORS.orange,COLORS.amber,COLORS.green,COLORS.green]
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{ beginAtZero:true, max:70, ticks:{callback:v=>v+'%'} } } }
+});
+
+// 品类违规量
+new Chart(document.getElementById('catVolChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Beauty & Personal Care','Health & Nutrition','Fashion & Apparel','Home & Living','Fitness & Sports','Others'],
+    datasets: [{
+      data: [632,571,336,95,36,45],
+      backgroundColor: [COLORS.purple,COLORS.red,COLORS.orange,COLORS.teal,COLORS.amber,'#90a4ae']
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right'}} }
+});
+
+// Policy Code
+new Chart(document.getElementById('pcChart'), {
+  type: 'bar',
+  data: {
+    labels: ['HW-1.1','AC-1.1','FS-1.2','HW-1.2','FS-1.1','MI-1.1','SP-1.1','IP-1.1','PV-1.2','RG-1.2'],
+    datasets: [{
+      label: '违规广告数',
+      data: [1368,95,93,53,39,32,15,12,17,9],
+      backgroundColor: [COLORS.red,COLORS.red,COLORS.orange,COLORS.orange,COLORS.red,COLORS.orange,COLORS.red,COLORS.red,COLORS.orange,COLORS.orange]
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{beginAtZero:true} } }
+});
+
+// Violation Type
+new Chart(document.getElementById('vtChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Prohibited Health Claims','Unsubstantiated Health','Misleading Claims','Explicit Sexual Lang','Body Image Violations','Explicit Sexual Content','Circumventing Systems','Deceptive Claims','Unsubstantiated Claims','Personal Attributes'],
+    datasets: [{
+      label: '出现次数',
+      data: [1131,122,61,37,35,17,14,13,11,11],
+      backgroundColor: COLORS.orange
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{beginAtZero:true} } }
+});
+
+// 广告主违规数
+new Chart(document.getElementById('companyVolChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Facundo','Shinka','Saamir Mithwani','Lisa','Alex JM','Alex el filali','Lenny','Rayan-VX','PSM','Wouter Akika'],
+    datasets: [{
+      label: '违规广告数',
+      data: [397,242,119,111,105,101,100,99,98,84],
+      backgroundColor: [COLORS.red,COLORS.red,COLORS.red,COLORS.red,COLORS.orange,COLORS.red,COLORS.red,COLORS.red,COLORS.green,COLORS.orange]
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{beginAtZero:true} } }
+});
+
+// 广告主违规率
+new Chart(document.getElementById('companyRateChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Shinka','Rayan-VX','Facundo','Radek & David','Mathieu','GLP','Brandon Bardwell','Lenny','Saamir Mithwani','Lisa'],
+    datasets: [{
+      label: '违规率%',
+      data: [98.8,92.5,88.2,87.5,86.8,85.7,69.9,65.4,76.3,75.0],
+      backgroundColor: COLORS.red
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{beginAtZero:true,max:105,ticks:{callback:v=>v+'%'}} } }
+});
+
+// 周期对比
+new Chart(document.getElementById('weeklyTrendChart'), {
+  type: 'line',
+  data: {
+    labels: ['03-30~04-05','04-06~04-12','04-13~04-19','04-20~04-26'],
+    datasets: [
+      { label: '审核量', data: [null,15111,10480,10185], borderColor: COLORS.blue, backgroundColor: 'rgba(24,119,242,0.1)', fill:true, tension:0.4, yAxisID:'y1' },
+      { label: 'Tier3率%', data: [null,3.6,13.3,22.7], borderColor: COLORS.red, backgroundColor: 'rgba(229,57,53,0.1)', fill:true, tension:0.4, yAxisID:'y2', pointRadius:6 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'bottom'} },
+    scales:{
+      y1:{ type:'linear', position:'left', beginAtZero:true },
+      y2:{ type:'linear', position:'right', beginAtZero:true, max:30, ticks:{callback:v=>v+'%'}, grid:{drawOnChartArea:false} }
+    }
+  }
+});
+</script>
+</body>
+</html>
