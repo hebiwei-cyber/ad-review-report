@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>展会客户提问应对清单 | AntSpy & BestCreative</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: white;
+      padding: 48px 40px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,200,50,0.15), transparent 70%);
+      border-radius: 50%;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(100,120,255,0.12), transparent 70%);
+      border-radius: 50%;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+    .header .subtitle {
+      font-size: 15px;
+      opacity: 0.75;
+      position: relative; z-index: 1;
+    }
+    .header .tags {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      position: relative; z-index: 1;
+    }
+    .header .tag {
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .tag-antspy { background: rgba(255,140,50,0.25); border: 1px solid rgba(255,140,50,0.5); color: #ffa040; }
+    .tag-best { background: rgba(80,180,255,0.2); border: 1px solid rgba(80,180,255,0.4); color: #60c0ff; }
+    .tag-general { background: rgba(160,100,255,0.2); border: 1px solid rgba(160,100,255,0.4); color: #c080ff; }
+
+    /* Nav */
+    .nav-bar {
+      background: white;
+      padding: 0 40px;
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid #e8eaf0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      overflow-x: auto;
+    }
+    .nav-item {
+      padding: 14px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .nav-item:hover { color: #302b63; border-bottom-color: #302b63; }
+    .nav-item.active { color: #302b63; border-bottom-color: #302b63; font-weight: 600; }
+
+    /* Main */
+    .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+
+    /* Section */
+    .section {
+      margin-bottom: 40px;
+      display: none;
+    }
+    .section.active { display: block; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e8eaf0;
+    }
+    .section-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .section-header .count {
+      margin-left: auto;
+      font-size: 13px;
+      color: #999;
+      background: #f0f2f5;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    /* Q&A Card */
+    .qa-card {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: box-shadow 0.2s, transform 0.2s;
+      overflow: hidden;
+      border-left: 4px solid transparent;
+    }
+    .qa-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      transform: translateY(-1px);
+    }
+    .qa-card.antspy { border-left-color: #ff8c32; }
+    .qa-card.bestcreative { border-left-color: #3da8f5; }
+    .qa-card.general { border-left-color: #a060f0; }
+
+    .qa-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 18px 20px 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .q-num {
+      font-size: 12px;
+      font-weight: 700;
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .antspy .q-num { background: #fff3e8; color: #ff8c32; }
+    .bestcreative .q-num { background: #e6f4ff; color: #3da8f5; }
+    .general .q-num { background: #f3ecff; color: #a060f0; }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a2e;
+      flex: 1;
+      line-height: 1.5;
+    }
+    .expand-icon {
+      font-size: 18px;
+      color: #bbb;
+      flex-shrink: 0;
+      transition: transform 0.25s;
+      margin-top: 2px;
+    }
+    .qa-card.open .expand-icon { transform: rotate(180deg); }
+
+    .qa-body {
+      display: none;
+      padding: 0 20px 18px 60px;
+      border-top: 1px solid #f4f5f7;
+    }
+    .qa-card.open .qa-body { display: block; }
+
+    .answer-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 8px;
+      margin-top: 14px;
+    }
+    .answer-text {
+      font-size: 14.5px;
+      color: #333;
+      line-height: 1.75;
+    }
+    .answer-text p { margin-bottom: 8px; }
+    .answer-text ul { padding-left: 20px; margin-bottom: 8px; }
+    .answer-text li { margin-bottom: 5px; }
+    .answer-text strong { color: #1a1a2e; }
+
+    .tip-box {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .tip-box.warn { background: #fffbec; border: 1px solid #ffe082; color: #7a5c00; }
+    .tip-box.info { background: #e8f4ff; border: 1px solid #90caf9; color: #0d47a1; }
+    .tip-box.success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #1b5e20; }
+    .tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Difficulty badge */
+    .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 10px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .badge-hard { background: #fde8e8; color: #c0392b; }
+    .badge-medium { background: #fff3e0; color: #e67e22; }
+    .badge-easy { background: #e8f5e9; color: #27ae60; }
+
+    /* Stats bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .stat-icon {
+      font-size: 28px;
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stat-icon.orange { background: #fff3e8; }
+    .stat-icon.blue { background: #e6f4ff; }
+    .stat-icon.purple { background: #f3ecff; }
+    .stat-num { font-size: 26px; font-weight: 700; color: #1a1a2e; }
+    .stat-label { font-size: 13px; color: #888; }
+
+    /* All-in-one view */
+    #all-section .qa-card {
+      margin-bottom: 10px;
+    }
+
+    /* Quick tips */
+    .quick-tips {
+      background: linear-gradient(135deg, #e8f4ff, #f0ebff);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .quick-tips h3 { font-size: 15px; font-weight: 700; color: #302b63; margin-bottom: 12px; }
+    .quick-tips ul { padding-left: 20px; }
+    .quick-tips li { font-size: 14px; color: #444; margin-bottom: 6px; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-bar { grid-template-columns: 1fr; }
+      .header { padding: 32px 20px 28px; }
+      .main { padding: 20px 14px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎪 展会客户提问应对清单</h1>
+  <div class="subtitle">AntSpy & BestCreative · 问题预演手册</div>
+  <div class="tags">
+    <span class="tag tag-antspy">🐜 AntSpy</span>
+    <span class="tag tag-best">⚡ BestCreative</span>
+    <span class="tag tag-general">🌐 通用问题</span>
+  </div>
+</div>
+
+<nav class="nav-bar">
+  <div class="nav-item active" onclick="showTab('all')">全部问题</div>
+  <div class="nav-item" onclick="showTab('antspy')">🐜 AntSpy</div>
+  <div class="nav-item" onclick="showTab('bestcreative')">⚡ BestCreative</div>
+  <div class="nav-item" onclick="showTab('general')">🌐 通用问题</div>
+  <div class="nav-item" onclick="showTab('tips')">🎯 应对技巧</div>
+</nav>
+
+<div class="main">
+
+  <!-- 全部问题 Tab -->
+  <div id="all-section" class="section active">
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon orange">🐜</div>
+        <div><div class="stat-num">11</div><div class="stat-label">AntSpy 相关问题</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">⚡</div>
+        <div><div class="stat-num">10</div><div class="stat-label">BestCreative 相关问题</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">🌐</div>
+        <div><div class="stat-num">7</div><div class="stat-label">通用问题</div></div>
+      </div>
+    </div>
+
+    <div class="quick-tips">
+      <h3>💡 上场前三条铁律</h3>
+      <ul>
+        <li>先听清楚问题再回答，不要急着打断客户——<strong>复述问题</strong>是争取思考时间的好技巧。</li>
+        <li>技术细节被追问时，可以说"我们有专属技术团队支持，可以为您安排深度演示"，<strong>不必现场硬扛</strong>。</li>
+        <li>价格敏感问题一律引导至"根据使用规模定制报价"，<strong>不要现场报价</strong>。</li>
+      </ul>
+    </div>
+
+    <!-- ========== AntSpy 问题 ========== -->
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff3e8;">🐜</div>
+      <h2>AntSpy 产品问题</h2>
+      <span class="count">11 个问题</span>
+    </div>
+
+    <!-- A1 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A1</div>
+        <div class="q-text">AntSpy 和普通的广告素材库有什么区别？为什么不直接用 Facebook Ad Library？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>Facebook Ad Library 只能告诉你「某个广告存在」，但 AntSpy 告诉你的是「这个广告<strong>表现如何</strong>」——我们聚合了真实的投放数据，包括创意活跃时长、在投广告数、历史广告数等核心指标，让你一眼看出哪些创意是经过市场验证的爆款，而不是盲目模仿一个可能已经跑死的素材。</p>
+          <p>此外，AntSpy 还覆盖了<strong>独立站选品</strong>的维度——你可以从商品的广告热度反推市场需求，这是 Ad Library 完全没有的能力。</p>
+        </div>
+        <div class="tip-box success">
+          <span class="tip-icon">✅</span>
+          <span>可以现场打开对比演示，用「热度指标 vs 仅展示广告」来直观体现差异。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A2</div>
+        <div class="q-text">你们的数据是怎么来的？来源合规吗？</div>
+        <span class="badge badge-hard">高频 · 敏感</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们的数据来源于<strong>公开的广告投放数据</strong>，基于真实的广告投放行为进行聚合分析，不涉及任何用户隐私数据的采集。这与行业内主流的竞品情报工具的运作方式一致。</p>
+          <p>我们的数据处理流程符合主要广告平台的使用条款，团队也持续关注各平台政策动态，确保合规边界。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>如客户深度追问具体数据来源渠道，建议回答"这属于我们的核心技术，可安排专项沟通"，不要现场展开细节。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A3</div>
+        <div class="q-text">数据更新频率是多少？能做到实时吗？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>AntSpy 采用<strong>定时更新机制</strong>，商品相关指标定期同步，确保用户看到的是最新数据。同时，我们支持设置<strong>邮件提醒</strong>，当你追踪的商品出现热度变化时，会主动推送通知，无需手动盯盘。</p>
+        </div>
+        <div class="tip-box info">
+          <span class="tip-icon">ℹ️</span>
+          <span>若客户追问具体更新间隔（如"是每小时还是每天"），可表示"不同数据维度的更新周期略有差异，欢迎后续安排详细演示"，避免给出可能不准确的承诺。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A4</div>
+        <div class="q-text">支持哪些平台？只有 Meta 吗？TikTok 数据有吗？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>AntSpy 目前<strong>聚焦独立站广告投放场景</strong>，覆盖主流广告渠道的创意素材数据。关于具体平台覆盖范围，我们可以在演示中为您展示当前支持的平台列表，并介绍我们后续的扩展计划。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>如果目前平台覆盖有限，不要过度承诺，实事求是介绍现状，可用"路线图中持续扩展"来保持吸引力。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- A5 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A5</div>
+        <div class="q-text">「素材分析」能分析出什么？能告诉我为什么这个广告跑得好吗？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>AntSpy 的素材分析会对视频素材进行<strong>结构化解析</strong>，拆解出分镜信息、创意元素和关键抓手，让你理解「这个素材是怎么做的」。结合热度数据，你可以推断出「哪类结构的创意更容易跑量」。</p>
+          <p>这不是简单地告诉你一个结论，而是给你足够的信息，让你<strong>自己形成判断</strong>，复用并改良有效的创意策略。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- A6 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A6</div>
+        <div class="q-text">竞对追踪功能，能追踪哪些信息？会不会违反隐私政策？</div>
+        <span class="badge badge-medium">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>追踪功能基于<strong>公开的广告数据</strong>，可以帮助你聚合分析某个品牌/店铺的投放情况、商品数量、创意布局，相当于给你配了一个「竞对动态观察员」，自动整理公开信息并推送变化提醒。</p>
+          <p>由于使用的都是公开广告数据，这与市场上主流的竞品监测工具的做法一致，不涉及隐私数据。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- A7 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A7</div>
+        <div class="q-text">「选热品」和我用 TikTok 小店选品工具有什么区别？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>TikTok 小店选品工具更多是从<strong>电商销售侧</strong>出发，看的是平台内的销量数据。AntSpy 的逻辑是从<strong>广告投放侧反推需求</strong>——一个商品如果在广告上有大量持续投放，说明它在独立站/DTC 场景已经被验证是可以跑量的品。这两种视角是互补的，AntSpy 尤其适合想要做独立站的卖家。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- A8 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A8</div>
+        <div class="q-text">这个工具主要是给谁用的？我们团队是运营，适合吗？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>非常适合！AntSpy 有两类核心用户：</p>
+          <ul>
+            <li><strong>独立站剪辑/创意人员</strong>：用来找优质素材、分析爆款结构，快速复用已验证的创意</li>
+            <li><strong>独立站运营人员</strong>：用来选品、分析商品投放趋势、追踪竞对动态</li>
+          </ul>
+          <p>运营团队最常用的是「选热品」和「追踪」两个模块，可以大幅提升选品决策效率。</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- A10 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A10</div>
+        <div class="q-text">AntSpy 未来会接入素材生成功能吗？和 BestCreative 是什么关系？</div>
+        <span class="badge badge-easy">低频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>这是一个非常好的问题！AntSpy 和 BestCreative 是我们公司的两款产品，未来规划中<strong>两者会深度打通</strong>——AntSpy 负责洞察和发现，BestCreative 负责基于洞察去生成和克隆创意，实现从"发现好创意"到"快速产出新创意"的完整闭环。</p>
+        </div>
+        <div class="tip-box success">
+          <span class="tip-icon">✅</span>
+          <span>这是一个很好的引导机会，可以顺势介绍 BestCreative。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- A11 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A11</div>
+        <div class="q-text">AntSpy 和 BigSpy、AdSpy 这些老牌工具比有什么优势？</div>
+        <span class="badge badge-medium">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>老牌工具更多是「广告图书馆」的思路——展示广告内容。AntSpy 更强调<strong>数据驱动的洞察</strong>：</p>
+          <ul>
+            <li>我们有<strong>投放热度量化指标</strong>，不只是展示广告，而是告诉你哪个更值得参考</li>
+            <li>我们打通了<strong>选品维度</strong>，从广告侧反推商品机会</li>
+            <li>未来与 BestCreative 的联动，能形成「洞察→生成」的一体化工作流</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- A12 -->
+    <div class="qa-card antspy" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">A12</div>
+        <div class="q-text">我能把 AntSpy 找到的素材直接下载用于自己的广告吗？版权怎么处理？</div>
+        <span class="badge badge-hard">高频 · 敏感</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>AntSpy 的定位是<strong>创意参考和洞察工具</strong>，帮助你了解市场上哪类创意在跑量，从而为你自己的创作提供灵感和方向。直接使用他人广告素材涉及版权问题，建议基于参考进行二次创作，或者配合 BestCreative 的生成能力来产出原创素材。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>这是敏感问题，要清楚表明产品是"参考工具"而非"素材搬运工具"，引导至合规使用场景。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== BestCreative 问题 ========== -->
+    <div class="section-header" style="margin-top: 40px;">
+      <div class="section-icon" style="background:#e6f4ff;">⚡</div>
+      <h2>BestCreative 产品问题</h2>
+      <span class="count">10 个问题</span>
+    </div>
+
+    <!-- B1 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B1</div>
+        <div class="q-text">BestCreative 和 Canva、Photoshop 这类设计工具有什么区别？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>Canva 和 PS 是<strong>编辑工具</strong>，你需要有明确的设计方案、会操作界面，才能产出内容。BestCreative 是<strong>生成工具</strong>——你只需要描述想要什么（或给一张参考图），AI 直接帮你生成图片或视频。</p>
+          <p>更重要的是，BestCreative 不只是生成，它还能<strong>分析现有视频的创意结构</strong>，告诉你素材的分镜、节奏和亮点，帮你做出更有依据的创意决策——这是传统设计软件完全不具备的能力。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B2</div>
+        <div class="q-text">视频换品（Product Swapping）效果怎么样？能保持原视频的自然感吗？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>视频换品是 BestCreative 最具差异化的核心能力之一。技术上会尽量保持场景的自然融合，效果的好坏与原视频的拍摄质量、商品的视觉复杂度有关。</p>
+          <p>核心价值在于<strong>大幅降低拍摄成本</strong>——你不需要为每个新商品重新拍一条视频，可以在已有的优质素材基础上快速复用，节省的不只是钱，更是时间。</p>
+        </div>
+        <div class="tip-box info">
+          <span class="tip-icon">ℹ️</span>
+          <span>如有现场演示样例效果视频，这是最好的说服材料。可以提前准备 1-2 个效果较好的案例。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- B3 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B3</div>
+        <div class="q-text">视频换脸是合规的吗？会不会有法律风险？</div>
+        <span class="badge badge-hard">高频 · 敏感</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们的换脸功能定位是<strong>合规的广告本地化工具</strong>，使用场景是：用户使用自己拥有版权的视频素材，或平台授权的数字形象，在多地区投放时进行创意适配（比如换成当地代言人的面孔）。</p>
+          <p>我们不支持也不鼓励用于生成涉及真实人物肖像权的未授权内容，平台会有相应的使用规范约束。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>这是高敏感问题，务必强调"合规使用场景"和"用户自有版权素材"，不要过于详细展开技术细节。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- B4 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B4</div>
+        <div class="q-text">图生图和文生图的区别是什么？什么时候用哪个？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <ul>
+            <li><strong>文生图</strong>：你有一个创意想法但还没有视觉参考，用文字描述场景，AI 帮你生成图片，适合从零开始的创意探索。</li>
+            <li><strong>图生图</strong>：你已经有一张参考图（比如竞品广告图、产品图），想生成风格相似或内容相关的变体，AI 基于这张参考图直接生成全新图片。一图可以裂变出多个创意变体，效率极高。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- B5 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B5</div>
+        <div class="q-text">视频去水印、去字幕，这个在广告法上合规吗？</div>
+        <span class="badge badge-hard">中频 · 敏感</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>这两个功能的合规使用场景是：处理<strong>用户自己拥有版权的视频素材</strong>，比如去除自己打的水印进行二次加工，或清除旧版字幕以便添加本地化字幕。</p>
+          <p>我们不支持用于侵犯他人版权的内容处理，平台使用条款对此有明确规定，用户在使用时需对素材的版权归属负责。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>始终将这些功能定位为"自有素材的后处理工具"，强调"用户自行承担版权责任"。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- B6 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B6</div>
+        <div class="q-text">「视频分析」能分析什么？它和人工分析相比有什么优势？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>BestCreative 的视频分析会<strong>自动解构分镜信息</strong>，包括创意结构、节奏把控和视觉亮点，输出结构化的分析结果，你可以直接下载使用。</p>
+          <p>相比人工分析的优势非常明显：一个人工分析需要几十分钟，AI 几秒钟完成；更重要的是标准化——AI 的分析框架是一致的，不会因为分析师的经验不同而有偏差，方便团队沉淀和复用创意经验。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- B7 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B7</div>
+        <div class="q-text">生成的图片/视频质量稳定吗？失败率高吗？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们在模型选型和工程化层面投入了大量精力，确保生成质量的稳定性。与此同时，平台会提供<strong>生成进度反馈</strong>，避免用户对结果一无所知的糟糕体验（这也是一些竞品被用户诟病的点）。</p>
+          <p>对于效果不满意的生成结果，可以通过调整参数重新生成，我们会持续迭代模型来提升效果。</p>
+        </div>
+        <div class="tip-box info">
+          <span class="tip-icon">ℹ️</span>
+          <span>如果客户已经有过使用竞品的不良体验，可以重点强调我们在稳定性和用户体验上的改进。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- B8 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B8</div>
+        <div class="q-text">BestCreative 背后用的是什么大模型？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们采用<strong>多模型接入架构</strong>，针对不同能力选用当前最优的模型：</p>
+          <ul>
+            <li><strong>图片生成</strong>：接入 Nano Banana Pro 和 Nano Banana 2，两者都是目前图片生成领域顶尖的模型</li>
+            <li><strong>视频生成</strong>：接入 Kling V3，当前业界最优秀的视频生成模型之一</li>
+          </ul>
+          <p>我们不绑定单一模型，随着 AI 技术快速迭代，会持续接入更多高效模型能力，确保用户始终用到最好的生成效果。</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- B11 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B11</div>
+        <div class="q-text">BestCreative 和 Creatify、Madhouse 等竞品相比有什么优势？</div>
+        <span class="badge badge-medium">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们对标的核心竞品是 Tec-Creative，在与用户调研和竞品对比中，我们识别了一些关键痛点并针对性改进：</p>
+          <ul>
+            <li><strong>稳定性</strong>：竞品存在生成速度慢、失败率高、无进度提示的问题，我们在这方面做了专项优化</li>
+            <li><strong>体验</strong>：界面引导更友好，功能限制更合理</li>
+            <li><strong>差异化能力</strong>：视频换品、视频分析是我们的核心亮点，部分竞品没有或效果较弱</li>
+            <li><strong>生态整合</strong>：与 AntSpy 联动的「洞察→生成」完整工作流，是竞品无法复制的</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- B12 -->
+    <div class="qa-card bestcreative" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">B12</div>
+        <div class="q-text">生成内容的版权归谁？我可以用于商业广告投放吗？</div>
+        <span class="badge badge-medium">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>BestCreative 生成的内容版权归<strong>用户所有</strong>，用户可以用于商业广告投放。我们平台不对用户的生成内容主张版权，您生产的素材就是您的素材。</p>
+          <p>需要注意的是，如果输入的素材（参考图、参考视频）涉及他人版权，用户需要自行确保使用合规。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 通用问题 ========== -->
+    <div class="section-header" style="margin-top: 40px;">
+      <div class="section-icon" style="background:#f3ecff;">🌐</div>
+      <h2>通用问题</h2>
+      <span class="count">7 个问题</span>
+    </div>
+
+
+    <!-- G2 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G2</div>
+        <div class="q-text">价格是怎么收费的？有没有免费试用？</div>
+        <span class="badge badge-hard">高频 · 敏感</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们会根据团队规模和使用需求提供<strong>定制化报价方案</strong>，不同的功能组合和用量对应不同的价格档位。</p>
+          <p>如果您有试用意向，欢迎留下联系方式，我们的商务同学会根据您的具体需求为您安排试用和报价。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>展会现场不要给出具体价格数字，统一引导至"后续商务沟通"，避免造成不必要的锚定或承诺。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- G3 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G3</div>
+        <div class="q-text">你们团队多大？是初创公司吗？稳定性有保障吗？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们是一支专注且高效的研发团队，核心成员涵盖产品、算法、前后端开发和测试，团队配置完整。</p>
+          <p>我们已经有成熟运营的产品（AntSpy 已上线），并且有清晰的 2026 产品路线图，是一家在稳步发展中的公司，不是刚起步的初创。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- G4 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G4</div>
+        <div class="q-text">数据安全和隐私保护怎么做的？我们公司的数据会被用来训练 AI 吗？</div>
+        <span class="badge badge-hard">高频 · 敏感</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们非常重视用户数据安全。用户上传的素材和生成的内容会受到严格保护，<strong>不会未经授权用于模型训练</strong>。</p>
+          <p>具体的数据隐私条款和安全机制，我们可以提供完整的说明文档，如有企业级数据合规需求，欢迎进一步沟通定制方案。</p>
+        </div>
+        <div class="tip-box warn">
+          <span class="tip-icon">⚠️</span>
+          <span>这是大客户非常关心的问题，不要轻率回答，明确表示"有完整的隐私政策文档可提供"是最稳妥的做法。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- G5 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G5</div>
+        <div class="q-text">你们的产品主要面向国内市场还是出海市场？</div>
+        <span class="badge badge-easy">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>我们的产品<strong>主要服务出海场景</strong>，核心用户是做独立站 DTC 业务的品牌和广告团队，帮助他们在海外市场更高效地运营广告创意。AntSpy 专注于独立站场景，BestCreative 也支持多语言本地化能力，都是为出海场景量身打造。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- G6 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G6</div>
+        <div class="q-text">有没有 API 对接？能集成到我们自己的系统里吗？</div>
+        <span class="badge badge-easy">低频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>API 对接是我们后续计划支持的能力之一，尤其是 BestCreative 在 V3.0 升级为独立服务后，会提供更完善的 API 接口。目前如有 API 或系统集成需求，欢迎与我们深入沟通，我们可以评估定制化合作的可能性。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- G7 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G7</div>
+        <div class="q-text">如果我想进一步了解或者试用，下一步怎么联系？</div>
+        <span class="badge badge-easy">高频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>非常欢迎！您可以先留下您的联系方式，我们会安排专属商务同学与您对接，根据您的实际需求安排<strong>产品演示和试用</strong>。也欢迎扫描展台二维码，直接添加我们的官方联系渠道。</p>
+        </div>
+        <div class="tip-box success">
+          <span class="tip-icon">✅</span>
+          <span>这是最理想的结束语，主动推进到下一步行动，每一个感兴趣的客户都要拿到联系方式。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- G8 -->
+    <div class="qa-card general" onclick="toggleCard(this)">
+      <div class="qa-header">
+        <div class="q-num">G8</div>
+        <div class="q-text">你们这个方向的竞争很激烈，凭什么能做起来？</div>
+        <span class="badge badge-hard">中频</span>
+        <span class="expand-icon">▾</span>
+      </div>
+      <div class="qa-body">
+        <div class="answer-label">参考回答</div>
+        <div class="answer-text">
+          <p>竞争激烈恰恰说明这是一个真实的市场需求。我们的核心优势有三点：</p>
+          <ul>
+            <li><strong>专注独立站场景</strong>：不是什么都做的综合工具，而是深耕独立站 DTC 的具体工作流，更懂用户</li>
+            <li><strong>洞察+生成的完整闭环</strong>：AntSpy + BestCreative 两款产品联动，这是竞品难以复制的生态壁垒</li>
+            <li><strong>从用户痛点出发迭代</strong>：我们深度调研了现有工具的用户反馈，针对竞品的具体痛点做了改进</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end all-section -->
+
+  <!-- AntSpy Tab -->
+  <div id="antspy-section" class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fff3e8;">🐜</div>
+      <h2>AntSpy 产品问题</h2>
+      <span class="count">11 个问题</span>
+    </div>
+    <p style="color:#888;font-size:14px;margin-bottom:16px;">以下列出 AntSpy 相关的所有问题，点击查看参考回答。</p>
+    <div id="antspy-list"></div>
+  </div>
+
+  <!-- BestCreative Tab -->
+  <div id="bestcreative-section" class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e6f4ff;">⚡</div>
+      <h2>BestCreative 产品问题</h2>
+      <span class="count">10 个问题</span>
+    </div>
+    <p style="color:#888;font-size:14px;margin-bottom:16px;">以下列出 BestCreative 相关的所有问题，点击查看参考回答。</p>
+    <div id="bestcreative-list"></div>
+  </div>
+
+  <!-- General Tab -->
+  <div id="general-section" class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#f3ecff;">🌐</div>
+      <h2>通用问题</h2>
+      <span class="count">7 个问题</span>
+    </div>
+    <p style="color:#888;font-size:14px;margin-bottom:16px;">以下列出通用/跨产品问题，点击查看参考回答。</p>
+    <div id="general-list"></div>
+  </div>
+
+  <!-- Tips Tab -->
+  <div id="tips-section" class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e8f5e9;">🎯</div>
+      <h2>展会应对技巧</h2>
+    </div>
+
+    <div style="display:grid;gap:16px;">
+
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <h3 style="font-size:16px;color:#1a1a2e;margin-bottom:14px;">🔑 核心原则</h3>
+        <ul style="padding-left:20px;font-size:14.5px;color:#444;line-height:2;">
+          <li><strong>先听后答</strong>：客户说完再回答，必要时复述问题确认理解正确，这也给自己争取思考时间</li>
+          <li><strong>价格不现报</strong>：所有价格问题统一回答"根据团队规模和需求定制报价，可安排专属商务跟进"</li>
+          <li><strong>不懂不硬扛</strong>：技术细节不确定时，诚实说"这块我需要跟技术同学确认，回头给您准确信息"比乱答好</li>
+          <li><strong>敏感问题有边界</strong>：数据来源、换脸合规、版权等问题，有准备好的标准答案，不要临场发挥</li>
+          <li><strong>每次对话要有行动项</strong>：感兴趣的客户一定要拿到联系方式或引导扫码</li>
+        </ul>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <h3 style="font-size:16px;color:#1a1a2e;margin-bottom:14px;">🎯 不同类型客户的应对策略</h3>
+        <div style="display:grid;gap:12px;">
+          <div style="background:#fff8f0;border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:600;color:#e67e22;margin-bottom:6px;">🛍️ 独立站卖家/运营</div>
+            <div style="font-size:14px;color:#555;">重点介绍 AntSpy 的选品和竞对追踪功能，强调「基于真实投放数据做决策」的价值，突出节省选品试错成本。</div>
+          </div>
+          <div style="background:#f0f8ff;border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:600;color:#3498db;margin-bottom:6px;">🎬 广告创意/剪辑团队</div>
+            <div style="font-size:14px;color:#555;">重点介绍 BestCreative 的生成和克隆能力，强调「一条视频→多地区多版本」的效率，突出节省拍摄和制作成本。</div>
+          </div>
+          <div style="background:#f5f0ff;border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:600;color:#9b59b6;margin-bottom:6px;">📊 品牌市场/决策层</div>
+            <div style="font-size:14px;color:#555;">重点介绍两款产品的协同价值，强调「洞察→生成」完整工作流，以及 AntSpy 的竞对追踪和品牌监控能力。</div>
+          </div>
+          <div style="background:#f0fff0;border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:600;color:#27ae60;margin-bottom:6px;">🔧 技术/产品人员</div>
+            <div style="font-size:14px;color:#555;">重点介绍 API 规划、多模型架构、系统集成可能性，以及 BestCreative V3.0 独立服务化的计划。</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <h3 style="font-size:16px;color:#1a1a2e;margin-bottom:14px;">⚡ 高频敏感问题一览表</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead>
+            <tr style="background:#f4f5f7;">
+              <th style="text-align:left;padding:10px 12px;border-radius:8px 0 0 8px;">问题类型</th>
+              <th style="text-align:left;padding:10px 12px;">应对原则</th>
+              <th style="text-align:left;padding:10px 12px;border-radius:0 8px 8px 0;">禁忌</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f0f2f5;">
+              <td style="padding:10px 12px;font-weight:500;">数据来源合规性</td>
+              <td style="padding:10px 12px;color:#555;">「公开广告数据，行业惯例」</td>
+              <td style="padding:10px 12px;color:#c0392b;">不要展开技术细节</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f0f2f5;">
+              <td style="padding:10px 12px;font-weight:500;">换脸/版权合规</td>
+              <td style="padding:10px 12px;color:#555;">「自有版权素材，合规使用场景」</td>
+              <td style="padding:10px 12px;color:#c0392b;">不要说可以用任何素材</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f0f2f5;">
+              <td style="padding:10px 12px;font-weight:500;">定价</td>
+              <td style="padding:10px 12px;color:#555;">「定制化报价，联系商务」</td>
+              <td style="padding:10px 12px;color:#c0392b;">不要现场报具体价格</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-weight:500;">数据隐私</td>
+              <td style="padding:10px 12px;color:#555;">「严格保护，有完整隐私政策」</td>
+              <td style="padding:10px 12px;color:#c0392b;">不要随意承诺"绝对安全"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#0f0c29,#302b63);border-radius:12px;padding:24px;color:white;">
+        <h3 style="font-size:16px;margin-bottom:14px;">🚀 快速开场话术</h3>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:14px 16px;font-size:14px;line-height:1.9;">
+          "我们是做<strong style="color:#ffa040;">广告创意情报</strong>和<strong style="color:#60c0ff;">AI 创意生成</strong>的——简单来说，我们帮独立站和出海品牌解决两个核心问题：第一，如何快速发现市场上有效的广告创意；第二，如何基于这些洞察高效产出自己的广告素材。我们旗下有两款产品，一分钟给您介绍一下？"
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<footer>AntSpy & BestCreative 展会问题应对手册 · 仅供内部使用</footer>
+
+<script>
+  function showTab(tab) {
+    // hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    // show target
+    const tabMap = {
+      'all': 'all-section',
+      'antspy': 'antspy-section',
+      'bestcreative': 'bestcreative-section',
+      'general': 'general-section',
+      'tips': 'tips-section'
+    };
+    document.getElementById(tabMap[tab]).classList.add('active');
+
+    // active nav
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabIndex = ['all','antspy','bestcreative','general','tips'].indexOf(tab);
+    if (navItems[tabIndex]) navItems[tabIndex].classList.add('active');
+
+    // populate filtered views
+    if (tab === 'antspy') populateFiltered('antspy-list', 'antspy');
+    if (tab === 'bestcreative') populateFiltered('bestcreative-list', 'bestcreative');
+    if (tab === 'general') populateFiltered('general-list', 'general');
+  }
+
+  function populateFiltered(containerId, className) {
+    const container = document.getElementById(containerId);
+    if (container.children.length > 0) return; // already populated
+    const cards = document.querySelectorAll('#all-section .qa-card.' + className);
+    cards.forEach(card => {
+      const clone = card.cloneNode(true);
+      clone.classList.remove('open');
+      clone.querySelector('.qa-body').style.display = 'none';
+      clone.onclick = function() { toggleCard(this); };
+      container.appendChild(clone);
+    });
+  }
+
+  function toggleCard(card) {
+    const isOpen = card.classList.contains('open');
+    // close all in same parent
+    const siblings = card.parentElement.querySelectorAll('.qa-card');
+    siblings.forEach(s => {
+      s.classList.remove('open');
+      const body = s.querySelector('.qa-body');
+      if (body) body.style.display = 'none';
+    });
+    if (!isOpen) {
+      card.classList.add('open');
+      const body = card.querySelector('.qa-body');
+      if (body) body.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
