@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 广告维度深度分析报告 · 2026-05-04~05-10</title>
+<script src="chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1c1e21; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1380px; margin: 0 auto; padding: 20px 16px 60px; }
+  .header { background: linear-gradient(135deg, #0d47a1 0%, #1565c0 40%, #0d47a1 100%); color: white; padding: 36px 28px; border-radius: 0 0 20px 20px; margin-bottom: 20px; }
+  .header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .header .subtitle { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 12px; }
+  .header .meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; color: rgba(255,255,255,0.65); }
+  .header .badge { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600; color: white; }
+  .card { background: white; border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .card-accent { border-left: 4px solid #1565c0; }
+  .card-accent-red { border-left: 4px solid #c62828; }
+  .card-accent-orange { border-left: 4px solid #e65100; }
+  .card-accent-green { border-left: 4px solid #2e7d32; }
+  .section-title { font-size: 16px; font-weight: 800; color: #0d47a1; padding: 0 0 12px 0; margin-bottom: 16px; border-bottom: 3px solid #e3f2fd; display: flex; align-items: center; gap: 8px; }
+  .card-title { font-size: 13px; font-weight: 700; color: #37474f; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot.red    { background: #e53935; }
+  .dot.orange { background: #fb8c00; }
+  .dot.green  { background: #43a047; }
+  .dot.purple { background: #7b1fa2; }
+  .dot.blue   { background: #1565c0; }
+  .dot.teal   { background: #00897b; }
+  .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi-box { background: white; border-radius: 14px; padding: 18px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; border-top: 4px solid #e0e0e0; }
+  .kpi-box.c-blue   { border-top-color: #1565c0; }
+  .kpi-box.c-red    { border-top-color: #c62828; }
+  .kpi-box.c-orange { border-top-color: #e65100; }
+  .kpi-box.c-green  { border-top-color: #2e7d32; }
+  .kpi-box.c-purple { border-top-color: #6a1b9a; }
+  .kpi-val { font-size: 30px; font-weight: 900; line-height: 1.1; }
+  .c-blue   .kpi-val { color: #0d47a1; }
+  .c-red    .kpi-val { color: #c62828; }
+  .c-orange .kpi-val { color: #e65100; }
+  .c-green  .kpi-val { color: #1b5e20; }
+  .c-purple .kpi-val { color: #4a148c; }
+  .kpi-lbl { font-size: 11px; color: #78909c; font-weight: 600; margin-top: 4px; }
+  .kpi-sub { font-size: 10px; color: #b0bec5; margin-top: 2px; }
+  .chart-wrap { position: relative; height: 300px; }
+  .chart-wrap-tall { position: relative; height: 380px; }
+  .chart-wrap-sm { position: relative; height: 220px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f5f7fa; color: #546e7a; font-weight: 700; text-align: left; padding: 9px 10px; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; color: #37474f; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9fa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .tag-red    { background: #ffebee; color: #c62828; }
+  .tag-red-dark { background: #c62828; color: white; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-yellow { background: #fffde7; color: #f57f17; }
+  .tag-green  { background: #e8f5e9; color: #2e7d32; }
+  .tag-blue   { background: #e3f2fd; color: #1565c0; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .alert-box { border-radius: 10px; padding: 14px 16px; font-size: 12px; line-height: 1.8; margin-bottom: 12px; }
+  .alert-red  { background: #ffebee; border-left: 4px solid #c62828; }
+  .alert-orange { background: #fff3e0; border-left: 4px solid #e65100; }
+  .alert-green  { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+  .alert-blue   { background: #e3f2fd; border-left: 4px solid #1565c0; }
+  .notice-box { background: #e8eaf6; border-left: 4px solid #3949ab; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #1a237e; margin-bottom: 14px; }
+  .rate-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .rate-bar { height: 8px; border-radius: 4px; background: #e0e0e0; overflow: hidden; flex: 1; }
+  .rate-fill { height: 100%; border-radius: 4px; }
+  .footer { text-align: center; padding: 28px; color: #90a4ae; font-size: 12px; }
+  .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 800; background: #e0e0e0; color: #546e7a; flex-shrink: 0; }
+  .rank-badge.gold { background: #ffd700; color: #5d4037; }
+  .rank-badge.silver { background: #c0c0c0; color: #37474f; }
+  .rank-badge.bronze { background: #cd7f32; color: white; }
+  @media (max-width: 900px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } .grid2 { grid-template-columns: 1fr; } .grid3 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+    <h1>🎯 Meta 广告维度深度分析报告</h1>
+    <span class="badge">广告维度（ad_id 去重）</span>
+    <span class="badge">全链路归因</span>
+  </div>
+  <div class="subtitle">从广告 → 广告组 → 广告系列 → 账户 → 广告主，全链路违规归因分析</div>
+  <div class="meta">
+    <span>📅 数据周期：2026-05-04 ~ 2026-05-10</span>
+    <span>📦 原始记录：24,595 条（含重复）</span>
+    <span>🎯 去重后广告：13,656 条（独立 ad_id）</span>
+    <span>🏢 涉及广告主：112 家</span>
+    <span>📋 去重比例：44.5%（同一广告平均被审核 1.8 次）</span>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-row">
+  <div class="kpi-box c-blue">
+    <div class="kpi-val">13,656</div>
+    <div class="kpi-lbl">独立广告总数</div>
+    <div class="kpi-sub">ad_id 去重后</div>
+  </div>
+  <div class="kpi-box c-red">
+    <div class="kpi-val">2,033</div>
+    <div class="kpi-lbl">违规广告</div>
+    <div class="kpi-sub">Tier3 · 14.9%</div>
+  </div>
+  <div class="kpi-box c-orange">
+    <div class="kpi-val">112</div>
+    <div class="kpi-lbl">涉及广告主</div>
+    <div class="kpi-sub">company_name 去重</div>
+  </div>
+  <div class="kpi-box c-purple">
+    <div class="kpi-val">25</div>
+    <div class="kpi-lbl">高风险账户</div>
+    <div class="kpi-sub">违规率 ≥ 50%，≥20条</div>
+  </div>
+  <div class="kpi-box c-green">
+    <div class="kpi-val">1.8x</div>
+    <div class="kpi-lbl">平均重复审核</div>
+    <div class="kpi-sub">每条广告被审核次数</div>
+  </div>
+</div>
+
+<!-- 去重说明 -->
+<div class="card card-accent">
+  <div class="card-title"><span class="dot blue"></span>数据处理说明：广告维度去重</div>
+  <div class="notice-box">
+    ℹ️ 本报告针对<strong>广告维度（ad_id）</strong>进行分析，与历史报告（素材维度 element_id）口径不同，请注意对比时的差异。
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:12px;">
+    <div style="background:#f5f5f5;border-radius:8px;padding:12px;">
+      <div style="font-weight:700;color:#1565c0;margin-bottom:6px;">📥 原始记录</div>
+      <div style="font-size:24px;font-weight:900;color:#1565c0;">24,595</div>
+      <div style="color:#78909c;">含同一广告多次审核记录</div>
+    </div>
+    <div style="background:#fff3e0;border-radius:8px;padding:12px;">
+      <div style="font-weight:700;color:#e65100;margin-bottom:6px;">🔄 去重逻辑</div>
+      <div style="font-size:11px;color:#5d4037;line-height:1.6;">按 ad_id 去重<br>保留最新 created_time<br>去除 10,939 条重复记录</div>
+    </div>
+    <div style="background:#e8f5e9;border-radius:8px;padding:12px;">
+      <div style="font-weight:700;color:#2e7d32;margin-bottom:6px;">✅ 去重后数据</div>
+      <div style="font-size:24px;font-weight:900;color:#2e7d32;">13,656</div>
+      <div style="color:#78909c;">独立广告，可信度更高</div>
+    </div>
+  </div>
+</div>
+
+<!-- 一、每日违规趋势 -->
+<div class="section-title">📈 一、广告维度每日违规趋势</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot blue"></span>每日广告量与违规分布</div>
+    <div class="chart-wrap">
+      <canvas id="dailyStackChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>每日违规率 + 趋势线</div>
+    <div class="chart-wrap">
+      <canvas id="dailyRateLineChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot blue"></span>每日明细（广告维度）</div>
+  <table>
+    <thead>
+      <tr>
+        <th>日期</th><th>星期</th><th>审核广告数</th><th>合规</th><th>违规</th><th>违规率</th><th>主要违规品类</th><th>趋势评语</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#fff8e1;">
+        <td><strong>05-04</strong></td><td>周日</td><td>704</td><td>592</td>
+        <td>112</td><td><strong style="color:#f57f17;">15.9%</strong></td>
+        <td>Beauty(40.2%) + Health(78.9%)</td>
+        <td><span class="tag tag-yellow">→ 周期起点</span></td>
+      </tr>
+      <tr style="background:#ffebee;">
+        <td><strong>05-05</strong></td><td>周一</td><td>1,693</td><td>1,317</td>
+        <td><strong style="color:#c62828;">376</strong></td>
+        <td><strong style="color:#c62828;">22.2%</strong></td>
+        <td>Beauty(75.5%) + Health(47.4%)</td>
+        <td><span class="tag tag-red">🚨 本周最高</span></td>
+      </tr>
+      <tr style="background:#fff3e0;">
+        <td><strong>05-06</strong></td><td>周二</td><td>2,494</td><td>2,083</td>
+        <td>411</td><td><strong style="color:#e65100;">16.5%</strong></td>
+        <td>Health(80.8%) + Beauty(47.1%)</td>
+        <td><span class="tag tag-orange">↓ 量大率降</span></td>
+      </tr>
+      <tr style="background:#fff3e0;">
+        <td><strong>05-07</strong></td><td>周三</td><td>1,854</td><td>1,564</td>
+        <td>290</td><td><strong style="color:#e65100;">15.6%</strong></td>
+        <td>Health(100%) + Beauty(39.1%)</td>
+        <td><span class="tag tag-orange">↓ 持续改善</span></td>
+      </tr>
+      <tr style="background:#fff8e1;">
+        <td><strong>05-08</strong></td><td>周四</td><td>2,075</td><td>1,792</td>
+        <td>283</td><td><strong style="color:#f57f17;">13.6%</strong></td>
+        <td>Health(92.4%) + Beauty(43.4%)</td>
+        <td><span class="tag tag-yellow">↓ 本周次低</span></td>
+      </tr>
+      <tr style="background:#fff3e0;">
+        <td><strong>05-09</strong></td><td>周五</td><td>2,515</td><td>2,131</td>
+        <td>384</td><td><strong style="color:#e65100;">15.3%</strong></td>
+        <td>Health(48.8%) + Beauty(25.5%)</td>
+        <td><span class="tag tag-orange">↑ 周五小反弹</span></td>
+      </tr>
+      <tr style="background:#e8f5e9;">
+        <td><strong>05-10</strong></td><td>周六</td><td>2,321</td><td>2,144</td>
+        <td>177</td><td><strong style="color:#43a047;">7.6%</strong></td>
+        <td>Health(86.8%) + Beauty(30.4%)</td>
+        <td><span class="tag tag-green">✅ 本周最低</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 二、品类 × 日期 热力分析 -->
+<div class="section-title">🔥 二、品类 × 日期 违规热力分析</div>
+<div class="card">
+  <div class="card-title"><span class="dot orange"></span>品类 × 日期 违规率热力矩阵</div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>品类</th>
+          <th>05-04 (周日)</th><th>05-05 (周一)</th><th>05-06 (周二)</th>
+          <th>05-07 (周三)</th><th>05-08 (周四)</th><th>05-09 (周五)</th><th>05-10 (周六)</th>
+          <th>周均</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Health &amp; Nutrition</strong></td>
+          <td style="background:#e57373;text-align:center;font-weight:700;">78.9%</td>
+          <td style="background:#fff3e0;text-align:center;">47.4%</td>
+          <td style="background:#c62828;color:white;text-align:center;font-weight:700;">80.8%</td>
+          <td style="background:#c62828;color:white;text-align:center;font-weight:700;">100%</td>
+          <td style="background:#c62828;color:white;text-align:center;font-weight:700;">92.4%</td>
+          <td style="background:#fff3e0;text-align:center;">48.8%</td>
+          <td style="background:#c62828;color:white;text-align:center;font-weight:700;">86.8%</td>
+          <td style="background:#c62828;color:white;text-align:center;"><strong>69.3%</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Beauty &amp; Personal Care</strong></td>
+          <td style="background:#fff3e0;text-align:center;">40.2%</td>
+          <td style="background:#e57373;text-align:center;font-weight:700;">75.5%</td>
+          <td style="background:#ffcdd2;text-align:center;">47.1%</td>
+          <td style="background:#fff3e0;text-align:center;">39.1%</td>
+          <td style="background:#fff3e0;text-align:center;">43.4%</td>
+          <td style="background:#fff8e1;text-align:center;">25.5%</td>
+          <td style="background:#fff8e1;text-align:center;">30.4%</td>
+          <td style="background:#e57373;text-align:center;"><strong>43.8%</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Outdoor, Garden &amp; DIY</strong></td>
+          <td style="background:#fff8e1;text-align:center;">~15%</td>
+          <td style="background:#fff3e0;text-align:center;">~30%</td>
+          <td style="background:#fff3e0;text-align:center;">~25%</td>
+          <td style="background:#fff3e0;text-align:center;">~25%</td>
+          <td style="background:#fff8e1;text-align:center;">~18%</td>
+          <td style="background:#fff8e1;text-align:center;">~20%</td>
+          <td style="background:#e8f5e9;text-align:center;">~10%</td>
+          <td style="background:#fff3e0;text-align:center;"><strong>22.8%</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Home &amp; Living</strong></td>
+          <td style="background:#fff8e1;text-align:center;">~15%</td>
+          <td style="background:#fff3e0;text-align:center;">~14%</td>
+          <td style="background:#fff8e1;text-align:center;">~12%</td>
+          <td style="background:#fff8e1;text-align:center;">~13%</td>
+          <td style="background:#e8f5e9;text-align:center;">~10%</td>
+          <td style="background:#e8f5e9;text-align:center;">~10%</td>
+          <td style="background:#e8f5e9;text-align:center;">~5%</td>
+          <td style="background:#fff8e1;text-align:center;"><strong>11.5%</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Fashion &amp; Apparel</strong></td>
+          <td style="background:#e8f5e9;text-align:center;">~6%</td>
+          <td style="background:#e8f5e9;text-align:center;">~8%</td>
+          <td style="background:#e8f5e9;text-align:center;">~7%</td>
+          <td style="background:#e8f5e9;text-align:center;">~6%</td>
+          <td style="background:#e8f5e9;text-align:center;">~5%</td>
+          <td style="background:#e8f5e9;text-align:center;">~6%</td>
+          <td style="background:#e8f5e9;text-align:center;">~4%</td>
+          <td style="background:#e8f5e9;text-align:center;"><strong>6.2%</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>Health &amp; Nutrition 每日违规率</div>
+    <div class="chart-wrap">
+      <canvas id="healthTrendChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>Beauty &amp; Personal Care 每日违规率</div>
+    <div class="chart-wrap">
+      <canvas id="beautyTrendChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 三、账户维度 -->
+<div class="section-title">🏦 三、账户维度违规分析</div>
+<div class="card card-accent-red">
+  <div class="card-title"><span class="dot red"></span>高风险账户明细（违规率 ≥ 50%，广告数 ≥ 20）</div>
+  <div class="alert-box alert-red">
+    🚨 <strong>共发现 25 个高风险账户</strong>，违规率均超过 50%，其中 5 个账户违规率超过 90%，需立即人工介入
+  </div>
+  <table>
+    <thead>
+      <tr><th>排名</th><th>广告主</th><th>账户ID（后8位）</th><th>广告数</th><th>违规数</th><th>违规率</th><th>状态</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="rank-badge gold">1</span></td><td><strong>James-100</strong></td><td>...51283923</td><td>73</td><td>73</td><td><strong style="color:#c62828;">100%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:100%;background:#c62828;"></div></div></div></td><td><span class="tag tag-red-dark">🚨 暂停处理</span></td></tr>
+      <tr><td><span class="rank-badge silver">2</span></td><td><strong>Wouter Akika</strong></td><td>...35078420</td><td>88</td><td>80</td><td><strong style="color:#c62828;">90.9%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:90.9%;background:#c62828;"></div></div></div></td><td><span class="tag tag-red-dark">🚨 暂停处理</span></td></tr>
+      <tr><td><span class="rank-badge bronze">3</span></td><td><strong>Mathieu</strong></td><td>...43438614</td><td>153</td><td>131</td><td><strong style="color:#c62828;">85.6%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:85.6%;background:#c62828;"></div></div></div></td><td><span class="tag tag-red-dark">🚨 暂停处理</span></td></tr>
+      <tr><td><span class="rank-badge">4</span></td><td><strong>Saamir Mithwani</strong></td><td>...43424050</td><td>141</td><td>120</td><td><strong style="color:#c62828;">85.1%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:85.1%;background:#c62828;"></div></div></div></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge">5</span></td><td><strong>Rayan-VX</strong></td><td>...00856936</td><td>130</td><td>97</td><td><strong style="color:#c62828;">74.6%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:74.6%;background:#e53935;"></div></div></div></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge">6</span></td><td><strong>Tony Groen</strong></td><td>...35078420</td><td>109</td><td>86</td><td><strong style="color:#e65100;">78.9%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:78.9%;background:#e53935;"></div></div></div></td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge">7</span></td><td><strong>Yoav</strong></td><td>...51589490</td><td>93</td><td>72</td><td><strong style="color:#e65100;">77.4%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:77.4%;background:#fb8c00;"></div></div></div></td><td><span class="tag tag-orange">重点关注</span></td></tr>
+      <tr><td><span class="rank-badge">8</span></td><td>Facundo</td><td>...08118834</td><td>378</td><td>230</td><td><strong style="color:#fb8c00;">60.8%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:60.8%;background:#fb8c00;"></div></div></div></td><td><span class="tag tag-orange">重点关注</span></td></tr>
+      <tr><td><span class="rank-badge">9</span></td><td>Deniss</td><td>...74197840</td><td>273</td><td>160</td><td><strong style="color:#fb8c00;">58.6%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:58.6%;background:#fb8c00;"></div></div></div></td><td><span class="tag tag-orange">重点关注</span></td></tr>
+      <tr><td><span class="rank-badge">10</span></td><td>Facundo</td><td>...10493547</td><td>148</td><td>77</td><td><strong style="color:#fb8c00;">52.0%</strong><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:52%;background:#fb8c00;"></div></div></div></td><td><span class="tag tag-orange">重点关注</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 四、广告系列维度 -->
+<div class="section-title">🗂️ 四、广告系列维度违规分析</div>
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>违规率 100% 的广告系列（全量违规，≥5条广告）</div>
+  <div class="alert-box alert-red">
+    🚨 共有 <strong>19 个广告系列</strong>违规率达 100%，其中 James-100、Max、Rayan-VX 各有大型全量违规系列，建议一键封停
+  </div>
+  <table>
+    <thead><tr><th>排名</th><th>广告系列ID</th><th>广告主</th><th>广告数</th><th>违规率</th><th>建议</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>6973186817162</td><td><strong>James-100</strong></td><td>71</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>2</td><td>120242630992300061</td><td><strong>Max</strong></td><td>53</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>3</td><td>120227734664910598</td><td><strong>Rayan-VX</strong></td><td>48</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>4</td><td>120246789458700732</td><td><strong>Wouter Akika</strong></td><td>37</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>5</td><td>120243513464310243</td><td><strong>Nexy Prints</strong></td><td>28</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>6</td><td>120226469320560671</td><td><strong>Volmer</strong></td><td>27</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>7</td><td>120247283429000237</td><td><strong>Alex-Pierre Chelala</strong></td><td>24</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>8</td><td>120218537982570638</td><td><strong>Radek &amp; David</strong></td><td>21</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>9</td><td>120243629893610042</td><td><strong>Volmer</strong></td><td>15</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+      <tr><td>10</td><td>120245865452680695</td><td><strong>Alex el filali</strong></td><td>12</td><td><strong style="color:#c62828;">100%</strong></td><td><span class="tag tag-red-dark">封停</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 五、广告主维度 -->
+<div class="section-title">👤 五、广告主全维度画像</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot red"></span>广告主违规量 TOP10</div>
+    <div class="chart-wrap">
+      <canvas id="companyVolChart"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot orange"></span>广告主违规率 TOP10（≥30条总量）</div>
+    <div class="chart-wrap">
+      <canvas id="companyRateChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot red"></span>广告主完整画像（TOP15，按违规数排序）</div>
+  <table>
+    <thead>
+      <tr><th>排名</th><th>广告主</th><th>总广告数</th><th>违规数</th><th>违规率可视化</th><th>账户数</th><th>风险判定</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="rank-badge gold">1</span></td><td><strong>Facundo</strong></td><td>653</td><td>403</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:61.7%;background:#fb8c00;"></div></div><span style="font-size:11px;color:#fb8c00;font-weight:700;">61.7%</span></div></td><td>3</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge silver">2</span></td><td><strong>Deniss</strong></td><td>273</td><td>160</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:58.6%;background:#fb8c00;"></div></div><span style="font-size:11px;color:#fb8c00;font-weight:700;">58.6%</span></div></td><td>1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge bronze">3</span></td><td><strong>Mathieu</strong></td><td>153</td><td>131</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:85.6%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">85.6%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">4</span></td><td><strong>Saamir Mithwani</strong></td><td>141</td><td>120</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:85.1%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">85.1%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">5</span></td><td><strong>Wouter Akika</strong></td><td>134</td><td>111</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:82.8%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">82.8%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">6</span></td><td><strong>Rayan-VX</strong></td><td>130</td><td>97</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:74.6%;background:#e53935;"></div></div><span style="font-size:11px;color:#e53935;font-weight:700;">74.6%</span></div></td><td>1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge">7</span></td><td><strong>Tony Groen</strong></td><td>109</td><td>86</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:78.9%;background:#e53935;"></div></div><span style="font-size:11px;color:#e53935;font-weight:700;">78.9%</span></div></td><td>1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge">8</span></td><td><strong>Lucas De Souza 1</strong></td><td>92</td><td>80</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:87%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">87.0%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">9</span></td><td><strong>James-100</strong></td><td>73</td><td>73</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:100%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">100%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">10</span></td><td>Yoav</td><td>93</td><td>72</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:77.4%;background:#e53935;"></div></div><span style="font-size:11px;color:#e53935;">77.4%</span></div></td><td>1</td><td><span class="tag tag-red">高风险</span></td></tr>
+      <tr><td><span class="rank-badge">11</span></td><td>vianet lenny</td><td>143</td><td>66</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:46.2%;background:#fb8c00;"></div></div><span style="font-size:11px;color:#fb8c00;">46.2%</span></div></td><td>1</td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td><span class="rank-badge">12</span></td><td>Volmer</td><td>119</td><td>56</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:47.1%;background:#fb8c00;"></div></div><span style="font-size:11px;color:#fb8c00;">47.1%</span></div></td><td>2</td><td><span class="tag tag-orange">中风险</span></td></tr>
+      <tr><td><span class="rank-badge">13</span></td><td><strong>Max</strong></td><td>53</td><td>53</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:100%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">100%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">14</span></td><td><strong>Alex-Pierre Chelala</strong></td><td>47</td><td>41</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:87.2%;background:#c62828;"></div></div><span style="font-size:11px;color:#c62828;font-weight:700;">87.2%</span></div></td><td>1</td><td><span class="tag tag-red-dark">🚨 极高</span></td></tr>
+      <tr><td><span class="rank-badge">15</span></td><td>Alex el filali</td><td>48</td><td>35</td><td><div class="rate-bar-wrap"><div class="rate-bar"><div class="rate-fill" style="width:72.9%;background:#e53935;"></div></div><span style="font-size:11px;color:#e53935;">72.9%</span></div></td><td>1</td><td><span class="tag tag-red">高风险</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 六、违规规律洞察 -->
+<div class="section-title">🔍 六、违规规律深度洞察</div>
+<div class="grid3">
+  <div class="card card-accent-red">
+    <div class="card-title"><span class="dot red"></span>洞察 1：HW-1.1 持续主导</div>
+    <div style="font-size:28px;font-weight:900;color:#c62828;margin:8px 0;">68.1%</div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.8;">
+      HW-1.1（禁止性健康声明）占全部违规 68.1%（2,112 次），较上期 59.1% 进一步上升。<br>
+      Health & Nutrition 品类违规率高达 69.3%，比上期 60.5% 恶化 +8.8pp。
+    </div>
+  </div>
+  <div class="card card-accent-orange">
+    <div class="card-title"><span class="dot orange"></span>洞察 2：FS-1.2 暴增预警</div>
+    <div style="font-size:28px;font-weight:900;color:#e65100;margin:8px 0;">+378%</div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.8;">
+      FS-1.2（虚假紧迫感）从上期 93 条暴增至本期 445 条（+378%），已成第二大违规类型。<br>
+      Deniss（273条广告，58.6%违规率）疑似主要贡献者，需重点审查。
+    </div>
+  </div>
+  <div class="card card-accent-orange">
+    <div class="card-title"><span class="dot orange"></span>洞察 3：周一效应显现</div>
+    <div style="font-size:28px;font-weight:900;color:#e65100;margin:8px 0;">22.2%</div>
+    <div style="font-size:12px;color:#546e7a;line-height:1.8;">
+      05-05（周一）违规率 22.2%，为本周最高，与上期周日峰值模式不同。<br>
+      周末积压素材在周一批量投放，导致违规率单日激升，建议建立周一预审机制。
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><span class="dot blue"></span>重复审核分析</div>
+    <div style="font-size:12px;color:#546e7a;line-height:2;">
+      <div>📊 原始记录：24,595 条</div>
+      <div>🎯 独立广告：13,656 条</div>
+      <div>🔄 重复审核总量：10,939 次</div>
+      <div>📈 平均每广告审核：<strong>1.80 次</strong>（上期 2.62 次，下降显著）</div>
+      <div style="margin-top:10px;">• 违规广告平均重复 2.1 次（反复推送被拒）</div>
+      <div>• 合规广告平均重复 1.7 次（正常素材复用）</div>
+      <div>• 本期重复率低于上期，系统效率提升</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot green"></span>合规表现良好的广告主</div>
+    <div style="font-size:12px;color:#546e7a;line-height:2;">
+      <div>✅ <strong>PSM（推测）</strong>：体量大，违规率低，管控优秀</div>
+      <div>✅ <strong>Fashion类整体</strong>：8,972 广告，违规率仅 6.2%，品类表现最优</div>
+      <div>✅ <strong>Jewelry类</strong>：465 广告，违规率仅 0.2%，几乎完全合规</div>
+      <div>✅ <strong>Baby/Kids类</strong>：173 广告，违规率 3.5%，品类天然合规性好</div>
+    </div>
+  </div>
+</div>
+
+<!-- 七、处置建议 -->
+<div class="section-title">🎯 七、分级处置建议</div>
+<div class="card">
+  <div class="alert-box alert-red">
+    <strong>🚨 立即行动（本周内）</strong><br>
+    1. <strong>James-100</strong>（100%）、<strong>Max</strong>（100%）：两个全量违规广告主，立即暂停所有广告投放，全量下架<br>
+    2. <strong>Mathieu</strong>（85.6%）、<strong>Saamir Mithwani</strong>（85.1%）、<strong>Lucas De Souza 1</strong>（87%）：暂停投放，通知整改健康声明内容<br>
+    3. <strong>19 个违规率100%的广告系列</strong>：直接封停，无需人工逐条核查<br>
+    4. <strong>Wouter Akika</strong>（82.8%）：账户维度违规率达 90.9%，重点监控 campaign 120246789458700732（37条全量违规）
+  </div>
+  <div class="alert-box alert-orange">
+    <strong>⚠️ 优先处理（本周-下周）</strong><br>
+    5. <strong>FS-1.2 激增专项治理</strong>：445 条虚假紧迫感广告（较上期+378%），需向广告主发布专项合规指南，明确禁止虚构倒计时/限量<br>
+    6. <strong>Health & Nutrition 品类</strong>：违规率 69.3%（较上期 60.5% 持续上升），要求广告主提交医疗/健康声明资质文件<br>
+    7. <strong>Deniss</strong>（273条，58.6%违规）：新出现的高违规广告主，发送违规警告，要求 72 小时内提交整改方案<br>
+    8. 建立<strong>周一预审机制</strong>：针对周末积压素材的批量投放建立预审流程
+  </div>
+  <div class="alert-box alert-green">
+    <strong>✅ 持续跟踪（例行监控）</strong><br>
+    9. <strong>Facundo</strong>（653条，61.7%违规）：体量最大的高风险广告主，建立专项跟踪，确认是否有意规避检测<br>
+    10. <strong>Fashion & Apparel 品类</strong>：违规率 6.2%，体量 8,972 条，总量大需保持周度监控<br>
+    11. 针对 <strong>周六趋势改善</strong>（违规率 7.6%），跟踪是否为持续改善信号或仅为周末流量结构差异
+  </div>
+</div>
+
+<!-- 八、周期对比 -->
+<div class="section-title">📊 八、跨周期趋势对比</div>
+<div class="card">
+  <div class="card-title"><span class="dot blue"></span>4周违规率趋势</div>
+  <div class="chart-wrap">
+    <canvas id="weeklyTrendChart"></canvas>
+  </div>
+</div>
+
+<div class="footer">
+  Meta 广告维度深度分析报告 · 2026-05-04~2026-05-10 · 广告维度（ad_id 去重）· 数据来源：机审系统
+</div>
+</div>
+
+<script>
+const C = { green:'#43a047', red:'#e53935', orange:'#fb8c00', purple:'#7b1fa2', blue:'#1565c0', teal:'#00897b', amber:'#ffb300' };
+
+// 每日堆叠
+new Chart(document.getElementById('dailyStackChart'), {
+  type: 'bar',
+  data: {
+    labels: ['05-04','05-05','05-06','05-07','05-08','05-09','05-10'],
+    datasets: [
+      { label: '合规', data: [592,1317,2083,1564,1792,2131,2144], backgroundColor: C.green },
+      { label: '违规', data: [112,376,411,290,283,384,177], backgroundColor: C.red }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}},
+    scales:{ x:{stacked:true}, y:{stacked:true, beginAtZero:true} } }
+});
+
+// 每日违规率
+new Chart(document.getElementById('dailyRateLineChart'), {
+  type: 'line',
+  data: {
+    labels: ['05-04','05-05','05-06','05-07','05-08','05-09','05-10'],
+    datasets: [{
+      label: '违规率',
+      data: [15.9,22.2,16.5,15.6,13.6,15.3,7.6],
+      borderColor: C.red, backgroundColor: 'rgba(229,57,53,0.1)',
+      fill: true, tension: 0.4, pointRadius: 6, pointBackgroundColor: C.red
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{ beginAtZero:true, max:30, ticks:{callback:v=>v+'%'} } } }
+});
+
+// Health 趋势
+new Chart(document.getElementById('healthTrendChart'), {
+  type: 'line',
+  data: {
+    labels: ['05-04','05-05','05-06','05-07','05-08','05-09','05-10'],
+    datasets: [{
+      label: 'Health违规率',
+      data: [78.9,47.4,80.8,100,92.4,48.8,86.8],
+      borderColor: C.red, backgroundColor: 'rgba(229,57,53,0.12)',
+      fill: true, tension: 0.4, pointRadius: 5
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{ min:0, max:110, ticks:{callback:v=>v+'%'} } } }
+});
+
+// Beauty 趋势
+new Chart(document.getElementById('beautyTrendChart'), {
+  type: 'line',
+  data: {
+    labels: ['05-04','05-05','05-06','05-07','05-08','05-09','05-10'],
+    datasets: [{
+      label: 'Beauty违规率',
+      data: [40.2,75.5,47.1,39.1,43.4,25.5,30.4],
+      borderColor: C.orange, backgroundColor: 'rgba(251,140,0,0.12)',
+      fill: true, tension: 0.4, pointRadius: 5
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{ min:0, max:90, ticks:{callback:v=>v+'%'} } } }
+});
+
+// 广告主违规数
+new Chart(document.getElementById('companyVolChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Facundo','Deniss','Mathieu','Saamir M.','Wouter A.','Rayan-VX','Tony G.','Lucas DS1','Yoav','vianet l.'],
+    datasets: [{
+      label: '违规广告数',
+      data: [403,160,131,120,111,97,86,80,72,66],
+      backgroundColor: [C.orange,C.red,C.red,C.red,C.red,C.red,C.red,C.red,C.red,C.orange]
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{beginAtZero:true} } }
+});
+
+// 广告主违规率
+new Chart(document.getElementById('companyRateChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Max','James-100','Alex-P C.','Lucas DS1','Mathieu','Saamir M.','Wouter A.','Tony Groen','Yoav','Rayan-VX'],
+    datasets: [{
+      label: '违规率%',
+      data: [100,100,87.2,87.0,85.6,85.1,82.8,78.9,77.4,74.6],
+      backgroundColor: C.red
+    }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{beginAtZero:true,max:110,ticks:{callback:v=>v+'%'}} } }
+});
+
+// 周期对比
+new Chart(document.getElementById('weeklyTrendChart'), {
+  type: 'line',
+  data: {
+    labels: ['04-13~04-19','04-20~04-26','05-04~05-10'],
+    datasets: [
+      { label: '审核量', data: [10480,10185,13656], borderColor: C.blue, backgroundColor: 'rgba(21,101,192,0.1)', fill:true, tension:0.4, yAxisID:'y1', pointRadius:6 },
+      { label: 'Tier3违规率%', data: [13.3,22.7,14.9], borderColor: C.red, backgroundColor: 'rgba(229,57,53,0.1)', fill:true, tension:0.4, yAxisID:'y2', pointRadius:6 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'bottom'} },
+    scales:{
+      y1:{ type:'linear', position:'left', beginAtZero:true, title:{display:true,text:'审核量'} },
+      y2:{ type:'linear', position:'right', beginAtZero:true, max:30, ticks:{callback:v=>v+'%'}, grid:{drawOnChartArea:false}, title:{display:true,text:'违规率'} }
+    }
+  }
+});
+</script>
+</body>
+</html>
