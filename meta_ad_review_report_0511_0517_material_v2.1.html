@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>素材维度违规分析报告 · v2.0七维评分 (0511-0517)</title>
+<script src="chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 24px; }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { font-size: 24px; margin-bottom: 4px; color: #0f172a; }
+.subtitle { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+.card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.card h2 { font-size: 17px; margin-bottom: 16px; color: #0f172a; border-left: 4px solid #3b82f6; padding-left: 12px; }
+.card h3 { font-size: 15px; margin: 16px 0 10px; color: #334155; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.stat-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; }
+.stat-box .number { font-size: 28px; font-weight: 700; }
+.stat-box .label { font-size: 13px; color: #64748b; margin-top: 4px; }
+.chart-row { display: flex; gap: 20px; flex-wrap: wrap; }
+.chart-half { flex: 1; min-width: 400px; }
+.chart-full { width: 100%; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #f1f5f9; padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; }
+tr:hover { background: #f8fafc; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.methodology { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 20px; font-size: 13px; line-height: 1.8; }
+.methodology code { background: #e0e7ff; padding: 1px 6px; border-radius: 3px; font-size: 12px; }
+.insight { background: #fefce8; border-left: 4px solid #eab308; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 8px 0; font-size: 13px; line-height: 1.7; }
+.danger { background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 8px 0; font-size: 13px; line-height: 1.7; }
+canvas { max-height: 350px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>素材维度违规分析报告 · v2.0 七维评分体系</h1>
+<p class="subtitle">数据范围：2026-05-11 ~ 2026-05-17 · 素材去重后 9018 条 · 基于 Meta广告违规分级管理方案 v2.0</p>
+
+<div class="methodology">
+<strong>📋 评分方法说明</strong><br>
+① 每个素材按 <code>v2.0 七维度评分体系</code> 打分：D1身份真实性、D2功效宣称、D3恐吓营销、D4社会证明、D5民族文化、D6诱导性、D7版权合规，各0-10分<br>
+② 综合评分 = 加权均分（重要维度权重×1.5，中等维度权重×1.0）<br>
+③ <code>综合评分 = MAX(素材分, 文案分, 落地页分)</code>，本报告以 element 维度呈现，每个 element 即为一种素材类型<br>
+④ R类硬红线(AC-1.1/IP-1.1/RG-1.2/HS-1.1)触发 → 一票否决；C类 → 返回修改<br>
+⑤ 白大褂规则：使用医生形象但无资质证明 → D1≤2 → 强制红灯
+</div>
+
+<!-- Overview Stats -->
+<div class="stats-grid">
+    <div class="stat-box"><div class="number" style="color:#0f172a;">9018</div><div class="label">独立素材总数</div></div>
+    <div class="stat-box"><div class="number" style="color:#10b981;">7859</div><div class="label">T0 合规素材</div></div>
+    <div class="stat-box"><div class="number" style="color:#ef4444;">1159</div><div class="label">违规素材</div></div>
+    <div class="stat-box"><div class="number" style="color:#ef4444;">12.9%</div><div class="label">素材违规率</div></div>
+    <div class="stat-box"><div class="number" style="color:#7c3aed;">91</div><div class="label">T4 硬红线</div></div>
+    <div class="stat-box"><div class="number" style="color:#ef4444;">883</div><div class="label">T3 高风险</div></div>
+</div>
+
+<!-- Tier Distribution + Element Type -->
+<div class="card">
+<h2>风险等级分布</h2>
+<div class="chart-row">
+    <div class="chart-half"><canvas id="tierPie"></canvas></div>
+    <div class="chart-half"><canvas id="etypeChart"></canvas></div>
+</div>
+</div>
+
+<!-- Element Type Analysis -->
+<div class="card">
+<h2>素材类型对比分析（文本 vs 视频）</h2>
+<div class="stats-grid">
+    <div class="stat-box"><div class="number" style="color:#3b82f6;">6464</div><div class="label">文本素材总数</div></div>
+    <div class="stat-box"><div class="number" style="color:#ef4444;">272</div><div class="label">文本违规 · 违规率 4.2%</div></div>
+    <div class="stat-box"><div class="number" style="color:#8b5cf6;">2554</div><div class="label">视频素材总数</div></div>
+    <div class="stat-box"><div class="number" style="color:#ef4444;">887</div><div class="label">视频违规 · 违规率 34.7%</div></div>
+</div>
+<div class="insight">
+⚠️ <strong>关键发现</strong>：视频素材违规率 <strong>34.7%</strong>，远高于文本素材 <strong>4.2%</strong>。视频素材中 HW-1.1（健康严重违规）占比最高，且 AC-1.1（硬红线）几乎全出现在视频素材中。建议优先加强视频素材预审机制。
+</div>
+<canvas id="etypeTierChart" style="max-height:300px;"></canvas>
+</div>
+
+<!-- Seven-Dimension Radar -->
+<div class="card">
+<h2>七维度评分雷达图（文本 vs 视频）</h2>
+<div class="methodology" style="margin-bottom:16px;">
+雷达图展示文本素材和视频素材在7个维度上的<strong>平均得分</strong>。得分越高，该维度违规越严重。<br>
+重要维度（权重×1.5）：D1身份真实性、D2功效宣称、D3恐吓营销、D4社会证明、D7版权合规<br>
+中等维度（权重×1.0）：D5民族文化、D6诱导性
+</div>
+<canvas id="radarChart" style="max-height:400px;"></canvas>
+</div>
+
+<!-- Dimension Bar Chart -->
+<div class="card">
+<h2>七维度违规命中分析</h2>
+<div class="chart-row">
+    <div class="chart-half"><canvas id="dimAvgChart"></canvas></div>
+    <div class="chart-half"><canvas id="dimHitChart"></canvas></div>
+</div>
+</div>
+
+<!-- Dimension Detail Breakdown -->
+<div class="card">
+<h2>七维度评分详情</h2>
+<div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D1: 身份真实性 <span style="font-size:12px;color:#888;font-weight:normal;">（重要维度, 权重×1.5）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>76</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>6.6%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>3.3</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">3分</span><div style="width:142.05px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">72个(94.7%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">9分</span><div style="width:7.949999999999999px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">4个(5.3%)</span></div></div>
+        </div>
+    </div><div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D2: 功效宣称 <span style="font-size:12px;color:#888;font-weight:normal;">（重要维度, 权重×1.5）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>1051</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>90.7%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>7.8</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">3分</span><div style="width:1.7999999999999998px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">13个(1.2%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">4分</span><div style="width:3.0px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">21个(2.0%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">5分</span><div style="width:8.399999999999999px;height:14px;background:#ef4444;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">59个(5.6%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">8分</span><div style="width:126.0px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">883个(84.0%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">10分</span><div style="width:10.649999999999999px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">75个(7.1%)</span></div></div>
+        </div>
+    </div><div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D3: 恐吓营销 <span style="font-size:12px;color:#888;font-weight:normal;">（重要维度, 权重×1.5）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>942</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>81.3%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>5.8</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">3分</span><div style="width:9.45px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">59个(6.3%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">6分</span><div style="width:140.55px;height:14px;background:#ef4444;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">883个(93.7%)</span></div></div>
+        </div>
+    </div><div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D4: 社会证明 <span style="font-size:12px;color:#888;font-weight:normal;">（重要维度, 权重×1.5）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>72</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>6.2%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>3.0</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">3分</span><div style="width:150.0px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">72个(100.0%)</span></div></div>
+        </div>
+    </div><div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D5: 民族文化 <span style="font-size:12px;color:#888;font-weight:normal;">（中等维度, 权重×1.0）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>6</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>0.5%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>7.0</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">4分</span><div style="width:75.0px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">3个(50.0%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">10分</span><div style="width:75.0px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">3个(50.0%)</span></div></div>
+        </div>
+    </div><div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D6: 诱导性 <span style="font-size:12px;color:#888;font-weight:normal;">（中等维度, 权重×1.0）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>1001</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>86.4%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>3.4</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">3分</span><div style="width:134.85000000000002px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">900个(89.9%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">4分</span><div style="width:3.1500000000000004px;height:14px;background:#f59e0b;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">21个(2.1%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">8分</span><div style="width:11.850000000000001px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">79个(7.9%)</span></div><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">9分</span><div style="width:0.15000000000000002px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">1个(0.1%)</span></div></div>
+        </div>
+    </div><div style="background:#f9fafb;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="margin:0 0 8px;">D7: 版权合规 <span style="font-size:12px;color:#888;font-weight:normal;">（重要维度, 权重×1.5）</span></h4>
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div><p style="margin:0;font-size:13px;">命中次数：<strong>8</strong></p>
+            <p style="margin:0;font-size:13px;">命中率：<strong>0.7%</strong></p>
+            <p style="margin:0;font-size:13px;">平均得分：<strong>10.0</strong></p></div>
+            <div style="flex:1;"><div style="display:flex;align-items:center;margin:2px 0;"><span style="width:40px;font-size:12px;text-align:right;margin-right:6px;">10分</span><div style="width:150.0px;height:14px;background:#7c3aed;border-radius:2px;"></div><span style="margin-left:4px;font-size:11px;color:#666;">8个(100.0%)</span></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- Category-Dimension Heatmap -->
+<div class="card">
+<h2>品类 × 维度 风险热力图</h2>
+<p style="font-size:13px;color:#64748b;margin-bottom:12px;">数值为该品类在对应维度的累计得分（颜色越深，风险越高）</p>
+<table style="border-collapse:collapse;font-size:13px;"><tr><th style="padding:6px 12px;border:1px solid #e5e7eb;background:#f3f4f6;">品类</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D1:身份真实性</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D2:功效宣称</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D3:恐吓营销</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D4:社会证明</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D5:民族文化</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D6:诱导性</th><th style="padding:6px 8px;border:1px solid #e5e7eb;background:#f3f4f6;font-size:11px;">D7:版权合规</th></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Health, Wellness & Nutrition</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.01);">45.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">4072.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.74);">3009.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.0);">18.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.38);">1558.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.0);">10.0</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Beauty & Personal Care</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.02);">36.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">1797.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.49);">879.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.02);">36.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.0);">4.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.52);">930.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">60.0</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Fashion & Apparel</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">42.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">1499.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.69);">1041.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">42.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.01);">8.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.36);">533.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.01);">10.0</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Home, Kitchen & Living</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.21);">84.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">406.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.69);">282.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.21);">84.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.07);">30.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.42);">171.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">other</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">3.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">106.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.57);">60.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">3.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.46);">49.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Other</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">3.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">90.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.73);">66.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.03);">3.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.33);">30.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Electronics & Smart Gadgets</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.2);">15.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">74.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.65);">48.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.08);">6.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.54);">40.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td></tr><tr><td style="padding:6px 12px;border:1px solid #e5e7eb;font-weight:500;">Fitness & Sports</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.13);">9.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 1.0);">67.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.72);">48.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.13);">9.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:rgba(239, 68, 68, 0.36);">24.0</td><td style="padding:6px 8px;border:1px solid #e5e7eb;text-align:center;background:#f9fafb;">-</td></tr></table>
+</div>
+
+<!-- Daily Trend -->
+<div class="card">
+<h2>每日违规趋势</h2>
+<canvas id="dailyTrend"></canvas>
+</div>
+
+<!-- Top Violations Table -->
+<div class="card">
+<h2>高风险素材 TOP 15（按加权均分排序）</h2>
+<table>
+<thead><tr><th>#</th><th>等级</th><th>类型</th><th>违规码</th><th>品类</th><th>广告主</th><th>维度评分</th><th>加权均分</th><th>违规证据</th></tr></thead>
+<tbody><tr>
+        <td>1</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>IP-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Video footage of Robert Downey Jr. and his wife Susan, and audio of Robert Downey Jr. speaking.">Video footage of Robert Downey Jr. and his wife Susan, and audio of Robert Downey Jr. speaking.</td>
+    </tr><tr>
+        <td>2</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>IP-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Video footage of Robert Downey Jr. and his wife, and his voice discussing his marriage and a 'reddis">Video footage of Robert Downey Jr. and his wife, and his voice discussing his marriage and a 'reddis</td>
+    </tr><tr>
+        <td>3</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>IP-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Video clips of Denzel Washington, Harrison Ford, Johnny Depp, and Michael B. Jordan">Video clips of Denzel Washington, Harrison Ford, Johnny Depp, and Michael B. Jordan</td>
+    </tr><tr>
+        <td>4</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>IP-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Kevin Hart just told Joe Rogan something about Anko that nobody expected. ... Joe, best we've ever b">Kevin Hart just told Joe Rogan something about Anko that nobody expected. ... Joe, best we've ever b</td>
+    </tr><tr>
+        <td>5</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>IP-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Video footage of Beyoncé, Idris Elba, Denzel Washington, Kevin Hart">Video footage of Beyoncé, Idris Elba, Denzel Washington, Kevin Hart</td>
+    </tr><tr>
+        <td>6</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>IP-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Visuals of Gabrielle Union and Dwyane Wade (0:03-0:06, 0:20-0:22, 0:32-0:33, 0:37-0:40, 0:46-0:49)">Visuals of Gabrielle Union and Dwyane Wade (0:03-0:06, 0:20-0:22, 0:32-0:33, 0:37-0:40, 0:46-0:49)</td>
+    </tr><tr>
+        <td>7</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>HS-1.1</code></td>
+        <td>Home, Kitchen & Living</td>
+        <td>CUONG NGUYEN</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D5: 民族文化=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="HAIRAPIST">HAIRAPIST</td>
+    </tr><tr>
+        <td>8</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>text</td>
+        <td><code>HS-1.1</code></td>
+        <td>Home, Kitchen & Living</td>
+        <td>CUONG NGUYEN</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D5: 民族文化=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Hairapist">Hairapist</td>
+    </tr><tr>
+        <td>9</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>text</td>
+        <td><code>HS-1.1</code></td>
+        <td>Home, Kitchen & Living</td>
+        <td>CUONG NGUYEN</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D5: 民族文化=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Hairapist">Hairapist</td>
+    </tr><tr>
+        <td>10</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>text</td>
+        <td><code>IP-1.1</code></td>
+        <td>Health, Wellness & Nutrition</td>
+        <td>Deniss</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="The product I recommend most often is Névea.">The product I recommend most often is Névea.</td>
+    </tr><tr>
+        <td>11</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>text</td>
+        <td><code>IP-1.1</code></td>
+        <td>Fashion & Apparel</td>
+        <td>Lê Phát</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D6: 诱导性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D7: 版权合规=10"></span></td>
+        <td><strong>10.0</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="AF 1 Sneaker">AF 1 Sneaker</td>
+    </tr><tr>
+        <td>12</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>AC-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D6: 诱导性=8"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>9.2</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="It literally makes them hard as a rock.">It literally makes them hard as a rock.</td>
+    </tr><tr>
+        <td>13</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>AC-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D6: 诱导性=8"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>9.2</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="It's a biological weapon... makes him grab your waist in the kitchen, text you at 6am, and look at y">It's a biological weapon... makes him grab your waist in the kitchen, text you at 6am, and look at y</td>
+    </tr><tr>
+        <td>14</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>AC-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D6: 诱导性=8"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>9.2</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="It literally makes them hard as a rock.">It literally makes them hard as a rock.</td>
+    </tr><tr>
+        <td>15</td>
+        <td><span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;">T4</span></td>
+        <td>video</td>
+        <td><code>AC-1.1</code></td>
+        <td>Beauty & Personal Care</td>
+        <td>Saamir Mithwani</td>
+        <td><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D1: 身份真实性=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D2: 功效宣称=10"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D3: 恐吓营销=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D4: 社会证明=0"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D5: 民族文化=0"></span><span style="display:inline-block;width:8px;height:14px;background:#7c3aed;margin-right:2px;border-radius:2px;" title="D6: 诱导性=8"></span><span style="display:inline-block;width:8px;height:14px;background:#e5e7eb;margin-right:2px;border-radius:2px;" title="D7: 版权合规=0"></span></td>
+        <td><strong>9.2</strong></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="This made him locked the room and f*cked me">This made him locked the room and f*cked me</td>
+    </tr></tbody>
+</table>
+</div>
+
+<!-- Recommendations -->
+<div class="card">
+<h2>行动建议</h2>
+<div class="danger">
+🔴 <strong>紧急</strong>：视频素材 AC-1.1 硬红线 887 次，涉及违禁品类，须立即上报合规负责人，暂停相关广告投放。
+</div>
+<div class="insight">
+🟡 <strong>重要</strong>：D2功效宣称 是最严重维度（HW-1.1 占违规主体），视频素材平均 D2 得分显著高于文本。建议：
+<ul style="margin:8px 0 0 20px;">
+<li>对 Health & Nutrition 品类（L4深灰）强制素材预审</li>
+<li>视频素材上机前必须过功效宣称词库检测</li>
+<li>建立"医疗/健康术语黑名单"自动拦截</li>
+</ul>
+</div>
+<div class="insight">
+🟡 <strong>重要</strong>：D3恐吓营销 几乎全部来自 HW-1.1（"your collagen is collapsing"类文案），需在文案审核环节增加恐吓用语检测。
+</div>
+<div class="insight">
+🔵 <strong>建议</strong>：D1身份真实性（FS-1.2虚假学术背书）虽然命中次数较少，但在视频素材中影响更严重（视频中的学术声称更具欺骗性），建议对引用"Harvard/Stanford/临床研究"等字样的素材触发 D1 维度复核。
+</div>
+</div>
+
+</div>
+
+<script>
+// Color scheme
+const COLORS = {
+    T0: '#10b981', T1: '#3b82f6', T2: '#f59e0b', T3: '#ef4444', T4: '#7c3aed'
+};
+
+// 1. Tier Pie Chart
+new Chart(document.getElementById('tierPie'), {
+    type: 'doughnut',
+    data: {
+        labels: ['T0 合规', 'T1 低风险', 'T2 中风险', 'T3 高风险', 'T4 硬红线'],
+        datasets: [{
+            data: [7859, 102, 83, 883, 91],
+            backgroundColor: [COLORS.T0, COLORS.T1, COLORS.T2, COLORS.T3, COLORS.T4],
+            borderWidth: 2, borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true, plugins: {
+            legend: { position: 'right' },
+            title: { display: true, text: '素材风险等级分布', font: { size: 14 } }
+        }
+    }
+});
+
+// 2. Element Type Bar
+new Chart(document.getElementById('etypeChart'), {
+    type: 'bar',
+    data: {
+        labels: ['文本素材', '视频素材'],
+        datasets: [
+            { label: '合规', data: [6192, 1667], backgroundColor: COLORS.T0 },
+            { label: '低风险', data: [16, 86], backgroundColor: COLORS.T1 },
+            { label: '中风险', data: [8, 75], backgroundColor: COLORS.T2 },
+            { label: '高风险', data: [241, 642], backgroundColor: COLORS.T3 },
+            { label: '硬红线', data: [7, 84], backgroundColor: COLORS.T4 }
+        ]
+    },
+    options: {
+        responsive: true, plugins: {
+            title: { display: true, text: '素材类型 × 风险等级', font: { size: 14 } }
+        },
+        scales: { x: { stacked: true }, y: { stacked: true } }
+    }
+});
+
+// 3. Element Type Tier Stacked
+new Chart(document.getElementById('etypeTierChart'), {
+    type: 'bar',
+    data: {
+        labels: ['文本素材', '视频素材'],
+        datasets: [
+            { label: 'T1 低风险', data: [16, 86], backgroundColor: COLORS.T1 },
+            { label: 'T2 中风险', data: [8, 75], backgroundColor: COLORS.T2 },
+            { label: 'T3 高风险', data: [241, 642], backgroundColor: COLORS.T3 },
+            { label: 'T4 硬红线', data: [7, 84], backgroundColor: COLORS.T4 }
+        ]
+    },
+    options: {
+        responsive: true, indexAxis: 'y',
+        plugins: { title: { display: true, text: '违规素材风险等级构成（仅违规部分）', font: { size: 14 } } },
+        scales: { x: { stacked: true }, y: { stacked: true } }
+    }
+});
+
+// 4. Radar Chart
+new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+        labels: ["\u8eab\u4efd\u771f\u5b9e\u6027", "\u529f\u6548\u5ba3\u79f0", "\u6050\u5413\u8425\u9500", "\u793e\u4f1a\u8bc1\u660e", "\u6c11\u65cf\u6587\u5316", "\u8bf1\u5bfc\u6027", "\u7248\u6743\u5408\u89c4"],
+        datasets: [
+            { label: '文本素材', data: [3.8, 7.9, 5.9, 3.0, 10.0, 3.1, 10.0], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', pointBackgroundColor: '#3b82f6' },
+            { label: '视频素材', data: [3.2, 7.8, 5.8, 3.0, 5.5, 3.5, 10.0], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', pointBackgroundColor: '#8b5cf6' }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: { r: { beginAtZero: true, max: 10, ticks: { stepSize: 2 } } },
+        plugins: { title: { display: true, text: '文本 vs 视频 七维度平均得分', font: { size: 14 } } }
+    }
+});
+
+// 5. Dimension Average Bar
+new Chart(document.getElementById('dimAvgChart'), {
+    type: 'bar',
+    data: {
+        labels: ["D1: \u8eab\u4efd\u771f\u5b9e\u6027", "D2: \u529f\u6548\u5ba3\u79f0", "D3: \u6050\u5413\u8425\u9500", "D4: \u793e\u4f1a\u8bc1\u660e", "D5: \u6c11\u65cf\u6587\u5316", "D6: \u8bf1\u5bfc\u6027", "D7: \u7248\u6743\u5408\u89c4"],
+        datasets: [{
+            label: '违规素材平均得分',
+            data: [3.3, 7.8, 5.8, 3.0, 7.0, 3.4, 10.0],
+            backgroundColor: ['#3b82f6','#ef4444','#f59e0b','#3b82f6','#8b5cf6','#f59e0b','#3b82f6'],
+            borderRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { title: { display: true, text: '各维度平均得分', font: { size: 14 } } },
+        scales: { y: { beginAtZero: true, max: 10 } }
+    }
+});
+
+// 6. Dimension Hit Rate
+new Chart(document.getElementById('dimHitChart'), {
+    type: 'bar',
+    data: {
+        labels: ["D1: \u8eab\u4efd\u771f\u5b9e\u6027", "D2: \u529f\u6548\u5ba3\u79f0", "D3: \u6050\u5413\u8425\u9500", "D4: \u793e\u4f1a\u8bc1\u660e", "D5: \u6c11\u65cf\u6587\u5316", "D6: \u8bf1\u5bfc\u6027", "D7: \u7248\u6743\u5408\u89c4"],
+        datasets: [{
+            label: '命中率(%)',
+            data: [6.6, 90.7, 81.3, 6.2, 0.5, 86.4, 0.7],
+            backgroundColor: ['#93c5fd','#fca5a5','#fcd34d','#93c5fd','#c4b5fd','#fcd34d','#93c5fd'],
+            borderRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { title: { display: true, text: '各维度违规命中率(%)', font: { size: 14 } } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+// 7. Daily Trend
+new Chart(document.getElementById('dailyTrend'), {
+    type: 'line',
+    data: {
+        labels: ["2026-05-10", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-16", "2026-05-17"],
+        datasets: [
+            { label: '违规率(%)', data: [50.0, 24.3, 14.3, 12.3, 16.9, 5.0, 33.0, 16.5], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', fill: true, yAxisID: 'y', tension: 0.3 },
+            { label: 'T3+T4违规数', data: [1, 191, 244, 69, 12, 156, 197, 104], borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.1)', fill: false, yAxisID: 'y1', tension: 0.3 }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: { title: { display: true, text: '每日素材违规趋势', font: { size: 14 } } },
+        scales: {
+            y: { position: 'left', title: { display: true, text: '违规率(%)' }, beginAtZero: true },
+            y1: { position: 'right', title: { display: true, text: 'T3+T4违规数' }, beginAtZero: true, grid: { drawOnChartArea: false } }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
